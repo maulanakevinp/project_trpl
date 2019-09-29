@@ -8,6 +8,7 @@ use App\Religion;
 use Illuminate\Http\Request;
 use App\User;
 use App\UserRole;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use File;
 
@@ -175,15 +176,45 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-        $image_path = public_path() . '/img/profile/' . $user->image;
+        $user = User::onlyTrashed()->where('id', $id);
+        $image = DB::table('users')->where('id', $id)->first();
+        $delete = File::delete(public_path('img/profile/' . $image->image));
 
-        if (unlink($image_path)) {
-            User::destroy($id);
-            return redirect('/users')->with('success', 'Profile has been deleted');
+        if ($delete) {
+            $user->forceDelete();
+            return redirect('/users')->with('success', 'User has been deleted');
         } else {
-            return redirect('/users')->with('failed', 'Profile has not been deleted');
+            return redirect('/users')->with('failed', 'User has not been deleted');
         }
+    }
+
+    public function softdelete($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        return redirect('/users')->with('success', 'User has been deleted');
+    }
+
+    public function trash()
+    {
+        $title = 'Users Management';
+        $subtitle = 'Users Trash';
+        $users = User::onlyTrashed()->get();
+        return view('user.trash', compact('title', 'subtitle', 'users'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->where('id', $id);
+        $user->restore();
+        return redirect('/users')->with('success', 'User has been restored');
+    }
+
+    public function restoreAll()
+    {
+        $user = User::onlyTrashed();
+        $user->restore();
+        return redirect('/users')->with('success', 'User has been restored');
     }
 
     public function editProfile()

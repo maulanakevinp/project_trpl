@@ -38,21 +38,6 @@ class UserSubmenu extends Model
             ])->get();
     }
 
-    public static function getSubmenu()
-    {
-        return DB::table('user_submenu')
-            ->select(
-                'user_submenu.id as id',
-                'user_menu.menu as menu',
-                'user_submenu.title as title',
-                'user_submenu.url as url',
-                'user_submenu.icon as icon',
-                'user_submenu.is_active as is_active',
-            )
-            ->join('user_menu', 'user_menu.id', '=', 'user_submenu.menu_id')
-            ->get();
-    }
-
     public function menu()
     {
         return $this->belongsTo('App\UserMenu');

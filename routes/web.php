@@ -27,6 +27,10 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     Route::group(['roles' => 'Admin'], function () {
         Route::get('/dashboard', 'HomeController@index')->name('home');
         Route::resource('/users', 'UserController')->except(['show']);
+        Route::get('/users/softdelete/{id}', 'UserController@softdelete')->name('softdelete');
+        Route::get('/users/trash', 'UserController@trash')->name('users.trash');
+        Route::get('/users/restore/{id}', 'UserController@restore')->name('users.restore');
+        Route::get('/users/restore', 'UserController@restoreAll')->name('users.restoreAll');
 
         Route::resource('/role', 'RoleController')->except(['create', 'show']);
         Route::post('/getRole/{id}', 'RoleController@getRole');

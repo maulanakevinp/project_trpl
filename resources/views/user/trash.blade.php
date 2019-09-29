@@ -5,6 +5,12 @@
 @section('container')
 <!-- Begin Page Content -->
 <div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('users.index') }}">{{ $title }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ $subtitle }}</li>
+        </ol>
+    </nav>
     @if ($errors->any())
     <div class="alert alert-danger">
         <ul>
@@ -29,10 +35,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 ">
-            <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $title }}</h5>
+            <h5 class="m-0 pt-1 font-weight-bold text-success float-left">{{ $subtitle }}</h5>
             <div class="btn-group float-right">
-                <a href="{{route('users.trash')}}" class="btn btn-sm btn-warning">{{ __('Trash') }}</a>
-                <a href="{{route('users.create')}}" class="btn btn-sm btn-success">{{ __('Add New User') }}</a>
+                <a href="{{route('users.restoreAll')}}" class="btn btn-sm btn-success">{{ __('Restore All') }}</a>
             </div>
         </div>
         <div class="card-body">
@@ -63,11 +68,15 @@
                             <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</td>
                             <td>{{ $user->job }}</td>
                             <td>
-                                <a href="{{route('users.edit',$user->id)}}" class="badge badge-warning">{{__('edit')}}</a>
+                                <a href="{{route('users.restore',$user->id)}}" class="badge badge-warning">{{__('restore')}}</a>
                                 @if($user->id != Auth::user()->id)
-                                <a href="{{ route('softdelete',$user->id) }}" class="badge badge-danger d-inline-block" onclick="return confirm('Are you sure want to DELETE this user ?');">
-                                    {{ __('delete') }}
-                                </a>
+                                <form class="d-inline-block" action="{{ route('users.destroy',$user->id) }}" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="badge badge-danger " onclick="return confirm('Are you sure want to DELETE this user ?');">
+                                        {{ __('delete') }}
+                                    </button>
+                                </form>
                                 @endif
                             </td>
                         </tr>
