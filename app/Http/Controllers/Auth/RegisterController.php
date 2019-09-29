@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Gender;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Marital;
+use App\Religion;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -28,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/my-profile';
 
     /**
      * Create a new controller instance.
@@ -38,6 +41,14 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+    }
+
+    protected function showRegistrationForm()
+    {
+        $religions = Religion::all();
+        $genders = Gender::all();
+        $maritals = Marital::all();
+        return view('auth.register', compact('genders', 'religions', 'maritals'));
     }
 
     /**
@@ -50,8 +61,16 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
+            'nik' => ['required', 'numeric'],
+            'gender' => ['required'],
+            'religion' => ['required'],
+            'marital' => ['required'],
+            'address' => ['required', 'string'],
+            'birth_place' => ['required', 'string', 'max:255'],
+            'birth_date' => ['required'],
+            'job' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
     }
 
@@ -64,7 +83,17 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
+            'role_id' => 2,
+            'nik' => $data['nik'],
             'name' => $data['name'],
+            'image' => 'default.jpg',
+            'gender_id' => $data['gender'],
+            'religion_id' => $data['religion'],
+            'marital_id' => $data['marital'],
+            'address' => $data['address'],
+            'birth_place' => $data['birth_place'],
+            'birth_date' => $data['birth_date'],
+            'job' => $data['job'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
