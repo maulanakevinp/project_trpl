@@ -12,11 +12,19 @@ class UserRoleTableSeeder extends Seeder
     public function run()
     {
         DB::table('user_role')->insert([
-            'role' => 'Admin'
+            'role' => 'Super Admin'
         ]);
 
         DB::table('user_role')->insert([
-            'role' => 'Member'
+            'role' => 'Kepala Desa'
+        ]);
+
+        DB::table('user_role')->insert([
+            'role' => 'Administrasi'
+        ]);
+
+        DB::table('user_role')->insert([
+            'role' => 'Penduduk'
         ]);
     }
 }

@@ -63,14 +63,23 @@ class UserController extends Controller
             'birth_place' => 'required|string',
             'birth_date' => 'required|date',
             'job' => 'required|string',
+            'image' => 'image|mimes:jpeg,png,gif,webp|max:2048',
             'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
             'confirm_password' => 'required|min:6'
         ]);
+        $image = 'default.jpg';
+        $file = $request->file('image');
+        if (!empty($file)) {
+            $image = time() . "_" . $file->getClientOriginalName();
+            if (!$file->move(public_path('img/profile'), $image)) {
+                return redirect('/users')->with('failed', 'User has not been added');
+            }
+        }
 
         User::create([
             'role_id' => $request->role,
             'name' => $request->name,
-            'image' => 'default.jpg',
+            'image' => $image,
             'gender_id' => $request->gender,
             'religion_id' => $request->religion,
             'marital_id' => $request->marital,
@@ -81,7 +90,7 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->confirm_password),
         ]);
-        return redirect('/users')->with('success', 'Profile has been added');
+        return redirect('/users')->with('success', 'User has been added');
     }
 
     /**
@@ -135,7 +144,8 @@ class UserController extends Controller
             'address' => 'required',
             'birth_place' => 'required',
             'birth_date' => 'required|date',
-            'job' => 'required'
+            'job' => 'required',
+            'image' => 'image|mimes:jpeg,png,gif,webp|max:2048'
         ]);
 
         $file = $request->file('image');
@@ -239,7 +249,8 @@ class UserController extends Controller
             'address' => 'required',
             'birth_place' => 'required',
             'birth_date' => 'required|date',
-            'job' => 'required'
+            'job' => 'required',
+            'image' => 'image|mimes:jpeg,png,gif,webp|max:2048'
         ]);
         $file = $request->file('image');
         if (!empty($file)) {
@@ -287,13 +298,17 @@ class UserController extends Controller
         $user = User::find($id);
 
         if (Hash::check($request->current_password, $user->password)) {
-            if ($request->new_password == $request->confirm_password) {
-                User::where('id', $id)->update([
-                    'password' => Hash::make($request->confirm_password)
-                ]);
-                return redirect('/my-profile')->with('success', 'Password has been updated');
+            if ($request->current_password == $request->confirm_password) {
+                return redirect('/my-profile')->with('failed', 'Password has not been updated, nothing changed in password');
             } else {
-                return redirect('/my-profile')->with('failed', 'Password not match, Password has not been updated');
+                if ($request->new_password == $request->confirm_password) {
+                    User::where('id', $id)->update([
+                        'password' => Hash::make($request->confirm_password)
+                    ]);
+                    return redirect('/my-profile')->with('success', 'Password has been updated');
+                } else {
+                    return redirect('/my-profile')->with('failed', 'Password not match, Password has not been updated');
+                }
             }
         } else {
             return redirect('/my-profile')->with('failed', 'Password not match with old password, Password has not been updated');

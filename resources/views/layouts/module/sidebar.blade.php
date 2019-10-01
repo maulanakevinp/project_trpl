@@ -31,7 +31,7 @@
                     @else
                     <li class="nav-item">
                     @endif
-                        <a class="nav-link pb-0" href="{{ route(''.$submenu->url) }}">
+                        <a class="nav-link pb-0" href="{{ url(''.$submenu->url) }}">
                             <i class="{{ $submenu->icon }}"></i>
                             <span>{{ $submenu->title }}</span>
                         </a>

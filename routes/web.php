@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     Route::get('/change-password', 'UserController@changePassword')->name('change-password');
     Route::patch('/update-password/{id}', 'UserController@updatePassword')->name('update-password');
 
-    Route::group(['roles' => 'Admin'], function () {
+    Route::group(['roles' => 'Super Admin'], function () {
         Route::get('/dashboard', 'HomeController@index')->name('home');
         Route::resource('/users', 'UserController')->except(['show']);
         Route::get('/users/softdelete/{id}', 'UserController@softdelete')->name('softdelete');
@@ -52,7 +52,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::get('/marital-chart', 'PopulationGraphController@marital')->name('marital-chart');
     });
 
-    Route::group(['roles' => 'Member'], function () {
+    Route::group(['roles' => 'Penduduk'], function () {
         Route::get('/letters/show', 'LetterController@show')->name('letters.show');
         Route::get('/letters/create', 'LetterController@show')->name('letters.create');
         Route::post('/letters', 'LetterController@show')->name('letters.store');
