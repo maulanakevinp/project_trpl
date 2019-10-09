@@ -16,11 +16,11 @@ class ReligionsTableSeeder extends Seeder
         ]);
 
         DB::table('religions')->insert([
-            'religion' => 'Christian'
+            'religion' => 'Kristen'
         ]);
 
         DB::table('religions')->insert([
-            'religion' => 'Catholic'
+            'religion' => 'Katolik'
         ]);
 
         DB::table('religions')->insert([

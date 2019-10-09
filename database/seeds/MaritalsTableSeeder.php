@@ -12,19 +12,19 @@ class MaritalsTableSeeder extends Seeder
     public function run()
     {
         DB::table('maritals')->insert([
-            'marital' => 'Married'
+            'marital' => 'Menikah'
         ]);
 
         DB::table('maritals')->insert([
-            'marital' => 'Single'
+            'marital' => 'Lajang'
         ]);
 
         DB::table('maritals')->insert([
-            'marital' => 'Widow'
+            'marital' => 'Duda'
         ]);
 
         DB::table('maritals')->insert([
-            'marital' => 'Widower'
+            'marital' => 'Janda'
         ]);
     }
 }

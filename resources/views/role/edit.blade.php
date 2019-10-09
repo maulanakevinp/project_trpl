@@ -22,7 +22,7 @@
             <div class="card shadow h-100">
                 <div class="card-header">
                     <h5 id="judul" class="m-0 pt-1 font-weight-bold text-primary">
-                        {{ __('Role :')}} {{ $role->role }}
+                        {{ __('role.role')}} {{ $role->role }}
                     </h5>
                 </div>
                 <div class="card-body">
@@ -30,8 +30,8 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">{{ __('#') }}</th>
-                                <th scope="col">{{ _('Menu') }}</th>
-                                <th scope="col">{{ __('Access') }}</th>
+                                <th scope="col">{{ __('role.menu') }}</th>
+                                <th scope="col">{{ __('role.access') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,7 +53,6 @@
 
         </div>
     </div>
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
 </div>
 <!-- /.container-fluid -->

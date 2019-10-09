@@ -21,7 +21,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 1,
-            'title' => 'Users Management',
+            'title' => 'Manajemen Pengguna',
             'url' => '/users',
             'icon' => 'fas fa-fw fa-user-edit',
             'is_active' => 1
@@ -29,7 +29,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 1,
-            'title' => 'Role Management',
+            'title' => 'Manajemen Peran',
             'url' => '/role',
             'icon' => 'fas fa-fw fa-user-tie',
             'is_active' => 1
@@ -37,7 +37,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 1,
-            'title' => 'Letters Management',
+            'title' => 'Manajemen Surat',
             'url' => '/letters',
             'icon' => 'fas fa-fw fa-envelope',
             'is_active' => 0
@@ -45,7 +45,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Gender Chart',
+            'title' => 'Grafik Jenis Kelamin',
             'url' => '/gender-chart',
             'icon' => 'fas fa-fw fa-chart-bar',
             'is_active' => 0
@@ -53,7 +53,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Age Chart',
+            'title' => 'Grafik Umur',
             'url' => '/age-chart',
             'icon' => 'fas fa-fw fa-chart-bar',
             'is_active' => 0
@@ -61,7 +61,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Religion Chart',
+            'title' => 'Grafik agama',
             'url' => '/religion-chart',
             'icon' => 'fas fa-fw fa-chart-bar',
             'is_active' => 0
@@ -69,7 +69,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Job Chart',
+            'title' => 'Grafik Pekerjaan',
             'url' => '/job-chart',
             'icon' => 'fas fa-fw fa-chart-bar',
             'is_active' => 0
@@ -77,7 +77,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Married Status Chart',
+            'title' => 'Grafik Pernikahan',
             'url' => '/marital-chart',
             'icon' => 'fas fa-fw fa-chart-bar',
             'is_active' => 0
@@ -85,15 +85,15 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 3,
-            'title' => 'Submitting a Letter',
-            'url' => '/letters/show',
+            'title' => 'Pengajuan surat',
+            'url' => '/pengajuan-surat',
             'icon' => 'fas fa-fw fa-envelope',
-            'is_active' => 0
+            'is_active' => 1
         ]);
 
         DB::table('user_submenu')->insert([
             'menu_id' => 4,
-            'title' => 'My Profile',
+            'title' => 'Profil Saya',
             'url' => '/my-profile',
             'icon' => 'fas fa-fw fa-user',
             'is_active' => 1
@@ -101,7 +101,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 4,
-            'title' => 'Edit Profile',
+            'title' => 'Ubah Profil',
             'url' => '/edit-profile',
             'icon' => 'fas fa-fw fa-user-edit',
             'is_active' => 1
@@ -109,7 +109,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 4,
-            'title' => 'Change Password',
+            'title' => 'Ganti Kata Sandi',
             'url' => '/change-password',
             'icon' => 'fas fa-fw fa-key',
             'is_active' => 1
@@ -117,7 +117,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 5,
-            'title' => 'Menu Management',
+            'title' => 'Manajemen Menu',
             'url' => '/menu',
             'icon' => 'fas fa-fw fa-folder',
             'is_active' => 1
@@ -125,7 +125,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 5,
-            'title' => 'Submenu Management',
+            'title' => 'Manajemen Submenu',
             'url' => '/submenu',
             'icon' => 'fas fa-fw fa-folder-open',
             'is_active' => 1

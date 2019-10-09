@@ -14,7 +14,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $title = 'Menu Management';
+        $title = 'Manajemen Menu';
         $user_menu = UserMenu::where('id', '!=', 1)->orderBy('id', 'asc')->get();
         return view('menu.index', compact('title', 'user_menu'));
     }
@@ -32,7 +32,7 @@ class MenuController extends Controller
         ]);
 
         UserMenu::create($request->all());
-        return redirect('/menu')->with('success', 'Menu has been created');
+        return redirect('/menu')->with('success', 'Menu berhasil ditambahkan');
     }
 
     /**
@@ -52,7 +52,7 @@ class MenuController extends Controller
             'menu' => $request->menu
         ]);
 
-        return redirect('/menu')->with('success', 'Menu has been updated');
+        return redirect('/menu')->with('success', 'Menu berhasil diubah');
     }
 
     /**
@@ -64,7 +64,7 @@ class MenuController extends Controller
     public function destroy($id)
     {
         UserMenu::destroy($id);
-        return redirect('/menu')->with('success', 'Menu has been deleted');
+        return redirect('/menu')->with('success', 'Menu berhasil dihapus');
     }
 
     public function getMenu(Request $request)

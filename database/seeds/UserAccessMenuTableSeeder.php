@@ -40,5 +40,10 @@ class UserAccessMenuTableSeeder extends Seeder
             'role_id' => 4,
             'menu_id' => 4
         ]);
+
+        DB::table('user_access_menu')->insert([
+            'role_id' => 4,
+            'menu_id' => 3
+        ]);
     }
 }

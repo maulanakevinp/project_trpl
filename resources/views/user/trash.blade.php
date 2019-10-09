@@ -35,9 +35,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 ">
-            <h5 class="m-0 pt-1 font-weight-bold text-success float-left">{{ $subtitle }}</h5>
+            <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $subtitle }}</h5>
             <div class="btn-group float-right">
-                <a href="{{route('users.restoreAll')}}" class="btn btn-sm btn-success">{{ __('Restore All') }}</a>
+                <a href="{{route('users.restoreAll')}}" class="btn btn-sm btn-primary">@lang('user.restoreAll')</a>
             </div>
         </div>
         <div class="card-body">
@@ -45,15 +45,15 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th>{{__('NIK')}}</th>
-                            <th>{{__('Name')}}</th>
-                            <th>{{__('Gender')}}</th>
-                            <th>{{__('Religion')}}</th>
-                            <th>{{__('Marital')}}</th>
-                            <th>{{__('Address')}}</th>
-                            <th>{{__('Age')}}</th>
-                            <th>{{__('Job')}}</th>
-                            <th>{{__('Action')}}</th>
+                            <th>{{__('user.nik')}}</th>
+                            <th>{{__('user.name')}}</th>
+                            <th>{{__('user.gender')}}</th>
+                            <th>{{__('user.religion')}}</th>
+                            <th>{{__('user.marital')}}</th>
+                            <th>{{__('user.address')}}</th>
+                            <th>{{__('user.age')}}</th>
+                            <th>{{__('user.job')}}</th>
+                            <th>{{__('user.action')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,16 +65,16 @@
                             <td>{{ $user->religion->religion }}</td>
                             <td>{{ $user->marital->marital }}</td>
                             <td>{{ $user->address }}</td>
-                            <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y tahun, %m bulan and %d hari') }}</td>
                             <td>{{ $user->job }}</td>
                             <td>
-                                <a href="{{route('users.restore',$user->id)}}" class="badge badge-warning">{{__('restore')}}</a>
+                                <a href="{{route('users.restore',$user->id)}}" class="badge badge-warning">{{__('user.restore')}}</a>
                                 @if($user->id != Auth::user()->id)
                                 <form class="d-inline-block" action="{{ route('users.destroy',$user->id) }}" method="POST">
                                     @method('delete')
                                     @csrf
-                                    <button type="submit" class="badge badge-danger " onclick="return confirm('Are you sure want to DELETE this user ?');">
-                                        {{ __('delete') }}
+                                    <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('user.delete_confirm')}}');">
+                                        {{ __('user.delete') }}
                                     </button>
                                 </form>
                                 @endif

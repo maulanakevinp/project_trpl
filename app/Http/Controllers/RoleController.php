@@ -17,7 +17,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $title = 'Role Management';
+        $title = 'Manajemen Peran';
         $user_role = UserRole::all();
         return view('role.index', compact('title', 'user_role'));
     }
@@ -31,12 +31,14 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'role' => 'required'
+            'peran' => 'required'
         ]);
 
-        UserRole::create($request->all());
+        UserRole::create([
+            'role' => $request->peran
+        ]);
 
-        return redirect('/role')->with('success', 'Role has been created');
+        return redirect('/role')->with('success', 'Peran berhasil ditambahkan');
     }
 
     /**
@@ -50,8 +52,8 @@ class RoleController extends Controller
         $menu = UserMenu::where('id', '!=', 1)
             ->orderBy('id', 'asc')
             ->get();
-        $title = 'Role Management';
-        $subtitle = 'Role Access';
+        $title = 'Manajemen Peran';
+        $subtitle = 'Hak Akses';
         $role = UserRole::find($id);
         return view('role.edit', compact('menu', 'title', 'subtitle', 'role'));
     }
@@ -72,14 +74,14 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'role' => 'required'
+            'peran' => 'required'
         ]);
 
         UserRole::where('id', $id)->update([
-            'role' => $request->role
+            'role' => $request->peran
         ]);
 
-        return redirect('/role')->with('success', 'Role has been updated');
+        return redirect('/role')->with('success', 'Peran berhasil diperbarui');
     }
 
     /**
@@ -91,7 +93,7 @@ class RoleController extends Controller
     public function destroy($id)
     {
         UserRole::destroy($id);
-        return redirect('/role')->with('success', 'Role has been deleted');
+        return redirect('/role')->with('success', 'Peran berhasil dihapus');
     }
 
     public function changeAccess(Request $request)
@@ -107,6 +109,6 @@ class RoleController extends Controller
                 ->where('menu_id', $request->menuId)
                 ->delete();
         }
-        Session::flash('success', 'Access has been changed!');
+        Session::flash('success', 'Hak akses berhasil diubah');
     }
 }

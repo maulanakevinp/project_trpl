@@ -1,5 +1,7 @@
 @extends('layouts.app')
-
+@section('title')
+@lang('auth.verify') | {{ config('app.name') }}
+@endsection
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -10,15 +12,15 @@
                         <div class="col-lg">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h2 class="h4 text-gray-900 mb-4">{{ __('Verify Your Email Address') }}</h2>
+                                    <h2 class="h4 text-gray-900 mb-4">{{ __('auth.verify_title') }}</h2>
                                 </div>
                                 @if (session('resent'))
                                     <div class="alert alert-success" role="alert">
-                                        {{ __('A fresh verification link has been sent to your email address.') }}
+                                        {{ __('auth.verify_resent') }}
                                     </div>
                                 @endif
-                                {{ __('Before proceeding, please check your email for a verification link.') }}
-                                {{ __('If you did not receive the email') }}, <a href="{{ route('verification.resend') }}">{{ __('click here to request another') }}</a>.
+                                {{ __('auth.verify_email_check') }}
+                                {{ __('auth.verify_not_receive_email') }}, <a href="{{ route('verification.resend') }}">{{ __('auth.verify_resent_email') }}</a>.
                             </div>
                         </div>
                     </div>

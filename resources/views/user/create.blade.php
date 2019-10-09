@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-{{ $subtitle }} - {{ config('app.name') }}
+@lang('user.add') - {{ config('app.name') }}
 @endsection
 @section('container')
 
@@ -9,144 +9,117 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('users.index') }}">{{ $title }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ $subtitle }}</li>
+            <li class="breadcrumb-item active" aria-current="page">@lang('user.add')</li>
         </ol>
     </nav>
-    @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if (session('failed'))
-    <div class="alert alert-danger">
-        {{ session('failed') }}
-    </div>
-    @endif
+    @if ($errors->any())<div class="alert alert-danger"><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+    @if (session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+    @if (session('failed'))<div class="alert alert-danger">{{ session('failed') }}</div>@endif
     <div class="row">
         <div class="col-lg">
             <div class="card shadow h-100">
                 <div class="card-header">
-                    <h5 class="m-0 pt-1 font-weight-bold text-primary">{{ $subtitle }}</h5>
+                    <h5 class="m-0 pt-1 font-weight-bold text-primary">@lang('user.add')</h5>
                 </div>
                 <div class="card-body">
                     <form action=" {{ route('users.store') }} " method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="peran" class="col-sm-4 col-form-label">{{__('Peran :')}}</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control @error('peran') is-invalid @enderror" name="peran" id="peran">
+                                            <option value="">{{__('user.choose_role')}}</option>
+                                            @foreach ($user_role as $role)
+                                            @if(old('peran') == $role->id)
+                                            <option selected="selected" value="{{$role->id}}">{{$role->role}}</option>                                            
+                                            @else
+                                            <option value="{{$role->id}}">{{$role->role}}</option>
+                                            @endif
+                                            @endforeach
+                                        </select>
+                                        @error('peran')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label" for="">@lang('user.name')</label>
+                                    <div class="col-sm-8">
+                                        <input id="nama_lengkap" type="text" class="form-control @error('nama_lengkap') is-invalid @enderror" name="nama_lengkap" value="{{ old('nama_lengkap') }}">
+                                        @error('nama_lengkap')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="">{{__('Full Name :')}}</label>
-                                        </div>
+                                        <label class="col-sm-4 col-form-label" for="">@lang('user.nik')</label>
                                         <div class="col-sm-8">
-                                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Enter name...">
-                                            @error('name')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ old('nik') }}">
+                                            @error('nik')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="">{{__('NIK :')}}</label>
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ old('nik') }}" placeholder="Enter nik...">
-                                            @error('nik')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="gender">{{__('Gender :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="jenis_kelamin">@lang('user.gender')</label>
                                         <div class="col-sm-8">
                                             @foreach ($genders as $gender)
-                                            <div class="custom-control custom-radio custom-control-inline">
-                                                <input id="gender{{ $loop->iteration }}" type="radio" class="custom-control-input @error('gender') is-invalid @enderror" name="gender" value="{{$gender->id}}" >
-                                                <label class="custom-control-label" for="gender{{ $loop->iteration }}">
-                                                    {{$gender->gender}}
-                                                </label>
-                                            </div>
+                                                <div class="custom-control custom-radio custom-control-inline">
+                                                    @if (old('jenis_kelamin') == $gender->id)
+                                                        <input checked="checked" id="jenis_kelamin{{ $loop->iteration }}" type="radio" class="custom-control-input @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{$gender->id}}" >
+                                                    @else
+                                                        <input id="jenis_kelamin{{ $loop->iteration }}" type="radio" class="custom-control-input @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{$gender->id}}" >
+                                                    @endif
+                                                    <label class="custom-control-label" for="jenis_kelamin{{ $loop->iteration }}">
+                                                        {{$gender->gender}}
+                                                    </label>
+                                                </div>
                                             @endforeach
-                                            @error('gender')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            @error('jenis_kelamin')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="religion">{{__('Religion :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="agama">@lang('user.religion')</label>
                                         <div class="col-sm-8">
-                                            <select name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror">
-                                                <option value="">{{__('Choose religion')}}</option>
+                                            <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
+                                                <option value="">@lang('user.choose_religion')</option>
                                                 @foreach ($religions as $religion)
-                                                <option value="{{$religion->id}}">{{$religion->religion}}</option>
+                                                    @if(old('agama') == $religion->id)
+                                                        <option selected="selected" value="{{$religion->id}}">{{$religion->religion}}</option>
+                                                    @else
+                                                        <option value="{{$religion->id}}">{{$religion->religion}}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
-                                            @error('religion')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            @error('agama')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="marital">{{__('Marital Status :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="status_pernikahan">@lang('user.marital')</label>
                                         <div class="col-sm-8">
-                                            <select name="marital" id="marital" class="form-control @error('marital') is-invalid @enderror">
-                                                <option value="">{{__('Choose marital')}}</option>
+                                            <select name="status_pernikahan" id="status_pernikahan" class="form-control @error('status_pernikahan') is-invalid @enderror">
+                                                <option value="">@lang('user.choose_marital')</option>
                                                 @foreach ($maritals as $marital)
-                                                <option value="{{$marital->id}}">{{$marital->marital}}</option>
+                                                    @if(old('status_pernikahan') == $marital->id)
+                                                        <option selected="selected" value="{{$marital->id}}">{{$marital->marital}}</option>
+                                                    @else
+                                                        <option value="{{$marital->id}}">{{$marital->marital}}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
-                                            @error('marital')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            @error('status_pernikahan')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="address">{{__('Address :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="alamat">@lang('user.address')</label>
                                         <div class="col-sm-8">
-                                            <textarea class="form-control @error('address') is-invalid @enderror" name="address" id="address" name="address" cols="30" rows="3">{{ old('address') }}</textarea>
-                                            @error('address')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="alamat" type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" value="{{ old('alamat') }}">
+                                            @error('alamat')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
@@ -154,116 +127,77 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="birth_place">{{__('Birth Place :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="tempat_lahir">@lang('user.birth_place')</label>
                                         <div class="col-sm-8">
-                                            <input id="birth_place" type="text" class="form-control @error('birth_place') is-invalid @enderror" name="birth_place" value="{{ old('birth_place') }}" placeholder="Enter birth place...">
-                                            @error('birth_place')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="tempat_lahir" type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" name="tempat_lahir" value="{{ old('tempat_lahir') }}">
+                                            @error('tempat_lahir')
+                                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="birth_date">{{__('Birthdate :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="tanggal_lahir">@lang('user.birth_date')</label>
                                         <div class="col-sm-8">
-                                            <input id="birth_date" type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" placeholder="Enter birth date...">
-                                            @error('birth_date')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="tanggal_lahir" type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" >
+                                            @error('tanggal_lahir')
+                                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="job">{{__('Job :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="pekerjaan">@lang('user.job')</label>
                                         <div class="col-sm-8">
-                                            <input id="job" type="text" class="form-control @error('job') is-invalid @enderror" name="job" value="{{ old('job') }}" placeholder="Enter job...">
-                                            @error('job')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="pekerjaan" type="text" class="form-control @error('pekerjaan') is-invalid @enderror" name="pekerjaan" value="{{ old('pekerjaan') }}">
+                                            @error('pekerjaan')
+                                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="email">{{__('Email :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="email">@lang('user.email')</label>
                                         <div class="col-sm-8">
-                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" placeholder="Enter email...">
+                                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}">
                                             @error('email')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="password">{{__('Password :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="kata_sandi">@lang('user.password')</label>
                                         <div class="col-sm-8">
-                                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter password...">
-                                            @error('password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="kata_sandi" type="password" class="form-control @error('kata_sandi') is-invalid @enderror" name="kata_sandi">
+                                            @error('kata_sandi')
+                                            <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-sm-4">
-                                            <label for="confirm_password">{{__('Confirm Password :')}}</label>
-                                        </div> 
+                                        <label class="col-sm-4 col-form-label" for="konfirmasi_kata_sandi">@lang('user.confirm_password')</label>
                                         <div class="col-sm-8">
-                                            <input id="confirm_password" type="password" class="form-control @error('confirm_password') is-invalid @enderror" name="confirm_password" placeholder="Enter confirm password...">
-                                            @error('confirm_password')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                            @enderror
+                                            <input id="konfirmasi_kata_sandi" type="password" class="form-control @error('konfirmasi_kata_sandi') is-invalid @enderror" name="konfirmasi_kata_sandi">
+                                            @error('konfirmasi_kata_sandi')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            {{__('Image')}}
-                                        </div>
-                                        <div class="col-sm-8">
-                                            <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="image" name="image">
-                                                <label class="custom-file-label" for="image">{{__('Choose file')}}</label>
-                                                @error('image')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                                @enderror
-                                            </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-4 col-form-label" for="foto">@lang('user.image')</label>
+                                    <div class="col-sm-8">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="foto" name="foto">
+                                            <label class="custom-file-label" for="foto">@lang('user.choose_image')</label>
+                                            @error('foto')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">
-                            {{__('Add New user')}}
+                            @lang('user.add')
                         </button>
                     </form>
                 </div>

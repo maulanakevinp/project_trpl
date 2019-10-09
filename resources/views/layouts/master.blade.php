@@ -18,17 +18,14 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
-    <link rel="stylesheet" href="{{ asset('fonts/fontawesome-all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('fonts/font-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('fonts/simple-line-icons.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('fonts/fontawesome5-overrides.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.10.0/baguetteBox.min.css">
     <link rel="stylesheet" href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/Map-Clean.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/smoothproducts.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/Testimonials.css') }}">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Muli">
+    <link rel="stylesheet" href="{{asset('fonts/simple-line-icons.min.css')}}">
+    @yield('style')
 
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link rel="icon" href="{{ asset('') }}">
@@ -51,7 +48,7 @@
                 @include('layouts.module.topbar')
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid mb-3">
 
                     @yield('container')
 
@@ -87,7 +84,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <a class="btn btn-primary font-weight-normal" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -98,6 +95,7 @@
         </div>
     </div>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -113,12 +111,10 @@
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('#dataTable').DataTable();
+            
             $(".custom-file-input").on("change", function() {
                 var fileName = $(this).val().split("\\").pop();
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
@@ -143,8 +139,8 @@
             $('.editRole').on('click', function() {
                 const id = $(this).data('id');
                 const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $('#newRoleModalLabel').html('Edit Role');
-                $('#submitRole').html('Edit');
+                $('#newRoleModalLabel').html("{{__('role.edit_role')}}");
+                $('#submitRole').html("{{__('role.edit')}}");
                 $('#postRole').attr('action', "{{ url('role') }}/" + id);
                 $('#method-role').val('patch');
                 $.ajax({
@@ -161,8 +157,8 @@
                 });
             });
             $('.addRole').on('click', function() {
-                $('#newRoleModalLabel').html('Add New Role');
-                $('#submitRole').html('Add');
+                $('#newRoleModalLabel').html("{{__('role.add')}}");
+                $('#submitRole').html("{{__('role.add')}}");
                 $('#postRole').attr('action', "{{ route('role.store') }}");
                 $('#method-role').val('post');
                 $('#role').val('');
@@ -170,8 +166,8 @@
             $('.editMenu').on('click', function() {
                 const id = $(this).data('id');
                 const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $('#newMenuModalLabel').html('Edit Menu');
-                $('#submitMenu').html('Edit');
+                $('#newMenuModalLabel').html("{{__('menu.edit_menu')}}");
+                $('#submitMenu').html("{{__('menu.edit')}}");
                 $('#postMenu').attr('action', "{{ url('menu') }}/" + id);
                 $('#method-menu').val('patch');
                 $.ajax({
@@ -188,17 +184,18 @@
                 });
             });
             $('.addMenu').on('click', function() {
-                $('#newMenuModalLabel').html('Add New Menu');
-                $('#submitMenu').html('Add');
+                $('#newMenuModalLabel').html("{{__('menu.add')}}");
+                $('#submitMenu').html("{{__('menu.add')}}");
                 $('#postMenu').attr('action', "{{ route('menu.store') }}");
                 $('#method-menu').val('post');
                 $('#menu').val('');
             });
             $('.editSubMenu').on('click', function() {
                 const id = $(this).data('id');
+                console.log(id);
                 const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $('#newSubMenuModalLabel').html('Edit Submenu');
-                $('#submitSubMenu').html('Edit');
+                $('#newSubMenuModalLabel').html("{{__('submenu.edit')}}");
+                $('#submitSubMenu').html("{{__('submenu.edit')}}");
                 $('#postSubMenu').attr('action', "{{ url('submenu') }}/" + id);
                 $('#method-submenu').val('patch');
                 $.ajax({
@@ -223,8 +220,8 @@
                 });
             });
             $('.addSubMenu').on('click', function() {
-                $('#newSubMenuModalLabel').html('Add New Submenu');
-                $('#submitSubMenu').html('Add');
+                $('#newSubMenuModalLabel').html("{{__('submenu.add')}}");
+                $('#submitSubMenu').html("{{__('submenu.add')}}");
                 $('#postSubMenu').attr('action', "{{ route('submenu.store') }}");
                 $('#title').val('');
                 $('#menu_id').val('');

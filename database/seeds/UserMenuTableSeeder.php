@@ -16,7 +16,7 @@ class UserMenuTableSeeder extends Seeder
         ]);
 
         DB::table('user_menu')->insert([
-            'menu' => 'Population Graph',
+            'menu' => 'Grafik Penduduk',
         ]);
 
         DB::table('user_menu')->insert([
@@ -24,7 +24,7 @@ class UserMenuTableSeeder extends Seeder
         ]);
 
         DB::table('user_menu')->insert([
-            'menu' => 'Profile',
+            'menu' => 'Profil',
         ]);
 
         DB::table('user_menu')->insert([

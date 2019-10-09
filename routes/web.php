@@ -18,10 +18,10 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function () {
-    Route::get('/my-profile', 'UserController@show')->name('my-profile');
+    Route::get('/my-profile', 'UserController@show');
     Route::get('/edit-profile', 'UserController@editProfile')->name('edit-profile');
     Route::patch('/update-profile/{id}', 'UserController@updateProfile')->name('update-profile');
-    Route::get('/change-password', 'UserController@changePassword')->name('change-password');
+    Route::get('/change-password', 'UserController@changePassword');
     Route::patch('/update-password/{id}', 'UserController@updatePassword')->name('update-password');
 
     Route::group(['roles' => 'Super Admin'], function () {
@@ -42,8 +42,6 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::resource('/submenu', 'SubmenuController')->except(['create', 'show', 'edit']);;
         Route::post('/getSubmenu', 'SubmenuController@getSubmenu');
 
-        Route::resource('/letters', 'LetterController')->except(['show', 'create', 'store']);
-
         Route::get('/gender-chart', 'PopulationGraphController@gender')->name('gender-chart');
         Route::get('/age-chart', 'PopulationGraphController@age')->name('age-chart');
         Route::get('/education-chart', 'PopulationGraphController@education')->name('education-chart');
@@ -53,8 +51,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     });
 
     Route::group(['roles' => 'Penduduk'], function () {
-        Route::get('/letters/show', 'LetterController@show')->name('letters.show');
-        Route::get('/letters/create', 'LetterController@show')->name('letters.create');
-        Route::post('/letters', 'LetterController@show')->name('letters.store');
+        Route::get('/pengajuan-surat', 'LetterController@index');
+        Route::resource('/salary', 'SalaryController');
     });
 });

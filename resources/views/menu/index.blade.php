@@ -29,15 +29,15 @@
             <div class="card shadow h-100">
                 <div class="card-header">
                     <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $title }}</h5>
-                    <a href="" class="btn btn-primary btn-sm float-right addMenu" data-toggle="modal" data-target="#newMenuModal">{{ __('Add New Menu') }}</a>
+                    <a href="" class="btn btn-primary btn-sm float-right addMenu" data-toggle="modal" data-target="#newMenuModal">{{ __('menu.add') }}</a>
                 </div>
                 <div class="card-body">
                     <table class="table table-hover">
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">{{ __('#') }}</th>
-                                <th scope="col">{{ __('Menu') }}</th>
-                                <th scope="col">{{ __('Action') }}</th>
+                                <th scope="col">{{ __('menu.menu') }}</th>
+                                <th scope="col">{{ __('menu.action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -46,12 +46,12 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $menu->menu }}</td>
                                 <td>
-                                    <a class="editMenu" href="" data-toggle="modal" data-target="#newMenuModal" data-id="{{ $menu->id }}"><span class="badge badge-success">{{ __('edit') }}</span></a>
+                                    <a class="editMenu" href="" data-toggle="modal" data-target="#newMenuModal" data-id="{{ $menu->id }}"><span class="badge badge-success">{{ __('menu.edit') }}</span></a>
                                     <form class="d-inline-block" action="{{ route('menu.destroy',$menu->id) }}" method="POST">
                                         @method('delete')
                                         @csrf
-                                        <button type="submit" class="badge badge-danger " onclick="return confirm('Are you sure want to DELETE this menu ?');">
-                                            {{ __('delete') }}
+                                        <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('menu.delete_confirm')}}');">
+                                            {{ __('menu.delete') }}
                                         </button>
                                     </form>
                                 </td>
@@ -72,7 +72,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="newMenuModalLabel">{{ __('Add New Menu') }}</h5>
+                <h5 class="modal-title" id="newMenuModalLabel">{{ __('menu.add') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -83,12 +83,12 @@
 
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="menu" name="menu" placeholder="Menu Name" autocomplete="off">
+                        <input type="text" class="form-control" id="menu" name="menu" placeholder="Menu" autocomplete="off">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="Submit" class="btn btn-primary" id="submitMenu">Add </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('menu.close')</button>
+                    <button type="Submit" class="btn btn-primary" id="submitMenu">@lang('menu.add')</button>
                 </div>
             </form>
         </div>

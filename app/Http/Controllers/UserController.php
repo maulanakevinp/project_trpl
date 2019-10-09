@@ -21,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $title = 'Users Management';
+        $title = 'Manajemen Pengguna';
         $users = User::all();
         return view('user.index', compact('title', 'users'));
     }
@@ -33,8 +33,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        $title = 'Users Management';
-        $subtitle = 'Add New User';
+        $title = 'Manajemen Pengguna';
+        $subtitle = 'Tambah Pengguna Baru';
         $users = User::all();
         $user_role = UserRole::all();
         $religions = Religion::all();
@@ -52,45 +52,46 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'role' => 'required|numeric',
-            'name' => 'required|string',
-            'nik' => 'required|numeric',
-            'email' => 'required|string|email|unique:users',
-            'gender' => 'required',
-            'religion' => 'required',
-            'marital' => 'required',
-            'address' => 'required',
-            'birth_place' => 'required|string',
-            'birth_date' => 'required|date',
-            'job' => 'required|string',
-            'image' => 'image|mimes:jpeg,png,gif,webp|max:2048',
-            'password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
-            'confirm_password' => 'required|min:6'
+            'peran'                 => 'required|numeric',
+            'nama_lengkap'          => 'required|string',
+            'nik'                   => 'required|numeric',
+            'email'                 => 'required|string|email|unique:users',
+            'jenis_kelamin'         => 'required',
+            'agama'                 => 'required',
+            'status_pernikahan'     => 'required',
+            'alamat'                => 'required',
+            'tempat_lahir'          => 'required|string',
+            'tanggal_lahir'         => 'required|date',
+            'pekerjaan'             => 'required|string',
+            'foto'                  => 'image|mimes:jpeg,png,gif,webp|max:2048',
+            'kata_sandi'            => 'required|min:6|required_with:konfirmasi_kata_sandi|same:konfirmasi_kata_sandi',
+            'konfirmasi_kata_sandi' => 'required|min:6'
         ]);
         $image = 'default.jpg';
-        $file = $request->file('image');
+        $file = $request->file('foto');
         if (!empty($file)) {
             $image = time() . "_" . $file->getClientOriginalName();
             if (!$file->move(public_path('img/profile'), $image)) {
-                return redirect('/users')->with('failed', 'User has not been added');
+                return redirect('/users')->with('failed', 'Pengguna gagal ditambahkan');
             }
         }
 
         User::create([
-            'role_id' => $request->role,
-            'name' => $request->name,
-            'image' => $image,
-            'gender_id' => $request->gender,
-            'religion_id' => $request->religion,
-            'marital_id' => $request->marital,
-            'address' => $request->address,
-            'birth_place' => $request->birth_place,
-            'birth_date' => $request->birth_date,
-            'job' => $request->job,
-            'email' => $request->email,
-            'password' => Hash::make($request->confirm_password),
+            'role_id'       => $request->peran,
+            'nik'           => $request->nik,
+            'name'          => $request->nama_lengkap,
+            'image'         => $image,
+            'gender_id'     => $request->jenis_kelamin,
+            'religion_id'   => $request->agama,
+            'marital_id'    => $request->status_pernikahan,
+            'address'       => $request->alamat,
+            'birth_place'   => $request->tempat_lahir,
+            'birth_date'    => $request->tanggal_lahir,
+            'job'           => $request->pekerjaan,
+            'email'         => $request->email,
+            'password'      => Hash::make($request->konfirmasi_kata_sandi),
         ]);
-        return redirect('/users')->with('success', 'User has been added');
+        return redirect('/users')->with('success', 'Pengguna berhasil ditambahkan');
     }
 
     /**
@@ -101,7 +102,7 @@ class UserController extends Controller
      */
     public function show()
     {
-        $title = 'My Profile';
+        $title = 'Profil Saya';
         return view('user.show', compact('title'));
     }
 
@@ -113,9 +114,9 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $title = 'Users Management';
-        $subtitle = 'Edit User';
-        $user = User::find($id);
+        $title = 'Manajemen Pengguna';
+        $subtitle = 'Ubah Pengguna';
+        $user = User::findOrFail($id);
         $user_role = UserRole::all();
         $genders = Gender::all();
         $religions = Religion::all();
@@ -134,21 +135,21 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $request->validate([
-            'role' => 'required|numeric',
-            'name' => 'required',
-            'nik' => 'required|numeric',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'religion' => 'required',
-            'marital' => 'required',
-            'address' => 'required',
-            'birth_place' => 'required',
-            'birth_date' => 'required|date',
-            'job' => 'required',
-            'image' => 'image|mimes:jpeg,png,gif,webp|max:2048'
+            'peran'             => 'required|numeric',
+            'nama_lengkap'      => 'required|string',
+            'nik'               => 'required|numeric',
+            'email'             => 'required|string|email',
+            'jenis_kelamin'     => 'required',
+            'agama'             => 'required',
+            'status_pernikahan' => 'required',
+            'alamat'            => 'required',
+            'tempat_lahir'      => 'required|string',
+            'tanggal_lahir'     => 'required|date',
+            'pekerjaan'         => 'required|string',
+            'foto'              => 'image|mimes:jpeg,png,gif,webp|max:2048'
         ]);
 
-        $file = $request->file('image');
+        $file = $request->file('foto');
         if (!empty($file)) {
             $file_name = time() . "_" . $file->getClientOriginalName();
             if ($file->move(public_path('img/profile'), $file_name)) {
@@ -157,25 +158,25 @@ class UserController extends Controller
                 }
                 $user->image = $file_name;
             } else {
-                return redirect('/users' . '/' . $id . '/edit')->with('failed', 'Photo cannot moved');
+                return redirect('/users' . '/' . $id . '/edit')->with('failed', 'Foto gagal diunggah');
             }
         }
 
         User::where('id', $id)->update([
-            'role_id' => $request->role,
-            'name' => $request->name,
-            'nik' => $request->nik,
-            'image' => $user->image,
-            'gender_id' => $request->gender,
-            'religion_id' => $request->religion,
-            'marital_id' => $request->marital,
-            'address' => $request->address,
-            'birth_place' => $request->birth_place,
-            'birth_date' => $request->birth_date,
-            'job' => $request->job,
-            'email' => $request->email
+            'role_id'       => $request->peran,
+            'nik'           => $request->nik,
+            'name'          => $request->nama_lengkap,
+            'image'         => $user->image,
+            'gender_id'     => $request->jenis_kelamin,
+            'religion_id'   => $request->agama,
+            'marital_id'    => $request->status_pernikahan,
+            'address'       => $request->alamat,
+            'birth_place'   => $request->tempat_lahir,
+            'birth_date'    => $request->tanggal_lahir,
+            'job'           => $request->pekerjaan,
+            'email'         => $request->email,
         ]);
-        return redirect('/users' . '/' . $id . '/edit')->with('success', 'Profile has been updated');
+        return redirect('/users' . '/' . $id . '/edit')->with('success', 'Pengguna berhasil diperbarui');
     }
 
     /**
@@ -192,9 +193,9 @@ class UserController extends Controller
 
         if ($delete) {
             $user->forceDelete();
-            return redirect('/users')->with('success', 'User has been deleted');
+            return redirect('/users')->with('success', 'Pengguna berhasil dihapus');
         } else {
-            return redirect('/users')->with('failed', 'User has not been deleted');
+            return redirect('/users')->with('failed', 'Pengguna gagal dihapus');
         }
     }
 
@@ -202,13 +203,13 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-        return redirect('/users')->with('success', 'User has been deleted');
+        return redirect('/users')->with('success', 'Pengguna berhasil dihapus');
     }
 
     public function trash()
     {
-        $title = 'Users Management';
-        $subtitle = 'Users Trash';
+        $title = 'Manajemen Pengguna';
+        $subtitle = 'Pengguna Terhapus';
         $users = User::onlyTrashed()->get();
         return view('user.trash', compact('title', 'subtitle', 'users'));
     }
@@ -217,19 +218,19 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->where('id', $id);
         $user->restore();
-        return redirect('/users')->with('success', 'User has been restored');
+        return redirect('/users')->with('success', 'Pengguna berhasil dikembalikan');
     }
 
     public function restoreAll()
     {
         $user = User::onlyTrashed();
         $user->restore();
-        return redirect('/users')->with('success', 'User has been restored');
+        return redirect('/users')->with('success', 'Pengguna berhasil dikembalikan semua');
     }
 
     public function editProfile()
     {
-        $title = 'Edit Profile';
+        $title = 'Ubah Profil';
         $genders = Gender::all();
         $religions = Religion::all();
         $maritals = Marital::all();
@@ -240,17 +241,17 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $request->validate([
-            'name' => 'required',
-            'nik' => 'required|numeric',
-            'email' => 'required|email',
-            'gender' => 'required',
-            'religion' => 'required',
-            'marital' => 'required',
-            'address' => 'required',
-            'birth_place' => 'required',
-            'birth_date' => 'required|date',
-            'job' => 'required',
-            'image' => 'image|mimes:jpeg,png,gif,webp|max:2048'
+            'nama_lengkap'      => 'required|string',
+            'nik'               => 'required|numeric',
+            'email'             => 'required|string|email',
+            'jenis_kelamin'     => 'required',
+            'agama'             => 'required',
+            'status_pernikahan' => 'required',
+            'alamat'            => 'required',
+            'tempat_lahir'      => 'required|string',
+            'tanggal_lahir'     => 'required|date',
+            'pekerjaan'         => 'required|string',
+            'foto'              => 'image|mimes:jpeg,png,gif,webp|max:2048'
         ]);
         $file = $request->file('image');
         if (!empty($file)) {
@@ -261,57 +262,57 @@ class UserController extends Controller
                 }
                 $user->image = $file_name;
             } else {
-                return redirect('/my-profile')->with('failed', 'Photo cannot moved');
+                return redirect('/my-profile')->with('failed', 'Foto gagal diunggah');
             }
         }
 
         User::where('id', $id)->update([
-            'name' => $request->name,
-            'nik' => $request->nik,
-            'image' => $user->image,
-            'gender_id' => $request->gender,
-            'religion_id' => $request->religion,
-            'marital_id' => $request->marital,
-            'address' => $request->address,
-            'birth_place' => $request->birth_place,
-            'birth_date' => $request->birth_date,
-            'job' => $request->job,
-            'email' => $request->email
+            'nik'           => $request->nik,
+            'name'          => $request->nama_lengkap,
+            'image'         => $user->image,
+            'gender_id'     => $request->jenis_kelamin,
+            'religion_id'   => $request->agama,
+            'marital_id'    => $request->status_pernikahan,
+            'address'       => $request->alamat,
+            'birth_place'   => $request->tempat_lahir,
+            'birth_date'    => $request->tanggal_lahir,
+            'job'           => $request->pekerjaan,
+            'email'         => $request->email,
         ]);
-        return redirect('/my-profile')->with('success', 'Profile has been updated');
+        return redirect('/my-profile')->with('success', 'Profil berhasil diperbarui');
     }
 
     public function changePassword()
     {
-        $title = 'Change Password';
+        $title = 'Ganti Kata Sandi';
         return view('user.change-password', compact('title'));
     }
 
     public function updatePassword(Request $request, $id)
     {
         $request->validate([
-            'current_password' => 'required|min:6',
-            'new_password' => 'required|min:6|required_with:confirm_password|same:confirm_password',
-            'confirm_password' => 'required|min:6'
+            'kata_sandi' => 'required|min:6',
+            'kata_sandi_baru' => 'required|min:6|required_with:konfirmasi_kata_sandi|same:konfirmasi_kata_sandi',
+            'konfirmasi_kata_sandi' => 'required|min:6'
         ]);
 
         $user = User::find($id);
 
-        if (Hash::check($request->current_password, $user->password)) {
-            if ($request->current_password == $request->confirm_password) {
-                return redirect('/my-profile')->with('failed', 'Password has not been updated, nothing changed in password');
+        if (Hash::check($request->kata_sandi, $user->password)) {
+            if ($request->kata_sandi == $request->konfirmasi_kata_sandi) {
+                return redirect('/my-profile')->with('failed', 'Kata sandi gagal diperbarui, tidak ada yang berubah pada kata sandi');
             } else {
-                if ($request->new_password == $request->confirm_password) {
+                if ($request->kata_sandi_baru == $request->konfirmasi_kata_sandi) {
                     User::where('id', $id)->update([
-                        'password' => Hash::make($request->confirm_password)
+                        'password' => Hash::make($request->konfirmasi_kata_sandi)
                     ]);
-                    return redirect('/my-profile')->with('success', 'Password has been updated');
+                    return redirect('/my-profile')->with('success', 'Kata sandi berhasil diperbarui');
                 } else {
-                    return redirect('/my-profile')->with('failed', 'Password not match, Password has not been updated');
+                    return redirect('/my-profile')->with('failed', 'Kata sandi tidak cocok');
                 }
             }
         } else {
-            return redirect('/my-profile')->with('failed', 'Password not match with old password, Password has not been updated');
+            return redirect('/my-profile')->with('failed', 'Kata sandi tidak cocok dengan kata sandi lama');
         }
     }
 }

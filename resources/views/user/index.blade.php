@@ -31,8 +31,8 @@
         <div class="card-header py-3 ">
             <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $title }}</h5>
             <div class="btn-group float-right">
-                <a href="{{route('users.trash')}}" class="btn btn-sm btn-warning">{{ __('Trash') }}</a>
-                <a href="{{route('users.create')}}" class="btn btn-sm btn-success">{{ __('Add New User') }}</a>
+                <a href="{{route('users.trash')}}" class="btn btn-sm btn-warning">{{ __('user.trash') }}</a>
+                <a href="{{route('users.create')}}" class="btn btn-sm btn-primary">{{ __('user.add') }}</a>
             </div>
         </div>
         <div class="card-body">
@@ -40,15 +40,10 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th>{{__('NIK')}}</th>
-                            <th>{{__('Name')}}</th>
-                            <th>{{__('Gender')}}</th>
-                            <th>{{__('Religion')}}</th>
-                            <th>{{__('Marital')}}</th>
-                            <th>{{__('Address')}}</th>
-                            <th>{{__('Age')}}</th>
-                            <th>{{__('Job')}}</th>
-                            <th>{{__('Action')}}</th>
+                            <th>{{__('user.nik')}}</th>
+                            <th>{{__('user.name')}}</th>
+                            <th>{{__('user.role')}}</th>
+                            <th>{{__('user.action')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -56,17 +51,12 @@
                         <tr>
                             <td>{{ $user->nik }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->gender->gender }}</td>
-                            <td>{{ $user->religion->religion }}</td>
-                            <td>{{ $user->marital->marital }}</td>
-                            <td>{{ $user->address }}</td>
-                            <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</td>
-                            <td>{{ $user->job }}</td>
+                            <td>{{ $user->role->role }}</td>
                             <td>
-                                <a href="{{route('users.edit',$user->id)}}" class="badge badge-warning">{{__('edit')}}</a>
+                                <a href="{{route('users.edit',$user->id)}}" class="badge badge-warning">{{__('user.edit')}}</a>
                                 @if($user->id != Auth::user()->id)
-                                <a href="{{ route('softdelete',$user->id) }}" class="badge badge-danger d-inline-block" onclick="return confirm('Are you sure want to DELETE this user ?');">
-                                    {{ __('delete') }}
+                                <a href="{{ route('softdelete',$user->id) }}" class="badge badge-danger d-inline-block" onclick="return confirm('{{__('user.delete_confirm')}}');">
+                                    {{ __('user.delete') }}
                                 </a>
                                 @endif
                             </td>
