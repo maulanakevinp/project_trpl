@@ -26,8 +26,8 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Form Pengajuan Surat Keterangan Penghasilan';
-        $salary = Salary::where('user_id', auth()->user()->id);
-        return view('salary.create', compact('title', 'subtitle', 'salary'));
+        $salaries = Salary::where('user_id', auth()->user()->id)->get();
+        return view('salary.create', compact('title', 'subtitle', 'salaries'));
     }
 
     /**
@@ -38,7 +38,17 @@ class SalaryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'penghasilan'       => 'required|numeric',
+            'alasan_pengajuan'  => 'required',
+        ]);
+
+        Salary::create([
+            'user_id'   => auth()->user()->id,
+            'salary'    => $request->penghasilan,
+            'reason'    => $request->alasan_pengajuan
+        ]);
+        return redirect('/salary/create')->with('success', 'Pengajuan surat keterangan penghasilan berhasil ditambahkan');
     }
 
     /**
@@ -72,6 +82,40 @@ class SalaryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'penghasilan'       => 'required|numeric',
+            'alasan_pengajuan'  => 'required',
+        ]);
+
+        Salary::where('id', $id)->update([
+            'user_id'   => auth()->user()->id,
+            'salary'    => $request->penghasilan,
+            'reason'    => $request->alasan_pengajuan
+        ]);
+        return redirect('/salary/create')->with('success', 'Pengajuan surat keterangan penghasilan berhasil diperbarui');
+    }
+
+    /**
+     * Verify1 the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function verify1(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Verify2 the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function verify2(Request $request, $id)
+    {
         //
     }
 
@@ -83,6 +127,7 @@ class SalaryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Salary::destroy($id);
+        return redirect('/salary/create')->with('success', 'Pengajuan surat keterangan penghasilan berhasil dihapus');
     }
 }

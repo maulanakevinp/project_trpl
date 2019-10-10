@@ -18,6 +18,14 @@ return [
     'data'              =>  'Data Pengajuan',
     'edit_salary'       =>  'Ubah pengajuan',
     'delete_confirm'    =>  'Apakah anda yakin ingin menghapus pengajuan ini???',
+    'status'            =>  'Status',
+    'status_null'       =>  'Belum diproses',
+    'status_1'          =>  'Sedang diproses',
+    'status_2'          =>  'Terverifikasi',
+    'status_0'          =>  'Ditolak',
+    'download'          =>  'Unduh SK',
+    'created'           =>  'Tanggal Pengajuan',
+    'updated'           =>  'Tanggal Terverifikasi',
 
     // Actions
     'action'    => 'Aksi',

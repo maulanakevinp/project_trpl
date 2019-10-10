@@ -85,7 +85,7 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 3,
-            'title' => 'Pengajuan surat',
+            'title' => 'Pengajuan Surat',
             'url' => '/pengajuan-surat',
             'icon' => 'fas fa-fw fa-envelope',
             'is_active' => 1

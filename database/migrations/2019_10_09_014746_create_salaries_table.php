@@ -18,8 +18,8 @@ class CreateSalariesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('salary');
             $table->text('reason');
-            $table->tinyInteger('verify1');
-            $table->tinyInteger('verify2');
+            $table->tinyInteger('verify1')->nullable();
+            $table->tinyInteger('verify2')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')
