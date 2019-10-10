@@ -61,6 +61,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo('App\Marital');
     }
 
+    public function salaries()
+    {
+        return $this->hasMany('App\Salary');
+    }
+
     public function hasRole($roles)
     {
         $this->have_role = $this->getUserRole();

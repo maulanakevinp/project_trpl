@@ -99,25 +99,11 @@
                                     @elseif($salary->verify1 == 1 && $salary->verify2 == 0)
                                         ~
                                     @elseif($salary->verify1 == -1 && $salary->verify2 == 0)
-                                        <a class="editSubmission" href="" data-toggle="modal" data-target="{{'#editSubmissionModal'.$i}}" data-id="{{ $salary->id }}"><span class="badge badge-warning">{{ __('salary.edit') }}</span></a>
-                                        <form class="d-inline-block" action="{{ route('salary.destroy',$salary->id) }}" method="POST">
-                                            @method('delete')
-                                            @csrf
-                                            <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('salary.delete_confirm')}}');">
-                                                {{ __('salary.delete') }}
-                                            </button>
-                                        </form>
+                                        ~
                                     @elseif($salary->verify1 == 1 && $salary->verify2 == -1)
                                         ~
                                     @elseif($salary->verify1 == -1 && $salary->verify2 == -1)
-                                        <a class="editSubmission" href="" data-toggle="modal" data-target="{{'#editSubmissionModal'.$i}}" data-id="{{ $salary->id }}"><span class="badge badge-warning">{{ __('salary.edit') }}</span></a>
-                                        <form class="d-inline-block" action="{{ route('salary.destroy',$salary->id) }}" method="POST">
-                                            @method('delete')
-                                            @csrf
-                                            <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('salary.delete_confirm')}}');">
-                                                {{ __('salary.delete') }}
-                                            </button>
-                                        </form>
+                                        ~
                                     @elseif($salary->verify1 == 1 && $salary->verify2 == 1)
                                         <a class="d-inline-block" href=""><span class="badge badge-success">{{ __('salary.download') }}</span></a>
                                     @endif

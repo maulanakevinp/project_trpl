@@ -15,7 +15,7 @@ return [
 
     // Labels
     'add'               =>  'Tambah pengajuan baru',
-    'data'              =>  'Data Pengajuan',
+    'data'              =>  'Data Pengajuan Surat Keterangan Penghasilan',
     'edit_salary'       =>  'Ubah pengajuan',
     'delete_confirm'    =>  'Apakah anda yakin ingin menghapus pengajuan ini???',
     'status'            =>  'Status',
