@@ -25,6 +25,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     Route::patch('/update-password/{id}', 'UserController@updatePassword')->name('update-password');
 
     Route::get('/pengajuan-surat', 'LetterController@index');
+    Route::get('/salary/download/{id}', 'SalaryController@download')->name('salary.download');
 
     Route::group(['roles' => 'Super Admin'], function () {
         Route::get('/dashboard', 'HomeController@index')->name('home');
@@ -68,6 +69,5 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
 
     Route::group(['roles' => 'Penduduk'], function () {
         Route::resource('/salary', 'SalaryController')->except(['create', 'edit', 'show']);
-        Route::get('/salary/download/{id}', 'SalaryController@download')->name('salary.download');
     });
 });

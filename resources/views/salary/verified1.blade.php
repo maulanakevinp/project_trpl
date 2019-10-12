@@ -61,7 +61,7 @@
                                     @if ($salary->verify1 == 1 && $salary->verify2 == null || $salary->verify2 == -1)
                                         <a href="" data-toggle="modal" data-target="{{'#editSubmissionModal'.$i}}"><span class="badge badge-warning">{{ __('salary.edit') }}</span></a>
                                     @else
-                                        <a href=""><span class="badge badge-success">{{ __('salary.download') }}</span></a>
+                                        <a href="{{ route('salary.download',$salary->id) }}"><span class="badge badge-success">{{ __('salary.download') }}</span></a>
                                     @endif
                                 </td>
                             </tr>

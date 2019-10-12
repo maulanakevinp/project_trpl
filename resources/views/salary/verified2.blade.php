@@ -59,7 +59,7 @@
                                 @endif
                                 <td>
                                     <a href="" data-toggle="modal" data-target="{{'#editSubmissionModal'.$i}}"><span class="badge badge-warning">{{ __('salary.edit') }}</span></a>
-                                    <a href=""><span class="badge badge-success">{{ __('salary.download') }}</span></a>
+                                    <a href="{{ route('salary.download',$salary->id) }}"><span class="badge badge-success">{{ __('salary.download') }}</span></a>
                                 </td>
                             </tr>
 

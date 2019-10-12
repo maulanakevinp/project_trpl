@@ -18,19 +18,21 @@
                     <div class="text-center">
                         <img src="{{ asset('img/profile/' . Auth::user()->image) }}" class="img-thumbnail mb-3" alt="{{ Auth::user()->image }}">
                     </div>
-                    <table class="table table-sm">
-                        <tbody>
-                            <tr><td>{{ __('user.name') }}</td>          <td>:</td><td>{{ Auth::user()->name }}</td></tr>
-                            <tr><td>{{ __('user.email') }}</td>         <td>:</td><td>{{ Auth::user()->email }}</td></tr>
-                            <tr><td>{{ __('user.nik') }}</td>           <td>:</td><td>{{ Auth::user()->nik }}</td></tr>
-                            <tr><td>{{ __('user.gender') }}</td>        <td>:</td><td>{{ Auth::user()->gender->gender }}</td></tr>
-                            <tr><td>{{ __('user.religion') }}</td>      <td>:</td><td>{{ Auth::user()->religion->religion }}</td></tr>
-                            <tr><td>{{ __('user.marital') }}</td>       <td>:</td><td>{{ Auth::user()->marital->marital }}</td></tr>
-                            <tr><td>{{ __('user.birth') }}</td>         <td>:</td><td>{{ Auth::user()->birth_place .__(', ').date('d-m-Y', strtotime(Auth::user()->birth_date)) }}</td></tr>
-                            <tr><td>{{ __('user.phone_number') }}</td>  <td>:</td><td>{{ Auth::user()->phone_number }}</td></tr>
-                            <tr><td>{{ __('user.address') }}</td>       <td>:</td><td>{{ Auth::user()->address }}</td></tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr><td>{{ __('user.name') }}</td>          <td>:</td><td>{{ Auth::user()->name }}</td></tr>
+                                <tr><td>{{ __('user.email') }}</td>         <td>:</td><td>{{ Auth::user()->email }}</td></tr>
+                                <tr><td>{{ __('user.nik') }}</td>           <td>:</td><td>{{ Auth::user()->nik }}</td></tr>
+                                <tr><td>{{ __('user.gender') }}</td>        <td>:</td><td>{{ Auth::user()->gender->gender }}</td></tr>
+                                <tr><td>{{ __('user.religion') }}</td>      <td>:</td><td>{{ Auth::user()->religion->religion }}</td></tr>
+                                <tr><td>{{ __('user.marital') }}</td>       <td>:</td><td>{{ Auth::user()->marital->marital }}</td></tr>
+                                <tr><td>{{ __('user.birth') }}</td>         <td>:</td><td>{{ Auth::user()->birth_place .__(', ').date('d-m-Y', strtotime(Auth::user()->birth_date)) }}</td></tr>
+                                <tr><td>{{ __('user.phone_number') }}</td>  <td>:</td><td>{{ Auth::user()->phone_number }}</td></tr>
+                                <tr><td>{{ __('user.address') }}</td>       <td>:</td><td>{{ Auth::user()->address }}</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
