@@ -28,7 +28,7 @@
     @yield('style')
 
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-    <link rel="icon" href="{{ asset('') }}">
+    <link rel="icon" href="{{ asset('img/logo/logo-pemkab-jember1.png') }}">
 
 </head>
 
