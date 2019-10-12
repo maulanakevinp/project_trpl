@@ -114,11 +114,20 @@
     <script>
         $(document).ready(function(){
             $('#dataTable').DataTable();
-            
             $(".custom-file-input").on("change", function() {
                 var fileName = $(this).val().split("\\").pop();
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                readURL(this);
             });
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#image').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
             $('.accessMenu').on('click', function() {
                 const menuId = $(this).data('menu');
                 const roleId = $(this).data('role');
@@ -189,46 +198,6 @@
                 $('#postMenu').attr('action', "{{ route('menu.store') }}");
                 $('#method-menu').val('post');
                 $('#menu').val('');
-            });
-            $('.editSubMenu').on('click', function() {
-                const id = $(this).data('id');
-                console.log(id);
-                const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $('#newSubMenuModalLabel').html("{{__('submenu.edit')}}");
-                $('#submitSubMenu').html("{{__('submenu.edit')}}");
-                $('#postSubMenu').attr('action', "{{ url('submenu') }}/" + id);
-                $('#method-submenu').val('patch');
-                $.ajax({
-                    url: "{{ url('/getSubmenu') }}",
-                    method: 'post',
-                    dataType: 'json',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        id: id
-                    },
-                    success: function(data) {
-                        $('#title').val(data.title);
-                        $('#menu_id').val(data.menu_id);
-                        $('#url').val(data.url);
-                        $('#icon').val(data.icon);
-                        if (data.is_active == 1) {
-                            $('#is_active').attr('checked', true);
-                        } else {
-                            $('#is_active').attr('checked', false);
-                        }
-                    }
-                });
-            });
-            $('.addSubMenu').on('click', function() {
-                $('#newSubMenuModalLabel').html("{{__('submenu.add')}}");
-                $('#submitSubMenu').html("{{__('submenu.add')}}");
-                $('#postSubMenu').attr('action', "{{ route('submenu.store') }}");
-                $('#title').val('');
-                $('#menu_id').val('');
-                $('#url').val('');
-                $('#icon').val('');
-                $('#is_active').attr('checked', false);
-                $('#method-submenu').val('post');
             });
         });
     </script>

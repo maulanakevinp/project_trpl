@@ -20,7 +20,7 @@ class UserMenuTableSeeder extends Seeder
         ]);
 
         DB::table('user_menu')->insert([
-            'menu' => 'Member',
+            'menu' => 'Surat',
         ]);
 
         DB::table('user_menu')->insert([

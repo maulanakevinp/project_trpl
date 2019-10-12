@@ -4,17 +4,9 @@
 @endsection
 @section('container')
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if (session('failed'))
-        <div class="alert alert-danger">
-            {{ session('failed') }}
-        </div>
-    @endif
+    @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
+    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
     <div class="row">
         <div class="col-md-6">
             <div class="card shadow h-100">
@@ -28,14 +20,15 @@
                     </div>
                     <table class="table table-sm">
                         <tbody>
-                            <tr><td>{{ __('user.name') }}</td>      <td>:</td><td>{{ Auth::user()->name }}</td></tr>
-                            <tr><td>{{ __('user.email') }}</td>     <td>:</td><td>{{ Auth::user()->email }}</td></tr>
-                            <tr><td>{{ __('user.nik') }}</td>       <td>:</td><td>{{ Auth::user()->nik }}</td></tr>
-                            <tr><td>{{ __('user.gender') }}</td>    <td>:</td><td>{{ Auth::user()->gender->gender }}</td></tr>
-                            <tr><td>{{ __('user.religion') }}</td>  <td>:</td><td>{{ Auth::user()->religion->religion }}</td></tr>
-                            <tr><td>{{ __('user.marital') }}</td>   <td>:</td><td>{{ Auth::user()->marital->marital }}</td></tr>
-                            <tr><td>{{ __('user.birth') }}</td>     <td>:</td><td>{{ Auth::user()->birth_place .__(', ').date('d-m-Y', strtotime(Auth::user()->birth_date)) }}</td></tr>
-                            <tr><td>{{ __('user.address') }}</td>   <td>:</td><td>{{ Auth::user()->address }}</td></tr>
+                            <tr><td>{{ __('user.name') }}</td>          <td>:</td><td>{{ Auth::user()->name }}</td></tr>
+                            <tr><td>{{ __('user.email') }}</td>         <td>:</td><td>{{ Auth::user()->email }}</td></tr>
+                            <tr><td>{{ __('user.nik') }}</td>           <td>:</td><td>{{ Auth::user()->nik }}</td></tr>
+                            <tr><td>{{ __('user.gender') }}</td>        <td>:</td><td>{{ Auth::user()->gender->gender }}</td></tr>
+                            <tr><td>{{ __('user.religion') }}</td>      <td>:</td><td>{{ Auth::user()->religion->religion }}</td></tr>
+                            <tr><td>{{ __('user.marital') }}</td>       <td>:</td><td>{{ Auth::user()->marital->marital }}</td></tr>
+                            <tr><td>{{ __('user.birth') }}</td>         <td>:</td><td>{{ Auth::user()->birth_place .__(', ').date('d-m-Y', strtotime(Auth::user()->birth_date)) }}</td></tr>
+                            <tr><td>{{ __('user.phone_number') }}</td>  <td>:</td><td>{{ Auth::user()->phone_number }}</td></tr>
+                            <tr><td>{{ __('user.address') }}</td>       <td>:</td><td>{{ Auth::user()->address }}</td></tr>
                         </tbody>
                     </table>
                 </div>

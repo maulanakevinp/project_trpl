@@ -15,7 +15,7 @@ class SubmenuController extends Controller
      */
     public function index()
     {
-        $title = 'Submenu Management';
+        $title = 'Manajemen Submenu';
         $user_menu = UserMenu::all();
         $user_submenu = UserSubmenu::all();
         return view('menu.submenu', compact('title', 'user_submenu', 'user_menu'));
@@ -31,7 +31,7 @@ class SubmenuController extends Controller
     {
 
         $request->validate([
-            'menu_id' => 'required|numeric',
+            'menu' => 'required|numeric',
             'title' => 'required',
             'url' => 'required',
             'icon' => 'required',
@@ -42,7 +42,7 @@ class SubmenuController extends Controller
         }
 
         UserSubmenu::create([
-            'menu_id' => $request->menu_id,
+            'menu_id' => $request->menu,
             'title' => $request->title,
             'url' => $request->url,
             'icon' => $request->icon,
@@ -61,7 +61,7 @@ class SubmenuController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'menu_id' => 'required|numeric',
+            'menu' => 'required|numeric',
             'title' => 'required',
             'url' => 'required',
             'icon' => 'required',
@@ -73,7 +73,7 @@ class SubmenuController extends Controller
         }
 
         UserSubmenu::where('id', $id)->update([
-            'menu_id' => $request->menu_id,
+            'menu_id' => $request->menu,
             'title' => $request->title,
             'url' => $request->url,
             'icon' => $request->icon,
@@ -91,13 +91,7 @@ class SubmenuController extends Controller
      */
     public function destroy($id)
     {
-        UserMenu::destroy($id);
+        UserSubmenu::destroy($id);
         return redirect('/submenu')->with('success', 'Submenu has been deleted');
-    }
-
-    public function getSubmenu(Request $request)
-    {
-        $submenu = UserSubmenu::find($request->id);
-        echo json_encode($submenu);
     }
 }

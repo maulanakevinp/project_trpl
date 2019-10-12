@@ -33,6 +33,7 @@ return [
     'trash'                 => 'Pengguna terhapus',
     'restore'               => 'Kembalikan',
     'restoreAll'            => 'Kembalikan semua',
+    'cancel'                => 'Batal',
 
     // Atributtes
     'name'              => 'Nama lengkap',
@@ -44,6 +45,7 @@ return [
     'choose_religion'   => 'Pilih agama',
     'marital'           => 'Status pernikahan',
     'choose_marital'    => 'Pilih status',
+    'phone_number'      => 'Nomor Telepon',
     'address'           => 'Alamat',
     'birth_place'       => 'Tempat lahir',
     'birth_date'        => 'Tanggal lahir',

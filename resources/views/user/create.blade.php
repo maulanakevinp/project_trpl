@@ -12,9 +12,9 @@
             <li class="breadcrumb-item active" aria-current="page">@lang('user.add')</li>
         </ol>
     </nav>
-    @if ($errors->any())<div class="alert alert-danger"><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
-    @if (session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
-    @if (session('failed'))<div class="alert alert-danger">{{ session('failed') }}</div>@endif
+    @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
+    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
     <div class="row">
         <div class="col-lg">
             <div class="card shadow h-100">
@@ -26,6 +26,18 @@
                         @csrf
                         <div class="row">
                             <div class="col-lg-6">
+                                <div class="form-group row">
+                                    <label for="image" class="col-md-4">{{__('user.image')}}</label>
+                                    <div class="col-md-8">
+                                        <div class="text-center mb-3">
+                                            <img id="image" src="{{ asset('img/profile/default.jpg') }}" class="img-thumbnail">
+                                        </div>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="foto" name="foto">
+                                            <label class="custom-file-label" for="foto">{{__('user.choose_image')}}</label>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="form-group row">
                                     <label for="peran" class="col-sm-4 col-form-label">{{__('Peran :')}}</label>
                                     <div class="col-sm-8">
@@ -78,6 +90,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="nomor_telepon" class="col-md-4 col-form-label">{{__('user.phone_number')}}</label>
+                                    <div class="col-md-8">
+                                        <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ Auth::user()->phone_number }}" >
+                                        @error('nomor_telepon')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
                                 <div class="form-group">
                                     <div class="row">
                                         <label class="col-sm-4 col-form-label" for="agama">@lang('user.religion')</label>
@@ -116,17 +137,6 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <label class="col-sm-4 col-form-label" for="alamat">@lang('user.address')</label>
-                                        <div class="col-sm-8">
-                                            <input id="alamat" type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" value="{{ old('alamat') }}">
-                                            @error('alamat')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <div class="row">
                                         <label class="col-sm-4 col-form-label" for="tempat_lahir">@lang('user.birth_place')</label>
                                         <div class="col-sm-8">
                                             <input id="tempat_lahir" type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" name="tempat_lahir" value="{{ old('tempat_lahir') }}">
@@ -155,6 +165,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4" for="alamat">{{__('user.address')}}</label>
+                                    <div class="col-md-8">
+                                        <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" name="alamat" cols="30" rows="3">{{ old('alamat') }}</textarea>
+                                        @error('alamat')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <div class="row">
                                         <label class="col-sm-4 col-form-label" for="email">@lang('user.email')</label>
@@ -181,16 +198,6 @@
                                         <div class="col-sm-8">
                                             <input id="konfirmasi_kata_sandi" type="password" class="form-control @error('konfirmasi_kata_sandi') is-invalid @enderror" name="konfirmasi_kata_sandi">
                                             @error('konfirmasi_kata_sandi')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-4 col-form-label" for="foto">@lang('user.image')</label>
-                                    <div class="col-sm-8">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="foto" name="foto">
-                                            <label class="custom-file-label" for="foto">@lang('user.choose_image')</label>
-                                            @error('foto')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                         </div>
                                     </div>
                                 </div>

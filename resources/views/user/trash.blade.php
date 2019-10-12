@@ -11,26 +11,9 @@
             <li class="breadcrumb-item active" aria-current="page">{{ $subtitle }}</li>
         </ol>
     </nav>
-    @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
-    @if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-    @endif
-
-    @if (session('failed'))
-    <div class="alert alert-danger">
-        {{ session('failed') }}
-    </div>
-    @endif
+    @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
+    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -47,12 +30,7 @@
                         <tr>
                             <th>{{__('user.nik')}}</th>
                             <th>{{__('user.name')}}</th>
-                            <th>{{__('user.gender')}}</th>
-                            <th>{{__('user.religion')}}</th>
-                            <th>{{__('user.marital')}}</th>
-                            <th>{{__('user.address')}}</th>
-                            <th>{{__('user.age')}}</th>
-                            <th>{{__('user.job')}}</th>
+                            <th>{{__('user.role')}}</th>
                             <th>{{__('user.action')}}</th>
                         </tr>
                     </thead>
@@ -61,12 +39,7 @@
                         <tr>
                             <td>{{ $user->nik }}</td>
                             <td>{{ $user->name }}</td>
-                            <td>{{ $user->gender->gender }}</td>
-                            <td>{{ $user->religion->religion }}</td>
-                            <td>{{ $user->marital->marital }}</td>
-                            <td>{{ $user->address }}</td>
-                            <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y tahun, %m bulan and %d hari') }}</td>
-                            <td>{{ $user->job }}</td>
+                            <td>{{ $user->role->role }}</td>
                             <td>
                                 <a href="{{route('users.restore',$user->id)}}" class="badge badge-warning">{{__('user.restore')}}</a>
                                 @if($user->id != Auth::user()->id)

@@ -17,6 +17,7 @@ class CreateSalariesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->string('salary');
+            $table->string('be_calculated')->nullable();
             $table->text('reason');
             $table->tinyInteger('verify1')->nullable();
             $table->tinyInteger('verify2')->nullable();

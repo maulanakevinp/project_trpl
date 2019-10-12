@@ -24,6 +24,8 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     Route::get('/change-password', 'UserController@changePassword');
     Route::patch('/update-password/{id}', 'UserController@updatePassword')->name('update-password');
 
+    Route::get('/pengajuan-surat', 'LetterController@index');
+
     Route::group(['roles' => 'Super Admin'], function () {
         Route::get('/dashboard', 'HomeController@index')->name('home');
         Route::resource('/users', 'UserController')->except(['show']);
@@ -50,8 +52,22 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::get('/marital-chart', 'PopulationGraphController@marital')->name('marital-chart');
     });
 
+    Route::group(['roles' => 'Kepala Desa'], function () {
+        Route::patch('/salary/{id}', 'SalaryController@verify2')->name('salary.verify2');
+        Route::get('/salary/unprocessed2', 'SalaryController@unprocessed2')->name('salary.unprocessed2');
+        Route::get('/salary/verified2', 'SalaryController@verified2')->name('salary.verified2');
+        Route::get('/salary/declined2', 'SalaryController@declined2')->name('salary.declined2');
+    });
+
+    Route::group(['roles' => 'Administrasi'], function () {
+        Route::put('/salary/{id}', 'SalaryController@verify1')->name('salary.verify1');
+        Route::get('/salary/unprocessed1', 'SalaryController@unprocessed1')->name('salary.unprocessed1');
+        Route::get('/salary/verified1', 'SalaryController@verified1')->name('salary.verified1');
+        Route::get('/salary/declined1', 'SalaryController@declined1')->name('salary.declined1');
+    });
+
     Route::group(['roles' => 'Penduduk'], function () {
-        Route::get('/pengajuan-surat', 'LetterController@index');
-        Route::resource('/salary', 'SalaryController');
+        Route::resource('/salary', 'SalaryController')->except(['create', 'edit', 'show']);
+        Route::get('/salary/download/{id}', 'SalaryController@download')->name('salary.download');
     });
 });

@@ -3,15 +3,9 @@
 @lang('user.edit_profile') - {{ config('app.name') }}
 @endsection
 @section('container')
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
+    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
+    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
     <div class="row">
         <div class="col-lg">
             <div class="card shadow h-100">
@@ -25,14 +19,14 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <div class="form-group row">
-                                    <div class="col-md-3">{{__('user.image')}}</div>
+                                    <label for="image" class="col-md-3">{{__('user.image')}}</label>
                                     <div class="col-md-9">
                                         <div class="text-center mb-3">
-                                            <img src="{{ asset('img/profile/'.Auth::user()->image) }}" class="img-thumbnail">
+                                            <img id="image" src="{{ asset('img/profile/'.Auth::user()->image) }}" class="img-thumbnail">
                                         </div>
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="image" name="image">
-                                            <label class="custom-file-label" for="image">{{__('user.choose_image')}}</label>
+                                            <input type="file" class="custom-file-input" id="foto" name="foto">
+                                            <label class="custom-file-label" for="foto">{{__('user.choose_image')}}</label>
                                         </div>
                                     </div>
                                 </div>
@@ -55,6 +49,13 @@
                                     <div class="col-md-9">
                                         <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ Auth::user()->nik }}" >
                                         @error('nik')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="nomor_telepon" class="col-md-3 col-form-label">{{__('user.phone_number')}}</label>
+                                    <div class="col-md-9">
+                                        <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ Auth::user()->phone_number }}" >
+                                        @error('nomor_telepon')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                     </div>
                                 </div>
                             </div>
@@ -142,9 +143,10 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            {{__('user.edit_profile')}}
-                        </button>
+                        <div class="float-right">
+                            <a href="{{ url('/my-profile') }}" class="btn btn-secondary">{{__('user.cancel')}}</a>
+                            <button type="submit" class="btn btn-primary">{{__('user.edit')}}</button>
+                        </div>
                     </form>
                 </div>
             </div>

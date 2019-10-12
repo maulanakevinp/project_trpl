@@ -36,14 +36,6 @@ class UserSubmenuTableSeeder extends Seeder
         ]);
 
         DB::table('user_submenu')->insert([
-            'menu_id' => 1,
-            'title' => 'Manajemen Surat',
-            'url' => '/letters',
-            'icon' => 'fas fa-fw fa-envelope',
-            'is_active' => 0
-        ]);
-
-        DB::table('user_submenu')->insert([
             'menu_id' => 2,
             'title' => 'Grafik Jenis Kelamin',
             'url' => '/gender-chart',

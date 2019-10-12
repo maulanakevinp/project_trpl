@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('gender_id');
             $table->unsignedBigInteger('religion_id');
             $table->unsignedBigInteger('marital_id');
+            $table->string('phone_number', 16)->nullable();
             $table->text('address');
             $table->string('birth_place');
             $table->date('birth_date');

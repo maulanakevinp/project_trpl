@@ -16,12 +16,13 @@ return [
     // Labels
     'add'               =>  'Tambah submenu baru',
     'edit_menu'         =>  'Ubah submenu',
-    'delete_confirm'    =>  'Apakah anda yakin ingin menghapus submenu ini???',
+    'delete_confirm'    =>  'Apakah anda yakin ingin menghapus submenu ":submenu" ini???',
 
     // Actions
     'action'    => 'Aksi',
     'edit'      => 'Ubah',
     'delete'    => 'Hapus',
+    'detail'    => 'Detail',
     'close'     => 'Tutup',
 
     // Atributtes

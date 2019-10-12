@@ -12,11 +12,7 @@
             <li class="breadcrumb-item active" aria-current="page">{{ $subtitle }}</li>
         </ol>
     </nav>
-            @if ($message = Session::get('success'))
-                <div class="alert alert-success">
-                    {{ $message }}
-                </div>
-            @endif
+    @if ($message = Session::get('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
     <div class="row">
         <div class="col-lg-6">
             <div class="card shadow h-100">

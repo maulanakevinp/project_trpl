@@ -15,7 +15,7 @@ return [
 
     // Labels
     'add'               =>  'Tambah pengajuan baru',
-    'data'              =>  'Data Pengajuan Surat Keterangan Penghasilan',
+    'data'              =>  'Data pengajuan surat keterangan penghasilan',
     'edit_salary'       =>  'Ubah pengajuan',
     'delete_confirm'    =>  'Apakah anda yakin ingin menghapus pengajuan ini???',
     'status'            =>  'Status',
@@ -24,8 +24,21 @@ return [
     'status_2'          =>  'Terverifikasi',
     'status_0'          =>  'Ditolak',
     'download'          =>  'Unduh SK',
-    'created'           =>  'Tanggal Pengajuan',
-    'updated'           =>  'Tanggal Terverifikasi',
+    'created'           =>  'Tanggal pengajuan',
+    'updated'           =>  'Tanggal terverifikasi',
+    'updated_at'        =>  'Tanggal disetujui',
+    'unprocessed'       =>  'Belum di proses',
+    'verified'          =>  'Terverifikasi',
+    'detail_user'       =>  'Data orang yang mengajukan',
+    'verify'            =>  'Verifikasi',
+    'accept'            =>  'Terima',
+    'decline'           =>  'Tolak',
+    'be_calculated'     =>  'Terbilang',
+    'declined_at'       =>  'Tanggal penolakan',
+    'declined'          =>  'Tidak disetujui',
+    'approved'          =>  'Disetujui',
+    'approve'           =>  'Setujui',
+    'not_approve'       =>  'Jangan setujui',
 
     // Actions
     'action'    => 'Aksi',
@@ -35,6 +48,6 @@ return [
     'close'     => 'Tutup',
 
     // Atributtes
-    'salary' => 'Penghasilan',
+    'salary' => 'Penghasilan Perbulan',
     'reason' => 'Alasan Pengajuan',
 ];
