@@ -118,10 +118,6 @@
                                                     <input id="penghasilan" type="text" class="form-control" name="penghasilan" value="{{ $salary->salary }}" disabled>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="col-form-label" for="">@lang('salary.be_calculated')</label>
-                                                    <input id="terbilang" type="text" class="form-control" name="terbilang" value="{{ $salary->be_calculated }}">
-                                                </div>
-                                                <div class="form-group">
                                                     <label class="col-form-label" for="">@lang('salary.reason')</label>
                                                     <textarea name="alasan_pengajuan" id="alasan_pengujian" class="form-control" cols="30" rows="5" disabled>{{ $salary->reason }}</textarea>
                                                 </div>

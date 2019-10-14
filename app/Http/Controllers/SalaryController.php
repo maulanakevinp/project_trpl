@@ -153,12 +153,10 @@ class SalaryController extends Controller
     public function verify1(Request $request, $id)
     {
         $request->validate([
-            'terbilang' => 'required',
             'verifikasi'   => 'required',
         ]);
 
         Salary::where('id', $id)->update([
-            'be_calculated' => $request->terbilang,
             'verify1'       => $request->verifikasi
         ]);
         if ($request->update == 1) {
@@ -208,7 +206,12 @@ class SalaryController extends Controller
     {
         $salary = Salary::findOrFail($id);
         $kepala = User::find(1);
-        $pdf = PDF::loadview('salary.download', compact('salary', 'kepala'));
-        return $pdf->stream();
+
+        if ($salary->user_id == auth()->user()->id || $salary->user->role_id == 2 || $salary->user->role_id == 3) {
+            $pdf = PDF::loadview('salary.download', compact('salary', 'kepala'));
+            return $pdf->stream();
+        } else {
+            return abort(403, 'Anda tidak memiliki hak akses');
+        }
     }
 }

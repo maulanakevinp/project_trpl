@@ -12,7 +12,7 @@ class Salary extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'salary', 'be_calculated', 'reason', 'verify1', 'verify2'
+        'user_id', 'salary', 'reason', 'verify1', 'verify2'
     ];
 
     public function user()
