@@ -12,65 +12,53 @@
         </ol>
     </nav>
     <nav class="nav nav-pills nav-fill mb-3">
-        <a class="nav-link" href="{{ route('salary.unprocessed2') }}">{{ __('salary.unprocessed') }}</a>
-        <a class="nav-link active" href="">{{ __('salary.verified') }}</a>
-        <a class="nav-link" href="{{ route('salary.declined2') }}">{{ __('salary.declined') }}</a>
+        <a class="nav-link" href="{{ route('incapable.unprocessed2') }}">{{ __('incapable.unprocessed') }}</a>
+        <a class="nav-link active" href="">{{ __('incapable.verified') }}</a>
+        <a class="nav-link" href="{{ route('incapable.declined2') }}">{{ __('incapable.declined') }}</a>
     </nav>
-    @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close"
-            data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-    </div>@endif
-    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button></div>@endif
-    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button></div>@endif
     <div class="card shadow h-100">
         <div class="card-header">
-            <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ __('salary.data') }}</h5>
+            <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ __('incapable.data') }}</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th>{{ __('salary.nik') }}</th>
-                            <th>{{ __('salary.salary') }}</th>
-                            <th>{{ __('salary.reason') }}</th>
-                            <th>{{ __('salary.created') }}</th>
-                            <th>{{ __('salary.updated_at') }}</th>
-                            <th>{{ __('salary.status') }}</th>
-                            <th>{{ __('salary.action') }}</th>
+                            <th>{{ __('incapable.nik') }}</th>
+                            <th>{{ __('incapable.reason') }}</th>
+                            <th>{{ __('incapable.created') }}</th>
+                            <th>{{ __('incapable.updated_at') }}</th>
+                            <th>{{ __('incapable.status') }}</th>
+                            <th>{{ __('incapable.action') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                         $i = 1;
                         @endphp
-                        @foreach($salaries as $salary)
+                        @foreach($incapables as $incapable)
                         <tr>
                             <td>
                                 <a href="" data-toggle="modal" data-target="{{'#showUserModal'.$i}}">
-                                    {{ $salary->user->nik }}
+                                    {{ $incapable->user->nik }}
                                 </a>
                             </td>
-                            <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
-                            <td>{{ $salary->reason }}</td>
-                            <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
-                            @if ($salary->letter->verify2 == 1)
-                            <td>{{ $salary->letter->updated_at->format('d M Y - H:i:s') }}</td>
-                            <td>{{ __('salary.approved') }}</td>
-                            @elseif($salary->letter->verify2 == -1)
+                            <td>{{ $incapable->reason }}</td>
+                            <td>{{ $incapable->created_at->format('d M Y - H:i:s') }}</td>
+                            @if ($incapable->letter->verify2 == 1)
+                            <td>{{ $incapable->letter->updated_at->format('d M Y - H:i:s') }}</td>
+                            <td>{{ __('incapable.approved') }}</td>
+                            @elseif($incapable->letter->verify2 == -1)
                             <td>~</td>
-                            <td>{{ __('salary.declined') }}</td>
+                            <td>{{ __('incapable.declined') }}</td>
                             @else
                             <td>~</td>
                             <td>~</td>
                             @endif
                             <td>
-                                <a href="{{ route('salary.download',$salary->id) }}" target="_blank">
-                                    <span class="badge badge-success">{{ __('salary.download') }}</span>
+                                <a href="{{ route('incapable.download',$incapable->id) }}" target="_blank">
+                                    <span class="badge badge-success">{{ __('incapable.download') }}</span>
                                 </a>
                             </td>
                         </tr>
@@ -82,61 +70,61 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="{{'showUserModalLabel'.$i}}">
-                                            {{ __('salary.detail_user') }}</h5>
+                                            {{ __('incapable.detail_user') }}</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        <img src="{{ asset('img/profile/' . $salary->user->image) }}"
-                                            class="img-thumbnail mb-3" alt="{{ $salary->user->image }}">
+                                        <img src="{{ asset('img/profile/' . $incapable->user->image) }}"
+                                            class="img-thumbnail mb-3" alt="{{ $incapable->user->image }}">
                                         <div class="row">
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.name') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->name }}"></div>
+                                                    value="{{ $incapable->user->name }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.email') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->email }}"></div>
+                                                    value="{{ $incapable->user->email }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.nik') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->nik }}"></div>
+                                                    value="{{ $incapable->user->nik }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.gender') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->gender->gender }}"></div>
+                                                    value="{{ $incapable->user->gender->gender }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.religion') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->religion->religion }}"></div>
+                                                    value="{{ $incapable->user->religion->religion }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.marital') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->marital->marital }}"></div>
+                                                    value="{{ $incapable->user->marital->marital }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.birth') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->birth_place .__(', ').date('d-m-Y', strtotime($salary->user->birth_date)) }}">
+                                                    value="{{ $incapable->user->birth_place .__(', ').date('d-m-Y', strtotime($incapable->user->birth_date)) }}">
                                             </div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.job') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->job }}"></div>
+                                                    value="{{ $incapable->user->job }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.phone_number') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->phone_number }}"></div>
+                                                    value="{{ $incapable->user->phone_number }}"></div>
                                             <div class="col-md-4"><label
                                                     class="col-form-label">{{ __('user.address') }}</label></div>
                                             <div class="col-md-8 mb-2"><textarea class="form-control" disabled
-                                                    rows="3">{{ $salary->user->address }}</textarea></div>
+                                                    rows="3">{{ $incapable->user->address }}</textarea></div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">@lang('salary.close')</button>
+                                            data-dismiss="modal">@lang('incapable.close')</button>
                                     </div>
                                 </div>
                             </div>

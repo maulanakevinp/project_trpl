@@ -20,7 +20,13 @@
         <div class="card-header py-3 ">
             <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $subtitle }}</h5>
             <div class="btn-group float-right">
-                <a href="{{route('users.restoreAll')}}" class="btn btn-sm btn-primary">@lang('user.restoreAll')</a>
+                <form action="{{ route('users.restoreAll') }}" method="POST">
+                    @method('put')
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('{{__('user.restore_all_confirm')}}');">
+                        {{ __('user.restoreAll') }}
+                    </button>
+                </form>
             </div>
         </div>
         <div class="card-body">
@@ -41,12 +47,18 @@
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->role->role }}</td>
                             <td>
-                                <a href="{{route('users.restore',$user->id)}}" class="badge badge-warning">{{__('user.restore')}}</a>
+                                <form action="{{ route('users.restore',$user->id) }}" method="POST">
+                                    @method('patch')
+                                    @csrf
+                                    <button type="submit" class="badge badge-warning">
+                                        {{ __('user.restore') }}
+                                    </button>
+                                </form>
                                 @if($user->id != Auth::user()->id)
                                 <form class="d-inline-block" action="{{ route('users.destroy',$user->id) }}" method="POST">
                                     @method('delete')
                                     @csrf
-                                    <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('user.delete_confirm')}}');">
+                                    <button type="submit" class="badge badge-danger" onclick="return confirm('{{__('user.delete_confirm')}}');">
                                         {{ __('user.delete') }}
                                     </button>
                                 </form>

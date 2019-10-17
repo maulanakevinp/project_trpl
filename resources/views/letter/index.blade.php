@@ -23,6 +23,14 @@
                             </a>
                         </div>
                     </div>
+                    <div class="col-lg-4">
+                        <div class="feature-item">
+                            <a class="card-link text-dark" href="{{ route('incapable.index') }}">
+                                <i class="fas fa-file-signature"></i>
+                                <h5>Surat Keterangan Tidak Mampu</h5>
+                            </a>
+                        </div>
+                    </div>
                 @elseif(Auth::user()->role->role == 'Administrasi')
                     <div class="col-lg-4">
                         <div class="feature-item">
@@ -32,12 +40,28 @@
                             </a>
                         </div>
                     </div>
+                    <div class="col-lg-4">
+                        <div class="feature-item">
+                            <a class="card-link text-dark" href="{{ route('incapable.unprocessed1') }}">
+                                <i class="fas fa-file-signature"></i>
+                                <h5>Surat Keterangan Tidak Mampu</h5>
+                            </a>
+                        </div>
+                    </div>
                 @elseif(Auth::user()->role->role == 'Kepala Desa')
                     <div class="col-lg-4">
                         <div class="feature-item">
                             <a class="card-link text-dark" href="{{ route('salary.unprocessed2') }}">
                                 <i class="fas fa-file-invoice-dollar"></i>
                                 <h5>Surat Keterangan Penghasilan</h5>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="feature-item">
+                            <a class="card-link text-dark" href="{{ route('incapable.unprocessed2') }}">
+                                <i class="fas fa-file-signature"></i>
+                                <h5>Surat Keterangan Tidak Mampu</h5>
                             </a>
                         </div>
                     </div>

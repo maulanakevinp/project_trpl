@@ -15,19 +15,17 @@ return [
 
     // Labels
     'add'               =>  'Tambah pengajuan baru',
-    'data'              =>  'Data pengajuan surat keterangan penghasilan',
-    'edit_salary'       =>  'Ubah pengajuan',
+    'data'              =>  'Data pengajuan surat keterangan tidak mampu',
+    'edit'              =>  'Ubah pengajuan',
     'delete_confirm'    =>  'Apakah anda yakin ingin menghapus pengajuan ini???',
     'status'            =>  'Status',
     'status_null'       =>  'Belum diproses',
     'status_1'          =>  'Sedang diproses',
-    'status_2'          =>  'Terverifikasi',
-    'status_0'          =>  'Ditolak',
     'download'          =>  'Unduh SK',
     'created'           =>  'Tanggal pengajuan',
     'updated'           =>  'Tanggal terverifikasi',
     'updated_at'        =>  'Tanggal disetujui',
-    'unprocessed'       =>  'Belum di proses',
+    'unprocessed'       =>  'Belum diproses',
     'verified'          =>  'Terverifikasi',
     'detail_user'       =>  'Data orang yang mengajukan',
     'verify'            =>  'Verifikasi',
@@ -39,10 +37,10 @@ return [
     'approved'          =>  'Disetujui',
     'approve'           =>  'Setujui',
     'not_approve'       =>  'Jangan setujui',
-    'name'              =>  'Nama Pemohon',
     'nik'               =>  'NIK Pemohon',
-    'edit_verify'       =>  'Ubah Verifikasi',
-    'back'              =>  'Kembali',
+    'parents'           =>  'Orangtua/Wali saya',
+    'child'             =>  'Anak saya',
+    'choose'            =>  'Pilih',
 
     // Actions
     'action'    => 'Aksi',
@@ -50,8 +48,14 @@ return [
     'delete'    => 'Hapus',
     'access'    => 'Akses',
     'close'     => 'Tutup',
+    'back'      => 'Kembali',
 
     // Atributtes
-    'salary' => 'Penghasilan Perbulan',
-    'reason' => 'Alasan Pengajuan',
+    'name'          => 'Nama',
+    'birth_place'   => 'Tempat lahir',
+    'birth_date'    => 'Tanggal lahir',
+    'job'           => 'Pekerjaan',
+    'address'       => 'Alamat',
+    'reason'        => 'Alasan pengajuan',
+    'as'            => 'Merupakan',
 ];

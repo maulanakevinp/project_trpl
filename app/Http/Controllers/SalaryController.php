@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Letter;
 use App\Salary;
 use App\User;
 use PDF;
+use Alert;
 use Illuminate\Http\Request;
 
 class SalaryController extends Controller
@@ -31,7 +33,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('verify1', null)->get();
+        $salaries = Salary::where('letter_id', null)->get();
         return view('salary.unprocessed1', compact('title', 'subtitle', 'salaries'));
     }
 
@@ -44,7 +46,9 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('verify1', 1)->get();
+        $salaries = Salary::whereHas('letter', function ($letter) {
+            $letter->where('verify1', 1);
+        })->get();
         return view('salary.verified1', compact('title', 'subtitle', 'salaries'));
     }
 
@@ -57,7 +61,9 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('verify1', -1)->get();
+        $salaries = Salary::whereHas('letter', function ($letter) {
+            $letter->where('verify1', -1);
+        })->get();
         return view('salary.declined1', compact('title', 'subtitle', 'salaries'));
     }
 
@@ -70,7 +76,9 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('verify2', null)->where('verify1', 1)->get();
+        $salaries = Salary::whereHas('letter', function ($letter) {
+            $letter->where('verify2', null)->where('verify1', 1);
+        })->get();
         return view('salary.unprocessed2', compact('title', 'subtitle', 'salaries'));
     }
 
@@ -83,7 +91,9 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('verify2', 1)->where('verify1', 1)->get();
+        $salaries = Salary::whereHas('letter', function ($letter) {
+            $letter->where('verify2', 1)->where('verify1', 1);
+        })->get();
         return view('salary.verified2', compact('title', 'subtitle', 'salaries'));
     }
 
@@ -96,7 +106,9 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('verify2', -1)->where('verify1', 1)->get();
+        $salaries = Salary::whereHas('letter', function ($letter) {
+            $letter->where('verify2', -1)->where('verify1', 1);
+        })->get();
         return view('salary.declined2', compact('title', 'subtitle', 'salaries'));
     }
 
@@ -112,13 +124,13 @@ class SalaryController extends Controller
             'penghasilan'       => 'required|numeric',
             'alasan_pengajuan'  => 'required',
         ]);
-
         Salary::create([
-            'user_id'   => auth()->user()->id,
-            'salary'    => $request->penghasilan,
-            'reason'    => $request->alasan_pengajuan
+            'user_id'       =>  auth()->user()->id,
+            'salary'        =>  $request->penghasilan,
+            'reason'        =>  $request->alasan_pengajuan
         ]);
-        return redirect('/salary')->with('success', 'Pengajuan surat keterangan penghasilan berhasil ditambahkan');
+        Alert::success('Pengajuan surat keterangan penghasilan berhasil ditambahkan', 'berhasil');
+        return redirect('/salary');
     }
 
     /**
@@ -136,11 +148,11 @@ class SalaryController extends Controller
         ]);
 
         Salary::where('id', $id)->update([
-            'user_id'   => auth()->user()->id,
             'salary'    => $request->penghasilan,
             'reason'    => $request->alasan_pengajuan
         ]);
-        return redirect('/salary')->with('success', 'Pengajuan surat keterangan penghasilan berhasil diperbarui');
+        Alert::success('Pengajuan surat keterangan penghasilan berhasil diperbarui', 'berhasil');
+        return redirect('/salary');
     }
 
     /**
@@ -156,14 +168,55 @@ class SalaryController extends Controller
             'verifikasi'   => 'required',
         ]);
 
-        Salary::where('id', $id)->update([
-            'verify1'       => $request->verifikasi
-        ]);
         if ($request->update == 1) {
-            return redirect('/salary/verified1')->with('success', 'Pengajuan surat keterangan penghasilan berhasil diperbarui');
+            Letter::where('id', $id)->update([
+                'verify1'       => $request->verifikasi
+            ]);
+            Alert::success('Pengajuan surat keterangan penghasilan berhasil diperbarui', 'berhasil');
+            return redirect('/salary/verified1');
         } else {
-            return redirect('/salary/unprocessed1')->with('success', 'Pengajuan surat keterangan penghasilan berhasil diverifikasi');
+            $time = now()->format('Y-m-d H:i:s');
+            Letter::create([
+                'verify1'       => $request->verifikasi,
+                'created_at'    =>  $time,
+                'updated_at'    =>  $time
+            ]);
+
+            $letter = Letter::where('created_at', $time)->first();
+            Salary::where('id', $id)->update([
+                'letter_id' => $letter->id
+            ]);
+            Alert::success('Pengajuan surat keterangan penghasilan berhasil diverifikasi', 'berhasil');
+            return redirect('/salary/unprocessed1');
         }
+    }
+
+    public function editVerified1(Request $request, $id)
+    {
+        $salary = Salary::findOrFail($id);
+        $title = 'Pengajuan Surat';
+        return view('salary.edit-verified1', compact('title', 'salary'));
+    }
+
+    public function editUnprocessed1(Request $request, $id)
+    {
+        $salary = Salary::findOrFail($id);
+        $title = 'Pengajuan Surat';
+        return view('salary.edit-unprocessed1', compact('title', 'salary'));
+    }
+
+    public function editUnprocessed2(Request $request, $id)
+    {
+        $salary = Salary::findOrFail($id);
+        $title = 'Pengajuan Surat';
+        return view('salary.edit-unprocessed2', compact('title', 'salary'));
+    }
+
+    public function editDeclined2(Request $request, $id)
+    {
+        $salary = Salary::findOrFail($id);
+        $title = 'Pengajuan Surat';
+        return view('salary.edit-declined2', compact('title', 'salary'));
     }
 
     /**
@@ -179,14 +232,35 @@ class SalaryController extends Controller
             'verifikasi'   => 'required'
         ]);
 
-        Salary::where('id', $id)->update([
-            'verify2'       => $request->verifikasi
+        $salary = Salary::findOrFail($id);
+        $letter = Letter::where('verify1', 1)->where('verify2', 1)->orderBy('number', 'desc')->first();
+        
+        Letter::where('id', $salary->letter_id)->update([
+            'verify2'   => $request->verifikasi
         ]);
 
-        if ($request->update == 1) {
-            return redirect('/salary/verified2')->with('success', 'Pengajuan surat keterangan penghasilan berhasil diperbarui');
+        if ($request->verifikasi == 1) {
+            if ($letter == null) {
+                Letter::where('id', $salary->letter_id)->update([
+                    'number'    => 1,
+                ]);
+            } else {
+                Letter::where('id', $salary->letter_id)->update([
+                    'number'    => $letter->number + 1,
+                ]);
+            }
         } else {
-            return redirect('/salary/unprocessed2')->with('success', 'Pengajuan surat keterangan penghasilan berhasil diverifikasi');
+            Letter::where('id', $salary->letter_id)->update([
+                'number'    => null,
+            ]);
+        }
+
+        if ($request->update == 1) {
+            Alert::success('Pengajuan surat keterangan penghasilan berhasil diperbarui', 'berhasil');
+            return redirect('/salary/verified2');
+        } else {
+            Alert::success('Pengajuan surat keterangan penghasilan berhasil diverifikasi', 'berhasil');
+            return redirect('/salary/unprocessed2');
         }
     }
 
@@ -199,19 +273,23 @@ class SalaryController extends Controller
     public function destroy($id)
     {
         Salary::destroy($id);
-        return redirect('/salary')->with('success', 'Pengajuan surat keterangan penghasilan berhasil dihapus');
+        Alert::success('Pengajuan surat keterangan penghasilan berhasil dihapus', 'berhasil');
+        return redirect('/salary');
     }
 
     public function download($id)
     {
         $salary = Salary::findOrFail($id);
         $kepala = User::find(1);
-
-        if ($salary->user_id == auth()->user()->id || $salary->user->role_id == 2 || $salary->user->role_id == 3) {
-            $pdf = PDF::loadview('salary.download', compact('salary', 'kepala'));
-            return $pdf->stream();
+        if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
+            if ($salary->user_id == auth()->user()->id || auth()->user()->role_id == 2 || auth()->user()->role_id == 3) {
+                $pdf = PDF::loadview('salary.download', compact('salary', 'kepala'));
+                return $pdf->stream();
+            } else {
+                return abort(403, 'Anda tidak memiliki hak akses');
+            }
         } else {
-            return abort(403, 'Anda tidak memiliki hak akses');
+            return abort(404);
         }
     }
 }

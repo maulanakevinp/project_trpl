@@ -11,6 +11,7 @@ use App\UserRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use File;
+use Alert;
 
 class UserController extends Controller
 {
@@ -59,7 +60,7 @@ class UserController extends Controller
             'jenis_kelamin'         => 'required',
             'agama'                 => 'required',
             'status_pernikahan'     => 'required',
-            'nomor_telepon'     => 'nullable|numeric',
+            'nomor_telepon'         => 'nullable|numeric',
             'alamat'                => 'required',
             'tempat_lahir'          => 'required|string',
             'tanggal_lahir'         => 'required|date',
@@ -73,7 +74,8 @@ class UserController extends Controller
         if (!empty($file)) {
             $image = time() . "_" . $file->getClientOriginalName();
             if (!$file->move(public_path('img/profile'), $image)) {
-                return redirect('/users')->with('failed', 'Pengguna gagal ditambahkan');
+                Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
+                return redirect('/users/create');
             }
         }
 
@@ -93,7 +95,8 @@ class UserController extends Controller
             'email'         => $request->email,
             'password'      => Hash::make($request->konfirmasi_kata_sandi),
         ]);
-        return redirect('/users')->with('success', 'Pengguna berhasil ditambahkan');
+        Alert::success('Pengguna berhasil ditambahkan', 'berhasil');
+        return redirect('/users');
     }
 
     /**
@@ -161,7 +164,8 @@ class UserController extends Controller
                 }
                 $user->image = $file_name;
             } else {
-                return redirect('/users' . '/' . $id . '/edit')->with('failed', 'Foto gagal diunggah');
+                Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
+                return redirect()->route('users.edit', $id);
             }
         }
 
@@ -180,7 +184,8 @@ class UserController extends Controller
             'job'           => $request->pekerjaan,
             'email'         => $request->email,
         ]);
-        return redirect('/users' . '/' . $id . '/edit')->with('success', 'Pengguna berhasil diperbarui');
+        Alert::success('Pengguna berhasil diperbarui', 'berhasil');
+        return redirect()->route('users.edit', $id);
     }
 
     /**
@@ -193,21 +198,20 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->where('id', $id);
         $image = DB::table('users')->where('id', $id)->first();
-        $delete = File::delete(public_path('img/profile/' . $image->image));
-
-        if ($delete) {
-            $user->forceDelete();
-            return redirect('/users')->with('success', 'Pengguna berhasil dihapus');
-        } else {
-            return redirect('/users')->with('failed', 'Pengguna gagal dihapus');
+        if ($image->image != 'default.jpg') {
+            File::delete(public_path('img/profile/' . $image->image));
         }
+        $user->forceDelete();
+        Alert::success('Pengguna berhasil dihapus', 'berhasil');
+        return redirect('/user/trash');
     }
 
     public function softdelete($id)
     {
         $user = User::find($id);
         $user->delete();
-        return redirect('/users')->with('success', 'Pengguna berhasil dihapus');
+        Alert::success('Pengguna berhasil dihapus', 'berhasil');
+        return redirect('/users');
     }
 
     public function trash()
@@ -222,14 +226,22 @@ class UserController extends Controller
     {
         $user = User::onlyTrashed()->where('id', $id);
         $user->restore();
-        return redirect('/users')->with('success', 'Pengguna berhasil dikembalikan');
+        Alert::success('Pengguna berhasil dikembalikan', 'berhasil');
+        return redirect('/users');
     }
 
     public function restoreAll()
     {
         $user = User::onlyTrashed();
-        $user->restore();
-        return redirect('/users')->with('success', 'Pengguna berhasil dikembalikan semua');
+        $user_deleted = DB::table('users')->where('deleted_at','!=',null)->first();
+        if (!empty($user_deleted)) {
+            $user->restore();
+            Alert::success('Pengguna berhasil dikembalikan semua', 'berhasil');
+            return redirect('/users');
+        } else {
+            Alert::error('Tidak ada pengguna yang dikembalikan, karena tidak ada pengguna yang terhapus', 'gagal')->persistent('tutup');
+            return redirect('/users/trash');
+        }
     }
 
     public function editProfile()
@@ -267,7 +279,8 @@ class UserController extends Controller
                 }
                 $user->image = $file_name;
             } else {
-                return redirect('/my-profile')->with('failed', 'Foto gagal diunggah');
+                Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
+                return redirect('/my-profile');
             }
         }
 
@@ -285,7 +298,8 @@ class UserController extends Controller
             'job'           => $request->pekerjaan,
             'email'         => $request->email,
         ]);
-        return redirect('/my-profile')->with('success', 'Profil berhasil diperbarui');
+        Alert::success('Profil berhasil diperbarui', 'berhasil');
+        return redirect('/my-profile');
     }
 
     public function changePassword()
@@ -297,28 +311,32 @@ class UserController extends Controller
     public function updatePassword(Request $request, $id)
     {
         $request->validate([
-            'kata_sandi' => 'required|min:6',
-            'kata_sandi_baru' => 'required|min:6|required_with:konfirmasi_kata_sandi|same:konfirmasi_kata_sandi',
-            'konfirmasi_kata_sandi' => 'required|min:6'
+            'kata_sandi'                => 'required|min:6',
+            'kata_sandi_baru'           => 'required|min:6|required_with:konfirmasi_kata_sandi|same:konfirmasi_kata_sandi',
+            'konfirmasi_kata_sandi'     => 'required|min:6'
         ]);
 
         $user = User::find($id);
 
         if (Hash::check($request->kata_sandi, $user->password)) {
             if ($request->kata_sandi == $request->konfirmasi_kata_sandi) {
-                return redirect('/my-profile')->with('failed', 'Kata sandi gagal diperbarui, tidak ada yang berubah pada kata sandi');
+                Alert::error('Kata sandi gagal diperbarui, tidak ada yang berubah pada kata sandi', 'gagal')->persistent("tutup");
+                return redirect('/my-profile');
             } else {
                 if ($request->kata_sandi_baru == $request->konfirmasi_kata_sandi) {
                     User::where('id', $id)->update([
                         'password' => Hash::make($request->konfirmasi_kata_sandi)
                     ]);
-                    return redirect('/my-profile')->with('success', 'Kata sandi berhasil diperbarui');
+                    Alert::success('Kata sandi berhasil diperbarui', 'berhasil');
+                    return redirect('/my-profile');
                 } else {
-                    return redirect('/my-profile')->with('failed', 'Kata sandi tidak cocok');
+                    Alert::error('Kata sandi tidak cocok', 'gagal')->persistent("tutup");
+                    return redirect('/my-profile');
                 }
             }
         } else {
-            return redirect('/my-profile')->with('failed', 'Kata sandi tidak cocok dengan kata sandi lama');
+            Alert::error('Kata sandi tidak cocok dengan kata sandi lama', 'gagal')->persistent("tutup");
+            return redirect('/my-profile');
         }
     }
 }

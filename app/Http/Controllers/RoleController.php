@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\UserAccessMenu;
 use App\UserMenu;
 use App\UserRole;
-use Session;
+use Alert;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -37,8 +37,8 @@ class RoleController extends Controller
         UserRole::create([
             'role' => $request->peran
         ]);
-
-        return redirect('/role')->with('success', 'Peran berhasil ditambahkan');
+        Alert::success('Peran berhasil ditambahkan', 'Berhasil');
+        return redirect('/role');
     }
 
     /**
@@ -80,8 +80,8 @@ class RoleController extends Controller
         UserRole::where('id', $id)->update([
             'role' => $request->peran
         ]);
-
-        return redirect('/role')->with('success', 'Peran berhasil diperbarui');
+        Alert::success('Peran berhasil diperbarui', 'Berhasil');
+        return redirect('/role');
     }
 
     /**
@@ -93,7 +93,8 @@ class RoleController extends Controller
     public function destroy($id)
     {
         UserRole::destroy($id);
-        return redirect('/role')->with('success', 'Peran berhasil dihapus');
+        Alert::success('Peran berhasil dihapus', 'Berhasil');
+        return redirect('/role');
     }
 
     public function changeAccess(Request $request)
@@ -109,6 +110,6 @@ class RoleController extends Controller
                 ->where('menu_id', $request->menuId)
                 ->delete();
         }
-        Session::flash('success', 'Hak akses berhasil diubah');
+        Alert::success('Hak akses berhasil diubah', 'Berhasil');
     }
 }

@@ -12,22 +12,14 @@
         </ol>
     </nav>
     <nav class="nav nav-pills nav-fill mb-3">
-        <a class="nav-link active" href="">{{ __('salary.unprocessed') }}</a>
-        <a class="nav-link" href="{{ route('salary.verified2') }}">{{ __('salary.verified') }}</a>
-        <a class="nav-link" href="{{ route('salary.declined2') }}">{{ __('salary.declined') }}</a>
+        <a class="nav-link" href="{{ route('incapable.unprocessed2') }}">{{ __('incapable.unprocessed') }}</a>
+        <a class="nav-link" href="{{ route('incapable.verified2') }}">{{ __('incapable.verified') }}</a>
+        <a class="nav-link active" href="">{{ __('incapable.declined') }}</a>
     </nav>
-    @if ($errors->any())
-    <div class="alert alert-danger alert-dismissible fade show">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif
+    @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close"
+            data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
+    </div>@endif
     @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">
         {{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button></div>@endif
@@ -36,37 +28,31 @@
                 aria-hidden="true">&times;</span></button></div>@endif
     <div class="card shadow h-100">
         <div class="card-header">
-            <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ __('salary.data') }}</h5>
+            <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ __('incapable.data') }}</h5>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th>{{ __('salary.nik') }}</th>
-                            <th>{{ __('salary.salary') }}</th>
-                            <th>{{ __('salary.reason') }}</th>
-                            <th>{{ __('salary.created') }}</th>
-                            <th>{{ __('salary.action') }}</th>
+                            <th>{{ __('incapable.nik') }}</th>
+                            <th>{{ __('incapable.reason') }}</th>
+                            <th>{{ __('incapable.created') }}</th>
+                            <th>{{ __('incapable.declined_at') }}</th>
+                            <th>{{ __('incapable.action') }}</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                        $i = 1;
-                        @endphp
-                        @foreach($salaries as $salary)
+                        @foreach($incapables as $incapable)
                         <tr>
-                            <td>{{ $salary->user->nik }}</td>
-                            <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
-                            <td>{{ $salary->reason }}</td>
-                            <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
+                            <td>{{ $incapable->user->nik }}</td>
+                            <td>{{ $incapable->reason }}</td>
+                            <td>{{ $incapable->created_at->format('d M Y - H:i:s') }}</td>
+                            <td>{{ $incapable->letter->updated_at->format('d M Y - H:i:s') }}</td>
                             <td>
-                                <a href="{{ route('salary.edit-unprocessed2',$salary->id) }}" class="badge badge-warning">{{ __('salary.verify') }}</a>
+                                <a href="{{ route('incapable.edit-declined2',$incapable->id) }}" class="badge badge-warning">{{ __('incapable.edit') }}</a>
                             </td>
                         </tr>
-                        @php
-                        $i++;
-                        @endphp
                         @endforeach
                     </tbody>
                 </table>

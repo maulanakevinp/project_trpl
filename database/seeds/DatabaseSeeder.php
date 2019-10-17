@@ -20,7 +20,8 @@ class DatabaseSeeder extends Seeder
             ReligionsTableSeeder::class,
             MaritalsTableSeeder::class,
             UsersTableSeeder::class,
-            SalariesTableSeeder::class,
+            // LettersTableSeeder::class,
+            // SalariesTableSeeder::class,
         ]);
     }
 }

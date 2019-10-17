@@ -92,7 +92,7 @@ return [
     ],
     'not_in' => 'selected :attribute tidak valid.',
     'not_regex' => ':attribute format tidak valid.',
-    'numeric' => ':attribute harus a number.',
+    'numeric' => ':attribute harus berupa angka.',
     'present' => ':attribute harus ada.',
     'regex' => ':attribute format tidak valid.',
     'required' => ':attribute wajib diisi.',

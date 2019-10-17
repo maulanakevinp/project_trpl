@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\UserMenu;
 use App\UserSubmenu;
+use Alert;
 use Illuminate\Http\Request;
 
 class SubmenuController extends Controller
@@ -48,7 +49,8 @@ class SubmenuController extends Controller
             'icon' => $request->icon,
             'is_active' => $is_active
         ]);
-        return redirect('/submenu')->with('success', 'Submenu has been created');
+        Alert::success('Submenu berhasil ditambahkan', 'berhasil');
+        return redirect('/submenu');
     }
 
     /**
@@ -79,8 +81,8 @@ class SubmenuController extends Controller
             'icon' => $request->icon,
             'is_active' => $is_active
         ]);
-
-        return redirect('/submenu')->with('success', 'Submenu has been updated');
+        Alert::success('Submenu berhasil diperbarui', 'berhasil');
+        return redirect('/submenu');
     }
 
     /**
@@ -92,6 +94,7 @@ class SubmenuController extends Controller
     public function destroy($id)
     {
         UserSubmenu::destroy($id);
-        return redirect('/submenu')->with('success', 'Submenu has been deleted');
+        Alert::success('Submenu berhasil dihapus', 'berhasil');
+        return redirect('/submenu');
     }
 }

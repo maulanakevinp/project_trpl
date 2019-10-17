@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Salary extends Model
+class Incapable extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -12,7 +12,7 @@ class Salary extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'letter_id', 'salary', 'reason', 'verify1', 'verify2'
+        'user_id', 'letter_id', 'name', 'birth_place', 'birth_date', 'job', 'address', 'reason', 'as'
     ];
 
     public function user()

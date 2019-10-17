@@ -14,14 +14,15 @@ return [
     */
 
     // Labels
-    'login'             =>  'Login',
-    'new_password'      =>  'Kata sandi baru',
-    'change_password'   =>  'Ganti kata sandi',
-    'add'               =>  'Tambah pengguna baru',
-    'edit_profile'      =>  'Ubah profil',
-    'My Profile'        =>  'Profil saya',
-    'delete_confirm'    =>  'Apakah anda yakin ingin menghapus pengguna ini???',
-
+    'login'                 =>  'Login',
+    'new_password'          =>  'Kata sandi baru',
+    'change_password'       =>  'Ganti kata sandi',
+    'add'                   =>  'Tambah pengguna baru',
+    'edit_profile'          =>  'Ubah profil',
+    'My Profile'            =>  'Profil saya',
+    'delete_confirm'        =>  'Apakah anda yakin ingin menghapus pengguna ini???',
+    'restore_all_confirm'   => 'Apakah anda yakin ingin mengembalikan semua pengguna ini???',
+    
     // Actions
     'to_forgot_password'    => 'Lupa kata sandi?',
     'password_reset_send'   => 'Kirim tautan setel ulang kata sandi',
@@ -33,7 +34,7 @@ return [
     'trash'                 => 'Pengguna terhapus',
     'restore'               => 'Kembalikan',
     'restoreAll'            => 'Kembalikan semua',
-    'cancel'                => 'Batal',
+    'back'                  => 'Kembali',
 
     // Atributtes
     'name'              => 'Nama lengkap',

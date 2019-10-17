@@ -1,0 +1,46 @@
+body {
+    font-family: Times, serif;
+    line-height: 1.6;
+    color: #000000;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.normal {
+    font-weight: normal;
+}
+
+.fs-14 {
+    font-size: 14;
+    letter-spacing: 1px;
+}
+
+.fs-12 {
+    font-size: 12;
+}
+
+.fs-11 {
+    font-size: 11;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+.text-indent {
+    text-indent: 75px;
+}

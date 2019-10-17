@@ -37,9 +37,13 @@
                             <td>
                                 <a href="{{route('users.edit',$user->id)}}" class="badge badge-warning">{{__('user.edit')}}</a>
                                 @if($user->id != Auth::user()->id)
-                                <a href="{{ route('softdelete',$user->id) }}" class="badge badge-danger d-inline-block" onclick="return confirm('{{__('user.delete_confirm')}}');">
-                                    {{ __('user.delete') }}
-                                </a>
+                                <form class="d-inline-block" action="{{ route('users.delete',$user->id) }}" method="POST">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('user.delete_confirm')}}');">
+                                        {{ __('user.delete') }}
+                                    </button>
+                                </form>
                                 @endif
                             </td>
                         </tr>
