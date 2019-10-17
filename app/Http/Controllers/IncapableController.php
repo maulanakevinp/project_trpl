@@ -189,8 +189,10 @@ class IncapableController extends Controller
             'alasan_pengajuan'  => 'required',
         ]);
 
+        $incapable = Incapable::findOrFail($id);
+
         if ($request->update == 1) {
-            Letter::where('id', $id)->update([
+            Letter::where('id', $incapable->letter_id)->update([
                 'verify1'       => $request->verifikasi
             ]);
             Alert::success('Pengajuan surat keterangan tidak mampu berhasil diperbarui', 'berhasil');

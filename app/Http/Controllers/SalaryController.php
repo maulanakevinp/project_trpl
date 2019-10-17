@@ -168,8 +168,9 @@ class SalaryController extends Controller
             'verifikasi'   => 'required',
         ]);
 
+        $salary = Salary::findOrFail($id);
         if ($request->update == 1) {
-            Letter::where('id', $id)->update([
+            Letter::where('id', $salary->letter_id)->update([
                 'verify1'       => $request->verifikasi
             ]);
             Alert::success('Pengajuan surat keterangan penghasilan berhasil diperbarui', 'berhasil');

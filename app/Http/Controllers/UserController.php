@@ -55,7 +55,7 @@ class UserController extends Controller
         $request->validate([
             'peran'                 => 'required|numeric',
             'nama_lengkap'          => 'required|string',
-            'nik'                   => 'required|numeric',
+            'nik'                   => 'required|digits:16',
             'email'                 => 'required|string|email|unique:users',
             'jenis_kelamin'         => 'required',
             'agama'                 => 'required',
@@ -142,7 +142,7 @@ class UserController extends Controller
         $request->validate([
             'peran'             => 'required|numeric',
             'nama_lengkap'      => 'required|string',
-            'nik'               => 'required|numeric',
+            'nik'               => 'required|digits:16',
             'email'             => 'required|string|email',
             'jenis_kelamin'     => 'required',
             'agama'             => 'required',
@@ -258,7 +258,7 @@ class UserController extends Controller
         $user = User::find($id);
         $request->validate([
             'nama_lengkap'      => 'required|string',
-            'nik'               => 'required|numeric',
+            'nik'               => 'required|digits:16',
             'email'             => 'required|string|email',
             'jenis_kelamin'     => 'required',
             'agama'             => 'required',
