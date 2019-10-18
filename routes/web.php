@@ -24,7 +24,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     Route::get('/change-password', 'UserController@changePassword');
     Route::patch('/update-password/{id}', 'UserController@updatePassword')->name('update-password');
 
-    Route::get('/pengajuan-surat', 'LetterController@index');
+    Route::get('/pengajuan-surat', 'LetterController@index')->name('pengajuan-surat');
     Route::get('/salary/download/{id}', 'SalaryController@download')->name('salary.download');
     Route::get('/incapable/download/{id}', 'IncapableController@download')->name('incapable.download');
 
