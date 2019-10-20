@@ -58,3 +58,6 @@
 <!-- /.container-fluid -->
 
 @endsection
+@section('orderBy')
+"order": [[ 2, "desc" ]]
+@endsection

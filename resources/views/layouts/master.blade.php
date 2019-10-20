@@ -113,7 +113,9 @@
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     @include('sweet::alert')
-    
+    <script>
+        
+    </script>
     <script>
         $(document).ready(function(){
             $('#dataTable').DataTable({
@@ -129,8 +131,10 @@
                         "previous": "Sebelumnya",
                         "next": "Selanjutnya"
                     }
-                }
+                },
+                @yield('orderBy')
             });
+            @yield('alasan_penolakan')
             $(".custom-file-input").on("change", function() {
                 var fileName = $(this).val().split("\\").pop();
                 $(this).siblings(".custom-file-label").addClass("selected").html(fileName);

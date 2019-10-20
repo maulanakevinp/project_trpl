@@ -5,6 +5,18 @@
 @section('container')
 <!-- Begin Page Content -->
 <div class="container-fluid">
+    @if ($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <div class="row">
         <div class="col-md-6">
             <div class="card shadow h-100">
@@ -32,7 +44,12 @@
                                 <tr>
                                     <td>{{ __('user.nik') }}</td>
                                     <td>:</td>
-                                    <td>{{ $incapable->user->nik }}</td>
+                                    <td><a target="_blank" @if($incapable->user->nik_file) data-toggle="tooltip" data-placement="top" title="Lihat detail NIK" href="{{ route('detail-nik', $incapable->user->nik_file) }} @endif">{{ $incapable->user->nik }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>{{ __('user.kk') }}</td>
+                                    <td>:</td>
+                                    <td><a target="_blank" @if($incapable->user->kk_file) data-toggle="tooltip" data-placement="top" title="Lihat detail KK" href="{{ route('detail-kk', $incapable->user->kk_file) }} @endif">{{ $incapable->user->kk }}</a></td>
                                 </tr>
                                 <tr>
                                     <td>{{ __('user.gender') }}</td>
@@ -106,7 +123,7 @@
                         </div>
                         <div class="form-group">
                             <label class="col-form-label" for="">@lang('incapable.as')</label>
-                            <select name="merupakan" id="merupakan">
+                            <select name="merupakan" id="merupakan" disabled>
                                 @if ($incapable->as == 1)
                                 <option selected="selected" value="1">{{ __('incapable.parents') }}</option>
                                 @elseif($incapable->as == 2)
@@ -117,29 +134,24 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="col-form-label" for="verifikasi">@lang('incapable.verify')</label><br>
+                            <label class="col-form-label" for="verifikasi">@lang('salary.verify')</label><br>
                             <div class="custom-control custom-radio">
-                                @if (old('verifikasi') == 1)
-                                <input checked="checked" type="radio" id="verifikas1" name="verifikasi" class="custom-control-input" value="1">
-                                @else
-                                <input type="radio" id="verifikas1" name="verifikasi" class="custom-control-input" value="1">
-                                @endif
-                                <label class="custom-control-label" for="verifikas1">{{ __('incapable.accept') }}</label>
+                                <input type="radio" id="verifikasi1" name="verifikasi" class="custom-control-input" value="1">
+                                <label class="custom-control-label" for="verifikasi1">{{ __('salary.accept') }}</label>
                             </div>
                             <div class="custom-control custom-radio">
-                                @if (old('verifikasi') == -1)
-                                <input checked="checked" type="radio" id="verifikasi2" name="verifikasi" class="custom-control-input"
-                                    value="-1">
-                                @else
                                 <input type="radio" id="verifikasi2" name="verifikasi" class="custom-control-input" value="-1">
-                                @endif
-                                <label class="custom-control-label" for="verifikasi2">{{__('incapable.decline')}}</label>
+                                <label class="custom-control-label" for="verifikasi2">{{__('salary.decline')}}</label>
                             </div>
                             @error('verifikasi')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                             @enderror
+                        </div>
+                        <div id="alasan_penolakan" class="form-group">
+                            <label class="col-form-label" for="">@lang('salary.reason_decline')</label>
+                            <textarea name="alasan_penolakan" class="form-control" cols="30" rows="5">{{ old('alasan_penolakan') }}</textarea>
                         </div>
                         <div class="float-right">
                             <a href="{{ route('incapable.unprocessed2') }}" class="btn btn-secondary">
@@ -155,4 +167,14 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('alasan_penolakan')
+$('#alasan_penolakan').hide();
+$('#verifikasi2').on('change', function () {
+    $('#alasan_penolakan').show();
+});
+$('#verifikasi1').on('change', function () {
+    $('#alasan_penolakan').hide();
+});
 @endsection

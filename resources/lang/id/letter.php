@@ -14,5 +14,6 @@ return [
     */
 
     // Labels
-    'salary' => 'Surat Keterangan Penghasilan',
+    'salary'    => 'Surat Keterangan Penghasilan',
+    'incapable' => 'Surat Keterangan Tidak Mampu',
 ];

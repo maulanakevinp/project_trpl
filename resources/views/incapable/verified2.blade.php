@@ -79,47 +79,45 @@
                                         <img src="{{ asset('img/profile/' . $incapable->user->image) }}"
                                             class="img-thumbnail mb-3" alt="{{ $incapable->user->image }}">
                                         <div class="row">
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.name') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->name }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.email') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->email }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.nik') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->nik }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.gender') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.name') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->name }}">
+                                            </div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.email') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->email }}">
+                                            </div>
+                                            <div class="col-md-4"><label class="col-form-label"><a target="_blank" data-toggle="tooltip" data-placement="top"
+                                                        title="Lihat detail NIK"
+                                                        href="{{ route('detail-nik', $incapable->user->nik_file) }}">{{ __('user.nik') }}</a></label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->nik }}">
+                                            </div>
+                                            <div class="col-md-4"><label class="col-form-label"><a target="_blank" data-toggle="tooltip" data-placement="top"
+                                                        title="Lihat detail KK"
+                                                        href="{{ route('detail-kk', $incapable->user->kk_file) }}">{{ __('user.kk') }}</a></label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->kk }}">
+                                            </div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.gender') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->gender->gender }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.religion') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.religion') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->religion->religion }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.marital') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.marital') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->marital->marital }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.birth') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.birth') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->birth_place .__(', ').date('d-m-Y', strtotime($incapable->user->birth_date)) }}">
                                             </div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.job') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->job }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.phone_number') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.job') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->job }}">
+                                            </div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.phone_number') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->phone_number }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.address') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.address') }}</label></div>
                                             <div class="col-md-8 mb-2"><textarea class="form-control" disabled
-                                                    rows="3">{{ $incapable->user->address }}</textarea></div>
+                                                    rows="3">{{ $incapable->user->address }}</textarea>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -142,4 +140,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+"order": [[ 2, "desc" ]]
 @endsection

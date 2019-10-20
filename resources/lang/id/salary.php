@@ -52,6 +52,7 @@ return [
     'close'     => 'Tutup',
 
     // Atributtes
-    'salary' => 'Penghasilan Perbulan',
-    'reason' => 'Alasan Pengajuan',
+    'salary'            => 'Penghasilan Perbulan',
+    'reason'            => 'Alasan Pengajuan',
+    'reason_decline'    => 'Alasan Penolakan',
 ];

@@ -18,6 +18,8 @@ class CreateLettersTable extends Migration
             $table->bigInteger('number')->nullable();
             $table->tinyInteger('verify1')->nullable();
             $table->tinyInteger('verify2')->nullable();
+            $table->text('reason1')->nullable();
+            $table->text('reason2')->nullable();
             $table->timestamps();
         });
     }

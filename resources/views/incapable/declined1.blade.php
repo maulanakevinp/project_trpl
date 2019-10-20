@@ -37,6 +37,7 @@
                         <tr>
                             <th>{{ __('incapable.nik') }}</th>
                             <th>{{ __('incapable.reason') }}</th>
+                            <th>{{ __('incapable.reason_decline') }}</th>
                             <th>{{ __('incapable.created') }}</th>
                             <th>{{ __('incapable.declined_at') }}</th>
                         </tr>
@@ -50,6 +51,7 @@
                             <td><a href="" data-toggle="modal"
                                     data-target="{{'#showUserModal'.$i}}">{{ $incapable->user->nik }}</a></td>
                             <td>{{ $incapable->reason }}</td>
+                            <td>{{ $incapable->letter->reason1 }}</td>
                             <td>{{ $incapable->created_at->format('d M Y - H:i:s') }}</td>
                             <td>{{ $incapable->letter->updated_at->format('d M Y - H:i:s') }}</td>
                         </tr>
@@ -70,47 +72,40 @@
                                         <img src="{{ asset('img/profile/' . $incapable->user->image) }}"
                                             class="img-thumbnail mb-3" alt="{{ $incapable->user->image }}">
                                         <div class="row">
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.name') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->name }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.email') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->email }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.nik') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->nik }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.gender') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.name') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->name }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.email') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->email }}">
+                                            </div>
+                                            <div class="col-md-4"><label class="col-form-label"><a target="_blank" data-toggle="tooltip" data-placement="top"
+                                                        title="Lihat detail NIK"
+                                                        href="{{ route('detail-nik', $incapable->user->nik_file) }}">{{ __('user.nik') }}</a></label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->nik }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label"><a target="_blank" data-toggle="tooltip" data-placement="top"
+                                                        title="Lihat detail KK"
+                                                        href="{{ route('detail-kk', $incapable->user->kk_file) }}">{{ __('user.kk') }}</a></label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->kk }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.gender') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->gender->gender }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.religion') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.religion') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->religion->religion }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.marital') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.marital') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->marital->marital }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.birth') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.birth') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->birth_place .__(', ').date('d-m-Y', strtotime($incapable->user->birth_date)) }}">
                                             </div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.job') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $incapable->user->job }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.phone_number') }}</label></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.job') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $incapable->user->job }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.phone_number') }}</label></div>
                                             <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
                                                     value="{{ $incapable->user->phone_number }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.address') }}</label></div>
-                                            <div class="col-md-8 mb-2"><textarea class="form-control" disabled
-                                                    rows="3">{{ $incapable->user->address }}</textarea></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.address') }}</label></div>
+                                            <div class="col-md-8 mb-2"><textarea class="form-control" disabled rows="3">{{ $incapable->user->address }}</textarea>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -133,4 +128,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+"order": [[ 3, "desc" ]]
 @endsection

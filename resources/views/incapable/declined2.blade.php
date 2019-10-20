@@ -37,6 +37,7 @@
                         <tr>
                             <th>{{ __('incapable.nik') }}</th>
                             <th>{{ __('incapable.reason') }}</th>
+                            <th>{{ __('incapable.reason_decline') }}</th>
                             <th>{{ __('incapable.created') }}</th>
                             <th>{{ __('incapable.declined_at') }}</th>
                             <th>{{ __('incapable.action') }}</th>
@@ -47,6 +48,7 @@
                         <tr>
                             <td>{{ $incapable->user->nik }}</td>
                             <td>{{ $incapable->reason }}</td>
+                            <td>{{ $incapable->letter->reason2 }}</td>
                             <td>{{ $incapable->created_at->format('d M Y - H:i:s') }}</td>
                             <td>{{ $incapable->letter->updated_at->format('d M Y - H:i:s') }}</td>
                             <td>
@@ -63,4 +65,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+"order": [[ 3, "desc" ]]
 @endsection

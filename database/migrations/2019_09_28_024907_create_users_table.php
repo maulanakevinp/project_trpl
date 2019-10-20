@@ -17,12 +17,15 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('role_id');
             $table->string('nik')->unique();
+            $table->string('nik_file')->nullable();
+            $table->string('kk')->unique()->nullable();
+            $table->string('kk_file')->nullable();
             $table->string('name');
             $table->string('image');
             $table->unsignedBigInteger('gender_id');
             $table->unsignedBigInteger('religion_id');
             $table->unsignedBigInteger('marital_id');
-            $table->string('phone_number', 16)->nullable();
+            $table->string('phone_number', 13)->nullable();
             $table->text('address');
             $table->string('birth_place');
             $table->date('birth_date');

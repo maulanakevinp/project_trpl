@@ -7,6 +7,7 @@ use App\Incapable;
 use App\User;
 use PDF;
 use Alert;
+use App\Http\Requests\IncapableRequest;
 use Illuminate\Http\Request;
 
 class IncapableController extends Controller
@@ -118,27 +119,14 @@ class IncapableController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(IncapableRequest $request)
     {
-        $request->validate([
-            'nama'              => 'required',
-            'tempat_lahir'      => 'required',
-            'tanggal_lahir'     => 'required|date',
-            'pekerjaan'         => 'required',
-            'alamat'            => 'required',
-            'alasan_pengajuan'  => 'required',
-            'merupakan'         => 'required',
-        ]);
-        Incapable::create([
-            'user_id'       =>  auth()->user()->id,
-            'name'          =>  $request->nama,
-            'birth_place'   =>  $request->tempat_lahir,
-            'birth_date'    =>  $request->tanggal_lahir,
-            'job'           =>  $request->pekerjaan,
-            'address'       =>  $request->alamat,
-            'reason'        =>  $request->alasan_pengajuan,
-            'as'            =>  $request->merupakan
-        ]);
+        if (auth()->user()->nik_file == null || auth()->user()->kk == null || auth()->user()->kk_file == null) {
+            Alert::error('Harap melengkapi profil anda', 'Gagal')->persistent('tutup');
+            return redirect('/edit-profile');
+        }
+        $request->validated();
+        Incapable::create($this->dataIncapable('store',$request));
         Alert::success('Pengajuan surat keterangan tidak mampu berhasil ditambahkan', 'berhasil');
         return redirect('/incapable');
     }
@@ -150,27 +138,10 @@ class IncapableController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(IncapableRequest $request, $id)
     {
-        $request->validate([
-            'nama'              => 'required',
-            'tempat_lahir'      => 'required',
-            'tanggal_lahir'     => 'required|date',
-            'pekerjaan'         => 'required',
-            'alamat'            => 'required',
-            'alasan_pengajuan'  => 'required',
-            'merupakan'         => 'required',
-        ]);
-
-        Incapable::where('id', $id)->update([
-            'name'          =>  $request->nama,
-            'birth_place'   =>  $request->tempat_lahir,
-            'birth_date'    =>  $request->tanggal_lahir,
-            'job'           =>  $request->pekerjaan,
-            'address'       =>  $request->alamat,
-            'reason'        =>  $request->alasan_pengajuan,
-            'as'            =>  $request->merupakan
-        ]);
+        $request->validated();
+        Incapable::where('id', $id)->update($this->dataIncapable('update',$request));
         Alert::success('Pengajuan surat keterangan tidak mampu berhasil diperbarui', 'berhasil');
         return redirect('/incapable');
     }
@@ -184,32 +155,34 @@ class IncapableController extends Controller
      */
     public function verify1(Request $request, $id)
     {
-        $request->validate([
-            'verifikasi'        => 'required',
-            'alasan_pengajuan'  => 'required',
-        ]);
-
+        $request->validate(['verifikasi' => 'required', 'alasan_pengajuan' => 'required']);
+        $time = now()->format('Y-m-d H:i:s');
+        $create = [
+            'verify1'       =>  $request->verifikasi,
+            'created_at'    =>  $time,
+            'updated_at'    =>  $time
+        ];
         $incapable = Incapable::findOrFail($id);
-
+        $reason1 = null;
+        if ($request->verifikasi == -1) {
+            $request->validate(['alasan_penolakan' => 'required']);
+            $reason1 = $request->alasan_penolakan;
+            $create['reason1'] = $request->alasan_penolakan;
+        }
         if ($request->update == 1) {
-            Letter::where('id', $incapable->letter_id)->update([
-                'verify1'       => $request->verifikasi
-            ]);
+            Incapable::where('id', $id)->update(['reason' => $request->alasan_pengajuan]);
+            $dataVerify = ['verify1' => $request->verifikasi, 'reason1' => $reason1];
+            if ($incapable->letter->verify2 == -1) {
+                $dataVerify['verify2'] = null;
+                $dataVerify['reason2'] = null;
+            }
+            Letter::where('id', $incapable->letter_id)->update($dataVerify);
             Alert::success('Pengajuan surat keterangan tidak mampu berhasil diperbarui', 'berhasil');
             return redirect('/incapable/verified1');
         } else {
-            $time = now()->format('Y-m-d H:i:s');
-            Letter::create([
-                'verify1'       => $request->verifikasi,
-                'created_at'    =>  $time,
-                'updated_at'    =>  $time
-            ]);
-
+            Letter::create($create);
             $letter = Letter::where('created_at', $time)->first();
-            Incapable::where('id', $id)->update([
-                'letter_id' => $letter->id,
-                'reason'    => $request->alasan_pengajuan,
-            ]);
+            Incapable::where('id', $id)->update(['letter_id' => $letter->id, 'reason' => $request->alasan_pengajuan]);
             Alert::success('Pengajuan surat keterangan tidak mampu berhasil diverifikasi', 'berhasil');
             return redirect('/incapable/unprocessed1');
         }
@@ -263,21 +236,24 @@ class IncapableController extends Controller
             'verify2'   => $request->verifikasi
         ]);
 
-        if ($request->verifikasi == 1) {
-            if ($letter == null) {
-                Letter::where('id', $incapable->letter_id)->update([
-                    'number'    => 1,
-                ]);
-            } else {
-                Letter::where('id', $incapable->letter_id)->update([
-                    'number'    => $letter->number + 1,
-                ]);
-            }
+        $reason = null;
+
+        if ($letter == null) {
+            $number = 1;
         } else {
-            Letter::where('id', $incapable->letter_id)->update([
-                'number'    => null,
-            ]);
+            $number = $letter->number + 1;
         }
+
+        if ($request->verifikasi == -1) {
+            $request->validate(['alasan_penolakan' => 'required']);
+            $number = null;
+            $reason = $request->alasan_penolakan;
+        }
+
+        Letter::where('id', $incapable->letter_id)->update([
+            'number'    => $number,
+            'reason2'   => $reason
+        ]);
 
         if ($request->update == 1) {
             Alert::success('Pengajuan surat keterangan tidak mampu berhasil diperbarui', 'berhasil');
@@ -315,5 +291,23 @@ class IncapableController extends Controller
         } else {
             return abort(404);
         }
+    }
+
+    private function dataIncapable($method, $request){
+        $data = [
+            'name'          =>  $request->nama,
+            'birth_place'   =>  $request->tempat_lahir,
+            'birth_date'    =>  $request->tanggal_lahir,
+            'job'           =>  $request->pekerjaan,
+            'address'       =>  $request->alamat,
+            'reason'        =>  $request->alasan_pengajuan,
+            'as'            =>  $request->merupakan
+        ];
+
+        if ($method == 'store') {
+            $data['user_id'] = auth()->user()->id;
+        }
+
+        return $data;
     }
 }

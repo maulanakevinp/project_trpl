@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use File;
 use Alert;
+use App\Http\Requests\UserRequest;
 
 class UserController extends Controller
 {
@@ -50,51 +51,26 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $request->validate([
-            'peran'                 => 'required|numeric',
-            'nama_lengkap'          => 'required|string',
-            'nik'                   => 'required|digits:16',
-            'email'                 => 'required|string|email|unique:users',
-            'jenis_kelamin'         => 'required',
-            'agama'                 => 'required',
-            'status_pernikahan'     => 'required',
-            'nomor_telepon'         => 'nullable|numeric',
-            'alamat'                => 'required',
-            'tempat_lahir'          => 'required|string',
-            'tanggal_lahir'         => 'required|date',
-            'pekerjaan'             => 'required|string',
-            'foto'                  => 'image|mimes:jpeg,png,gif,webp|max:2048',
-            'kata_sandi'            => 'required|min:6|required_with:konfirmasi_kata_sandi|same:konfirmasi_kata_sandi',
-            'konfirmasi_kata_sandi' => 'required|min:6'
-        ]);
+        $request->validated();
+
         $image = 'default.jpg';
-        $file = $request->file('foto');
-        if (!empty($file)) {
-            $image = time() . "_" . $file->getClientOriginalName();
-            if (!$file->move(public_path('img/profile'), $image)) {
-                Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
-                return redirect('/users/create');
-            }
+        if ($request->file('foto')) {
+            $nik_file = $this->uploadFile($request->file('foto'), 'img/profile');
         }
 
-        User::create([
-            'role_id'       => $request->peran,
-            'nik'           => $request->nik,
-            'name'          => $request->nama_lengkap,
-            'image'         => $image,
-            'gender_id'     => $request->jenis_kelamin,
-            'religion_id'   => $request->agama,
-            'marital_id'    => $request->status_pernikahan,
-            'phone_number'  => $request->nomor_telepon,
-            'address'       => $request->alamat,
-            'birth_place'   => $request->tempat_lahir,
-            'birth_date'    => $request->tanggal_lahir,
-            'job'           => $request->pekerjaan,
-            'email'         => $request->email,
-            'password'      => Hash::make($request->konfirmasi_kata_sandi),
-        ]);
+        $nik_file = null;
+        if ($request->file('nik_file')) {
+            $nik_file = $this->uploadFile($request->file('nik_file'), 'img/nik');
+        }
+
+        $kk_file = null;
+        if ($request->file('kk_file')) {
+            $kk_file = $this->uploadFile($request->file('kk_file'), 'img/kk');
+        }
+
+        User::create($this->dataUser('store', $request, $image, $nik_file, $kk_file));
         Alert::success('Pengguna berhasil ditambahkan', 'berhasil');
         return redirect('/users');
     }
@@ -136,54 +112,24 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserRequest $request, $id)
     {
         $user = User::find($id);
-        $request->validate([
-            'peran'             => 'required|numeric',
-            'nama_lengkap'      => 'required|string',
-            'nik'               => 'required|digits:16',
-            'email'             => 'required|string|email',
-            'jenis_kelamin'     => 'required',
-            'agama'             => 'required',
-            'status_pernikahan' => 'required',
-            'nomor_telepon'     => 'nullable|numeric',
-            'alamat'            => 'required',
-            'tempat_lahir'      => 'required|string',
-            'tanggal_lahir'     => 'required|date',
-            'pekerjaan'         => 'required|string',
-            'foto'              => 'image|mimes:jpeg,png,gif,webp|max:2048'
-        ]);
+        $request->validated();
 
-        $file = $request->file('foto');
-        if (!empty($file)) {
-            $file_name = time() . "_" . $file->getClientOriginalName();
-            if ($file->move(public_path('img/profile'), $file_name)) {
-                if ($user->image != "default.jpg") {
-                    File::delete(public_path('img/profile/' . $user->image));
-                }
-                $user->image = $file_name;
-            } else {
-                Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
-                return redirect()->route('users.edit', $id);
-            }
+        if ($request->file('foto')) {
+            $user->image = $this->updateUploadPhoto($request->file('foto'), 'img/profile', $user->image);
         }
 
-        User::where('id', $id)->update([
-            'role_id'       => $request->peran,
-            'nik'           => $request->nik,
-            'name'          => $request->nama_lengkap,
-            'image'         => $user->image,
-            'gender_id'     => $request->jenis_kelamin,
-            'religion_id'   => $request->agama,
-            'marital_id'    => $request->status_pernikahan,
-            'phone_number'  => $request->nomor_telepon,
-            'address'       => $request->alamat,
-            'birth_place'   => $request->tempat_lahir,
-            'birth_date'    => $request->tanggal_lahir,
-            'job'           => $request->pekerjaan,
-            'email'         => $request->email,
-        ]);
+        if ($request->file('nik_file')) {
+            $user->nik_file = $this->uploadFile($request->file('nik_file'), 'img/nik');
+        }
+
+        if ($request->file('kk_file')) {
+            $user->kk_file = $this->uploadFile($request->file('kk_file'), 'img/kk');
+        }
+
+        User::where('id', $id)->update($this->dataUser('update', $request, $user->image, $user->nik_file, $user->kk_file));
         Alert::success('Pengguna berhasil diperbarui', 'berhasil');
         return redirect()->route('users.edit', $id);
     }
@@ -203,7 +149,7 @@ class UserController extends Controller
         }
         $user->forceDelete();
         Alert::success('Pengguna berhasil dihapus', 'berhasil');
-        return redirect('/user/trash');
+        return redirect()->back();
     }
 
     public function softdelete($id)
@@ -233,7 +179,7 @@ class UserController extends Controller
     public function restoreAll()
     {
         $user = User::onlyTrashed();
-        $user_deleted = DB::table('users')->where('deleted_at','!=',null)->first();
+        $user_deleted = DB::table('users')->where('deleted_at', '!=', null)->first();
         if (!empty($user_deleted)) {
             $user->restore();
             Alert::success('Pengguna berhasil dikembalikan semua', 'berhasil');
@@ -253,51 +199,24 @@ class UserController extends Controller
         return view('user.edit-profile', compact('title', 'genders', 'religions', 'maritals'));
     }
 
-    public function updateProfile(Request $request, $id)
+    public function updateProfile(UserRequest $request, $id)
     {
         $user = User::find($id);
-        $request->validate([
-            'nama_lengkap'      => 'required|string',
-            'nik'               => 'required|digits:16',
-            'email'             => 'required|string|email',
-            'jenis_kelamin'     => 'required',
-            'agama'             => 'required',
-            'status_pernikahan' => 'required',
-            'nomor_telepon'     => 'nullable|numeric',
-            'alamat'            => 'required',
-            'tempat_lahir'      => 'required|string',
-            'tanggal_lahir'     => 'required|date',
-            'pekerjaan'         => 'required|string',
-            'foto'              => 'image|mimes:jpeg,png,gif,webp|max:2048'
-        ]);
-        $file = $request->file('image');
-        if (!empty($file)) {
-            $file_name = time() . "_" . $file->getClientOriginalName();
-            if ($file->move(public_path('img/profile'), $file_name)) {
-                if ($user->image != "default.jpg") {
-                    File::delete(public_path('img/profile/' . $user->image));
-                }
-                $user->image = $file_name;
-            } else {
-                Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
-                return redirect('/my-profile');
-            }
+        $request->validated();
+
+        if ($request->file('foto')) {
+            $user->image = $this->updateUploadPhoto($request->file('foto'), 'img/profile', $user->image);
         }
 
-        User::where('id', $id)->update([
-            'nik'           => $request->nik,
-            'name'          => $request->nama_lengkap,
-            'image'         => $user->image,
-            'gender_id'     => $request->jenis_kelamin,
-            'religion_id'   => $request->agama,
-            'marital_id'    => $request->status_pernikahan,
-            'phone_number'  => $request->nomor_telepon,
-            'address'       => $request->alamat,
-            'birth_place'   => $request->tempat_lahir,
-            'birth_date'    => $request->tanggal_lahir,
-            'job'           => $request->pekerjaan,
-            'email'         => $request->email,
-        ]);
+        if ($request->file('nik_file')) {
+            $user->nik_file = $this->uploadFile($request->file('nik_file'), 'img/nik');
+        }
+
+        if ($request->file('kk_file')) {
+            $user->kk_file = $this->uploadFile($request->file('kk_file'), 'img/kk');
+        }
+
+        User::where('id', $id)->update($this->dataUser('updateProfile', $request, $user->image, $user->nik_file, $user->kk_file));
         Alert::success('Profil berhasil diperbarui', 'berhasil');
         return redirect('/my-profile');
     }
@@ -338,5 +257,80 @@ class UserController extends Controller
             Alert::error('Kata sandi tidak cocok dengan kata sandi lama', 'gagal')->persistent("tutup");
             return redirect('/my-profile');
         }
+    }
+
+    public function detailKK($kk_file)
+    {
+        if (auth()->user()->kk_file == $kk_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3) {
+            $title = 'Detail KK';
+            $file = 'img/kk/' . $kk_file;
+            $file_name = $kk_file;
+            return view('user/detail', compact('title', 'file', 'file_name'));
+        }
+    }
+
+    public function detailNIK($nik_file)
+    {
+        if (auth()->user()->nik_file == $nik_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3) {
+            $title = 'Detail NIK';
+            $file = 'img/nik/'.$nik_file;
+            $file_name = $nik_file;
+            return view('user/detail', compact('title','file','file_name'));
+        }
+    }
+
+    private function uploadFile($file, $path)
+    {
+        $name = time() . "_" . $file->getClientOriginalName();
+        if (!$file->move(public_path($path), $name)) {
+            Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
+            return redirect()->back();
+        } else {
+            return $name;
+        }
+    }
+
+    private function updateUploadPhoto($file, $path, $old_file)
+    {
+        $file_name = time() . "_" . $file->getClientOriginalName();
+        if ($file->move(public_path($path), $file_name)) {
+            if ($old_file != "default.jpg") {
+                File::delete(public_path('img/profile/' . $old_file));
+            }
+            return $file_name;
+        } else {
+            Alert::error('Foto gagal diunggah', 'gagal')->persistent('tutup');
+            return redirect()->back();
+        }
+    }
+
+    private function dataUser($method, $request, $image, $nik_file, $kk_file)
+    {
+        $data = [
+            'nik'           => $request->nik,
+            'nik_file'      => $nik_file,
+            'kk'            => $request->kk,
+            'kk_file'       => $kk_file,
+            'name'          => $request->nama_lengkap,
+            'image'         => $image,
+            'gender_id'     => $request->jenis_kelamin,
+            'religion_id'   => $request->agama,
+            'marital_id'    => $request->status_pernikahan,
+            'phone_number'  => $request->nomor_telepon,
+            'address'       => $request->alamat,
+            'birth_place'   => $request->tempat_lahir,
+            'birth_date'    => $request->tanggal_lahir,
+            'job'           => $request->pekerjaan,
+            'email'         => $request->email,
+        ];
+
+        if ($method == 'store') {
+            $data['role_id'] = $request->peran;
+            $data['password'] = Hash::make($request->konfirmasi_kata_sandi);
+        } else if ($method == 'update') {
+            $data['role_id'] = $request->peran;
+        }
+
+        return $data;
     }
 }

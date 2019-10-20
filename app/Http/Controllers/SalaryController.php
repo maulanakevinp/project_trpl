@@ -120,6 +120,10 @@ class SalaryController extends Controller
      */
     public function store(Request $request)
     {
+        if (auth()->user()->nik_file == null || auth()->user()->kk == null || auth()->user()->kk_file == null) {
+            Alert::error('Harap melengkapi profil anda', 'Gagal')->persistent('tutup');
+            return redirect('/edit-profile');
+        }
         $request->validate([
             'penghasilan'       => 'required|numeric',
             'alasan_pengajuan'  => 'required',
@@ -164,29 +168,29 @@ class SalaryController extends Controller
      */
     public function verify1(Request $request, $id)
     {
-        $request->validate([
-            'verifikasi'   => 'required',
-        ]);
-
+        $request->validate(['verifikasi' => 'required']);
+        $time = now()->format('Y-m-d H:i:s');
+        $create = [
+            'verify1'       =>  $request->verifikasi,
+            'created_at'    =>  $time,
+            'updated_at'    =>  $time
+        ];
         $salary = Salary::findOrFail($id);
+        $reason1 = null;
+        if ($request->verifikasi == -1) {
+            $request->validate(['alasan_penolakan' => 'required']);
+            $reason1 = $request->alasan_penolakan;
+            $create['reason1'] = $request->alasan_penolakan;
+        }
+
         if ($request->update == 1) {
-            Letter::where('id', $salary->letter_id)->update([
-                'verify1'       => $request->verifikasi
-            ]);
+            Letter::where('id', $salary->letter_id)->update(['verify1' => $request->verifikasi, 'reason1' => $reason1]);
             Alert::success('Pengajuan surat keterangan penghasilan berhasil diperbarui', 'berhasil');
             return redirect('/salary/verified1');
         } else {
-            $time = now()->format('Y-m-d H:i:s');
-            Letter::create([
-                'verify1'       => $request->verifikasi,
-                'created_at'    =>  $time,
-                'updated_at'    =>  $time
-            ]);
-
+            Letter::create($create);
             $letter = Letter::where('created_at', $time)->first();
-            Salary::where('id', $id)->update([
-                'letter_id' => $letter->id
-            ]);
+            Salary::where('id', $id)->update(['letter_id' => $letter->id]);
             Alert::success('Pengajuan surat keterangan penghasilan berhasil diverifikasi', 'berhasil');
             return redirect('/salary/unprocessed1');
         }
@@ -235,26 +239,30 @@ class SalaryController extends Controller
 
         $salary = Salary::findOrFail($id);
         $letter = Letter::where('verify1', 1)->where('verify2', 1)->orderBy('number', 'desc')->first();
-        
+
         Letter::where('id', $salary->letter_id)->update([
             'verify2'   => $request->verifikasi
         ]);
 
-        if ($request->verifikasi == 1) {
-            if ($letter == null) {
-                Letter::where('id', $salary->letter_id)->update([
-                    'number'    => 1,
-                ]);
-            } else {
-                Letter::where('id', $salary->letter_id)->update([
-                    'number'    => $letter->number + 1,
-                ]);
-            }
+        $reason = null;
+
+        if ($letter == null) {
+            $number = 1;
         } else {
-            Letter::where('id', $salary->letter_id)->update([
-                'number'    => null,
-            ]);
+            $number = $letter->number + 1;
+
         }
+
+        if ($request->verifikasi == -1) {
+            $request->validate(['alasan_penolakan' => 'required']);
+            $number = null;
+            $reason = $request->alasan_penolakan;
+        }
+
+        Letter::where('id', $salary->letter_id)->update([
+            'number'    => $number,
+            'reason2'   => $reason
+        ]);
 
         if ($request->update == 1) {
             Alert::success('Pengajuan surat keterangan penghasilan berhasil diperbarui', 'berhasil');

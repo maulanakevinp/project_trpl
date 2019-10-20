@@ -16,7 +16,8 @@ return [
     // Labels
     'add'               =>  'Tambah pengajuan baru',
     'data'              =>  'Data pengajuan surat keterangan tidak mampu',
-    'edit'              =>  'Ubah pengajuan',
+    'edit_incapable'    =>  'Ubah pengajuan',
+    'edit_verify'       =>  'Ubah verifikasi',
     'delete_confirm'    =>  'Apakah anda yakin ingin menghapus pengajuan ini???',
     'status'            =>  'Status',
     'status_null'       =>  'Belum diproses',
@@ -37,7 +38,7 @@ return [
     'approved'          =>  'Disetujui',
     'approve'           =>  'Setujui',
     'not_approve'       =>  'Jangan setujui',
-    'nik'               =>  'NIK Pemohon',
+    'nik'               =>  'NIK pemohon',
     'parents'           =>  'Orangtua/Wali saya',
     'child'             =>  'Anak saya',
     'choose'            =>  'Pilih',
@@ -51,11 +52,12 @@ return [
     'back'      => 'Kembali',
 
     // Atributtes
-    'name'          => 'Nama',
-    'birth_place'   => 'Tempat lahir',
-    'birth_date'    => 'Tanggal lahir',
-    'job'           => 'Pekerjaan',
-    'address'       => 'Alamat',
-    'reason'        => 'Alasan pengajuan',
-    'as'            => 'Merupakan',
+    'name'              => 'Nama',
+    'birth_place'       => 'Tempat lahir',
+    'birth_date'        => 'Tanggal lahir',
+    'job'               => 'Pekerjaan',
+    'address'           => 'Alamat',
+    'reason'            => 'Alasan pengajuan',
+    'reason_decline'    => 'Alasan penolakan',
+    'as'                => 'Merupakan',
 ];

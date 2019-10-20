@@ -23,7 +23,8 @@
                             <tbody>
                                 <tr><td>{{ __('user.name') }}</td>          <td>:</td><td>{{ Auth::user()->name }}</td></tr>
                                 <tr><td>{{ __('user.email') }}</td>         <td>:</td><td>{{ Auth::user()->email }}</td></tr>
-                                <tr><td>{{ __('user.nik') }}</td>           <td>:</td><td>{{ Auth::user()->nik }}</td></tr>
+                                <tr><td>{{ __('user.nik') }}</td>           <td>:</td><td><a target="_blank" @if(Auth::user()->nik_file) data-toggle="tooltip" data-placement="top" title="Lihat detail NIK" href="{{ route('detail-nik', ['nik' => Auth::user()->nik_file]) }} @endif">{{ Auth::user()->nik }}</a></td></tr>
+                                <tr><td>{{ __('user.kk') }}</td>            <td>:</td><td><a target="_blank" @if(Auth::user()->kk_file) data-toggle="tooltip" data-placement="top" title="Lihat detail KK" href="{{ route('detail-kk', ['kk' => Auth::user()->kk_file]) }} @endif">{{ Auth::user()->kk }}</a></td></tr>
                                 <tr><td>{{ __('user.gender') }}</td>        <td>:</td><td>{{ Auth::user()->gender->gender }}</td></tr>
                                 <tr><td>{{ __('user.religion') }}</td>      <td>:</td><td>{{ Auth::user()->religion->religion }}</td></tr>
                                 <tr><td>{{ __('user.marital') }}</td>       <td>:</td><td>{{ Auth::user()->marital->marital }}</td></tr>
@@ -37,5 +38,4 @@
             </div>
         </div>
     </div>
-
 @endsection

@@ -18,14 +18,13 @@
     </nav>
     @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close"
             data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>
-    </div>@endif
-    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button></div>@endif
-    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button></div>@endif
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <div class="card shadow h-100">
         <div class="card-header">
             <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ __('salary.data') }}</h5>
@@ -38,6 +37,7 @@
                             <th>{{ __('salary.nik') }}</th>
                             <th>{{ __('salary.salary') }}</th>
                             <th>{{ __('salary.reason') }}</th>
+                            <th>{{ __('salary.reason_decline') }}</th>
                             <th>{{ __('salary.created') }}</th>
                             <th>{{ __('salary.declined_at') }}</th>
                         </tr>
@@ -52,6 +52,7 @@
                                     data-target="{{'#showUserModal'.$i}}">{{ $salary->user->nik }}</a></td>
                             <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
                             <td>{{ $salary->reason }}</td>
+                            <td>{{ $salary->letter->reason1 }}</td>
                             <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
                             <td>{{ $salary->letter->updated_at->format('d M Y - H:i:s') }}</td>
                         </tr>
@@ -72,47 +73,28 @@
                                         <img src="{{ asset('img/profile/' . $salary->user->image) }}"
                                             class="img-thumbnail mb-3" alt="{{ $salary->user->image }}">
                                         <div class="row">
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.name') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->name }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.email') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->email }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.nik') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->nik }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.gender') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->gender->gender }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.religion') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->religion->religion }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.marital') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->marital->marital }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.birth') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->birth_place .__(', ').date('d-m-Y', strtotime($salary->user->birth_date)) }}">
-                                            </div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.job') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->job }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.phone_number') }}</label></div>
-                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled
-                                                    value="{{ $salary->user->phone_number }}"></div>
-                                            <div class="col-md-4"><label
-                                                    class="col-form-label">{{ __('user.address') }}</label></div>
-                                            <div class="col-md-8 mb-2"><textarea class="form-control" disabled
-                                                    rows="3">{{ $salary->user->address }}</textarea></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.name') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->name }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.email') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->email }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label"><a target="_blank" data-toggle="tooltip" data-placement="top" title="Lihat detail NIK" href="{{ route('detail-nik', $salary->user->nik_file) }}">{{ __('user.nik') }}</a></label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->nik }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label"><a target="_blank" data-toggle="tooltip" data-placement="top" title="Lihat detail KK" href="{{ route('detail-kk', $salary->user->kk_file) }}">{{ __('user.kk') }}</a></label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->kk }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.gender') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->gender->gender }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.religion') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->religion->religion }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.marital') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->marital->marital }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.birth') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->birth_place .__(', ').date('d-m-Y', strtotime($salary->user->birth_date)) }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.job') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->job }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.phone_number') }}</label></div>
+                                            <div class="col-md-8 mb-2"><input class="form-control" type="text" disabled value="{{ $salary->user->phone_number }}"></div>
+                                            <div class="col-md-4"><label class="col-form-label">{{ __('user.address') }}</label></div>
+                                            <div class="col-md-8 mb-2"><textarea class="form-control" disabled rows="3">{{ $salary->user->address }}</textarea></div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -135,4 +117,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+"order": [[ 4, "desc" ]]
 @endsection

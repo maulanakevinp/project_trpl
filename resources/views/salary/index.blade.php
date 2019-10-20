@@ -88,13 +88,13 @@
                             <td>{{ __('salary.status_1') }}</td>
                             @elseif($salary->letter->verify1 == -1 && $salary->letter->verify2 == 0)
                             <td>{{ __('~') }}</td>
-                            <td>{{ __('salary.declined') }}</td>
+                            <td><span class="font-weight-bold">{{ __('salary.declined') }}</span> {{$salary->letter->reason1}}</td>
                             @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == -1)
                             <td>{{ __('~') }}</td>
                             <td>{{ __('salary.status_1') }}</td>
                             @elseif($salary->letter->verify1 == -1 && $salary->letter->verify2 == -1)
                             <td>{{ __('~') }}</td>
-                            <td>{{ __('salary.declined') }}</td>
+                            <td><span class="font-weight-bold">{{ __('salary.declined') }}</span> {{$salary->letter->reason1}}</td>
                             @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1)
                             <td>{{ $salary->letter->updated_at->format('d M Y - H:i:s') }}</td>
                             <td>{{ __('salary.approved') }}</td>
@@ -179,4 +179,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+    "order": [[ 2, "desc" ]]
 @endsection

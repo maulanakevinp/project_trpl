@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div style="margin:60px">
+    <div style="margin-top:60px;margin-left:60px;margin-bottom:30px;margin-right:60px">
         <div style="height:100px;width:100%">
             <div style="height:100px;width:90px;float:left" class="">
                 <img height="100%" width="100%" src="{{ asset('img/logo/logo-pemkab-jember1.png') }}" alt="">
@@ -28,9 +28,9 @@
             </div>
             <hr style="position: relative; top:-25px; border-top: 5px double #000000;">
         </div>
-        <div style="margin-top:30px">
+        <div style="margin-top:50px">
             <p class="text-center">
-                <span class="fs-14 bold underline">SURAT KETERANGAN TIDAK MAMPU</span>
+                <span class="fs-12 bold underline">SURAT KETERANGAN TIDAK MAMPU</span>
                 <br>
                 <span class="fs-11">
                     Nomor : 140 / {{ $incapable->letter->number }} / 22.2003 /
@@ -39,7 +39,7 @@
                 </span>
             </p>
         </div>
-        <div style="" class="">
+        <div style="margin-top:-10px" class="">
             <p class="text-justify text-indent">
                 Yang bertanda tangan dibawah ini Kepala Desa Arjasa
                 Kecamatan Arjasa Kabupaten Jember, menerangakan bahwa :
@@ -103,15 +103,15 @@
             </p>
         </div>
         <div style="margin-left:50%; margin-top:-25px" class="text-center">
-            <p style="line-height: 1; margin-bottom: 60px">
+            <p style="line-height: 1; margin-bottom: 55px">
                 Arjasa, {{ date('d M Y', strtotime($incapable->letter->updated_at)) }} <br>
                 Kepala Desa Arjasa
             </p>
             <p style="" class="bold underline">
                 {{ $kepala->name }}
             </p>
-            <img style="position: absolute; top: 760px; right:150px;height: 120px; width:120px" src="{{ asset('img/logo/tanda-tangan.png') }}" alt="">
-            <img style="position: absolute; top: 740px; right:220px;height: 120px; width:120px;-ms-transform: rotate(20deg);-webkit-transform: rotate(20deg);transform: rotate(20deg);" src="{{ asset('img/logo/stempel.png') }}" alt="">
+            <img style="position: absolute; top: 795px; right:150px;height: 120px; width:120px" src="{{ asset('img/logo/tanda-tangan.png') }}" alt="">
+            <img style="position: absolute; top: 760px; right:220px;height: 120px; width:120px;-ms-transform: rotate(20deg);-webkit-transform: rotate(20deg);transform: rotate(20deg);" src="{{ asset('img/logo/stempel.png') }}" alt="">
         </div>
     </div>
 </body>

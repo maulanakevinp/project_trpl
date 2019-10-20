@@ -137,13 +137,13 @@
                             <td>{{ __('incapable.status_1') }}</td>
                             @elseif($incapable->letter->verify1 == -1 && $incapable->letter->verify2 == 0)
                             <td>{{ __('~') }}</td>
-                            <td>{{ __('incapable.declined') }}</td>
+                            <td><span class="font-weight-bold">{{ __('incapable.declined') }}</span> {{$incapable->letter->reason1}}</td>
                             @elseif($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == -1)
                             <td>{{ __('~') }}</td>
                             <td>{{ __('incapable.status_1') }}</td>
                             @elseif($incapable->letter->verify1 == -1 && $incapable->letter->verify2 == -1)
                             <td>{{ __('~') }}</td>
-                            <td>{{ __('incapable.declined') }}</td>
+                            <td><span class="font-weight-bold">{{ __('incapable.declined') }}</span> {{$incapable->letter->reason1}}</td>
                             @elseif($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == 1)
                             <td>{{ $incapable->letter->updated_at->format('d M Y - H:i:s') }}</td>
                             <td>{{ __('incapable.approved') }}</td>
@@ -185,7 +185,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="{{'editMenuModalLabel'.$i}}">
-                                            {{ __('incapable.edit_salary') }}</h5>
+                                            {{ __('incapable.edit_incapable') }}</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -265,4 +265,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+"order": [[ 1, "desc" ]]
 @endsection

@@ -12,7 +12,7 @@ class Letter extends Model
      * @var array
      */
     protected $fillable = [
-        'number','verify1', 'verify1', 'created_at', 'updated_at'
+        'number', 'verify1', 'verify1', 'reason1', 'reason2', 'created_at', 'updated_at'
     ];
 
     public function salaries()

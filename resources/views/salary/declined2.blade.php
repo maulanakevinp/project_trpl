@@ -38,6 +38,7 @@
                             <th>{{ __('salary.nik') }}</th>
                             <th>{{ __('salary.salary') }}</th>
                             <th>{{ __('salary.reason') }}</th>
+                            <th>{{ __('salary.reason_decline') }}</th>
                             <th>{{ __('salary.created') }}</th>
                             <th>{{ __('salary.declined_at') }}</th>
                             <th>{{ __('salary.action') }}</th>
@@ -49,6 +50,7 @@
                             <td>{{ $salary->user->nik }}</td>
                             <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
                             <td>{{ $salary->reason }}</td>
+                            <td>{{ $salary->letter->reason2 }}</td>
                             <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
                             <td>{{ $salary->letter->updated_at->format('d M Y - H:i:s') }}</td>
                             <td>
@@ -65,4 +67,7 @@
 </div>
 <!-- /.container-fluid -->
 
+@endsection
+@section('orderBy')
+"order": [[ 3, "desc" ]]
 @endsection

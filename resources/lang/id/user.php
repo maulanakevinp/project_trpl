@@ -39,6 +39,13 @@ return [
     // Atributtes
     'name'              => 'Nama lengkap',
     'nik'               => 'NIK',
+    'nik_file'          => 'NIK file',
+    'choose_nik'        => 'Masukkan hasil scan NIK',
+    'view_nik'          => 'Lihat NIK',
+    'kk'                => 'KK',
+    'kk_file'           => 'KK file',
+    'choose_kk'         => 'Masukkan hasil scan KK',
+    'view_kk'           => 'Lihat KK',
     'gender'            => 'Jenis kelamin',
     'male'              => 'Laki-laki',
     'female'            => 'Perempuan',

@@ -32,7 +32,14 @@
                                 <tr>
                                     <td>{{ __('user.nik') }}</td>
                                     <td>:</td>
-                                    <td>{{ $salary->user->nik }}</td>
+                                    <td><a target="_blank" @if($salary->user->nik_file) data-toggle="tooltip" data-placement="top" title="Lihat detail NIK"
+                                        href="{{ route('detail-nik', $salary->user->nik_file) }} @endif">{{ $salary->user->nik }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>{{ __('user.kk') }}</td>
+                                    <td>:</td>
+                                    <td><a target="_blank" @if($salary->user->kk_file) data-toggle="tooltip" data-placement="top" title="Lihat detail KK"
+                                        href="{{ route('detail-kk', $salary->user->kk_file) }} @endif">{{ $salary->user->kk }}</a></td>
                                 </tr>
                                 <tr>
                                     <td>{{ __('user.gender') }}</td>
@@ -95,13 +102,13 @@
                             <label class="col-form-label" for="verifikasi">@lang('salary.verify')</label><br>
                             <div class="custom-control custom-radio">
                                 @if ($salary->letter->verify2 == 1)
-                                <input checked="checked" type="radio" id="verifikas1" name="verifikasi"
+                                <input checked="checked" type="radio" id="verifikasi1" name="verifikasi"
                                     class="custom-control-input" value="1">
                                 @else
-                                <input type="radio" id="verifikas1" name="verifikasi" class="custom-control-input"
+                                <input type="radio" id="verifikasi1" name="verifikasi" class="custom-control-input"
                                     value="1">
                                 @endif
-                                <label class="custom-control-label" for="verifikas1">{{ __('salary.accept') }}</label>
+                                <label class="custom-control-label" for="verifikasi1">{{ __('salary.accept') }}</label>
                             </div>
                             <div class="custom-control custom-radio">
                                 @if ($salary->letter->verify2 == -1)
@@ -119,6 +126,10 @@
                             </span>
                             @enderror
                         </div>
+                        <div id="alasan_penolakan" class="form-group">
+                            <label class="col-form-label" for="">@lang('salary.reason_decline')</label>
+                            <textarea name="alasan_penolakan" class="form-control" cols="30" rows="5">{{ $salary->letter->reason2 }}</textarea>
+                        </div>
                         <div class="float-right">
                             <a href="{{ route('salary.declined2') }}" class="btn btn-secondary">
                                 @lang('salary.back')
@@ -133,4 +144,13 @@
         </div>
     </div>
 </div>
+@endsection
+@section('alasan_penolakan')
+$('#alasan_penolakan').show();
+$('#verifikasi2').on('change', function () {
+    $('#alasan_penolakan').show();
+});
+$('#verifikasi1').on('change', function () {
+    $('#alasan_penolakan').hide();
+});
 @endsection
