@@ -8,16 +8,16 @@
         <div class="col-md-7">
             <div class="card o-hidden border-0 shadow-lg my-5" style="background: rgba(255,255,255,0.7)">
                 <div class="card-body p-0">
-                    @if (session('status'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('status') }}
-                    </div>
-                    @endif
                     <div class="row">
                         <div class="col-lg">
                             <div class="p-5">
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">@lang('auth.password_reset') {{ config('app.name') }}</h1>
+                                    @if (session('status'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('status') }}
+                                    </div>
+                                    @endif
                                 </div>
                                 <form class="user" method="POST" action="{{ route('password.email') }}">
                                     @csrf
