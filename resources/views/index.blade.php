@@ -13,60 +13,51 @@
 
         <!-- Content Row -->
         <div class="row">
-            <!-- Earnings (Monthly) Card Example -->
+            <!-- Jumlah Penduduk Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Earnings (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Jumlah Penduduk</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $users->count() }}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                                <i class="fas fa-user fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Earnings (Monthly) Card Example -->
+            <!-- Jumlah Penduduk Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Earnings (Annual)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Jumlah Surat Disetujui</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $letters_approved }}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                <i class="fas fa-check fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Earnings (Monthly) Card Example -->
+            <!-- Jumlah Penduduk Card Example -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks</div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="progress progress-sm mr-2">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Jumlah Surat Tidak Disetujui</div>
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $letters_declined }}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                <i class="fas fa-times-circle fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -79,11 +70,11 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Jumlah Surat Belum Diproses</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $unprocessed }}</div>
                             </div>
                             <div class="col-auto">
-                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                <i class="fas fa-mail-bulk fa-2x text-gray-300"></i>
                             </div>
                         </div>
                     </div>
@@ -94,7 +85,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 ">
-            <h5 class="m-0 pt-1 font-weight-bold text-primary">{{ __('Users') }}</h5>
+            <h5 class="m-0 pt-1 font-weight-bold text-primary">Data Penduduk</h5>
         </div>
 
         <!-- Content Row -->
@@ -103,14 +94,14 @@
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th>{{__('NIK')}}</th>
-                            <th>{{__('Name')}}</th>
-                            <th>{{__('Gender')}}</th>
-                            <th>{{__('Religion')}}</th>
-                            <th>{{__('Marital')}}</th>
-                            <th>{{__('Address')}}</th>
-                            <th>{{__('Age')}}</th>
-                            <th>{{__('Job')}}</th>
+                            <th>{{__('user.nik')}}</th>
+                            <th>{{__('user.name')}}</th>
+                            <th>{{__('user.gender')}}</th>
+                            <th>{{__('user.religion')}}</th>
+                            <th>{{__('user.marital')}}</th>
+                            <th>{{__('user.address')}}</th>
+                            <th>{{__('user.age')}}</th>
+                            <th>{{__('user.job')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -122,7 +113,7 @@
                             <td>{{ $user->religion->religion }}</td>
                             <td>{{ $user->marital->marital }}</td>
                             <td>{{ $user->address }}</td>
-                            <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y years, %m months and %d days') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($user->birth_date)->diff(\Carbon\Carbon::now())->format('%y tahun') }}</td>
                             <td>{{ $user->job }}</td>
                         </tr>
                         @endforeach

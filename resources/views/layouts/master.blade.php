@@ -30,7 +30,7 @@
 
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
     <link rel="icon" href="{{ asset('img/logo/logo-pemkab-jember1.png') }}">
-
+    <script src="https://code.highcharts.com/highcharts.js"></script>
 </head>
 
 <body id="page-top">
@@ -108,14 +108,11 @@
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
     <!-- Page level plugins -->
-    <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     @include('sweet::alert')
-    <script>
-        
-    </script>
+    @yield('chart')
     <script>
         $(document).ready(function(){
             $('#dataTable').DataTable({

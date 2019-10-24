@@ -32,7 +32,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
     Route::get('/detail-nik/{nik}', 'UserController@detailNIK')->name('detail-nik');
 
     Route::group(['roles' => 'Super Admin'], function () {
-        Route::get('/dashboard', 'HomeController@index')->name('home');
+
         Route::put('/users/restore-all', 'UserController@restoreAll')->name('users.restoreAll');
         Route::delete('/users/softdelete/{id}', 'UserController@softdelete')->name('users.delete');
         Route::patch('/users/restore/{id}', 'UserController@restore')->name('users.restore');
@@ -49,15 +49,12 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::resource('/submenu', 'SubmenuController')->except(['create', 'show', 'edit']);;
         Route::post('/getSubmenu', 'SubmenuController@getSubmenu');
 
-        Route::get('/gender-chart', 'PopulationGraphController@gender')->name('gender-chart');
-        Route::get('/age-chart', 'PopulationGraphController@age')->name('age-chart');
-        Route::get('/education-chart', 'PopulationGraphController@education')->name('education-chart');
-        Route::get('/religion-chart', 'PopulationGraphController@religion')->name('religion-chart');
-        Route::get('/job-chart', 'PopulationGraphController@job')->name('job-chart');
-        Route::get('/marital-chart', 'PopulationGraphController@marital')->name('marital-chart');
     });
 
     Route::group(['roles' => 'Kepala Desa'], function () {
+        
+        Route::get('/dashboard', 'HomeController@index')->name('home');
+
         //Salary
         Route::patch('/salary/{id}/verify2', 'SalaryController@verify2')->name('salary.verify2');
         Route::get('/salary/unprocessed2', 'SalaryController@unprocessed2')->name('salary.unprocessed2');
@@ -73,6 +70,11 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::get('/incapable/verified2', 'IncapableController@verified2')->name('incapable.verified2');
         Route::get('/incapable/declined2', 'IncapableController@declined2')->name('incapable.declined2');
         Route::get('/incapable/{id}/declined2', 'IncapableController@editDeclined2')->name('incapable.edit-declined2');
+
+        Route::get('/jenis-kelamin', 'PopulationGraphController@gender')->name('jenis-kelamin');
+        Route::get('/usia', 'PopulationGraphController@age')->name('usia');
+        Route::get('/agama', 'PopulationGraphController@religion')->name('agama');
+        Route::get('/status-pernikahan', 'PopulationGraphController@marital')->name('status-pernikahan');
         
     });
 

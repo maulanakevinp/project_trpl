@@ -11,6 +11,20 @@
             </a>
             
             <!-- Divider -->
+            
+            @if (Auth::user()->role_id == 2)
+            <hr class="sidebar-divider my-0">
+                @if ($title == 'Dashboard')
+                <li class="nav-item active">
+                @else
+                <li class="nav-item">
+                @endif
+                    <a class="nav-link" href="{{ url('/dashboard') }}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+            @endif
             <hr class="sidebar-divider">
 
             @php

@@ -28,17 +28,16 @@ class UserAccessMenuTableSeeder extends Seeder
 
         DB::table('user_access_menu')->insert([
             'role_id' => 2,
-            'menu_id' => 4
+            'menu_id' => 3
         ]);
-
 
         DB::table('user_access_menu')->insert([
             'role_id' => 2,
-            'menu_id' => 3
+            'menu_id' => 2
         ]);
 
         DB::table('user_access_menu')->insert([
-            'role_id' => 3,
+            'role_id' => 2,
             'menu_id' => 4
         ]);
 
@@ -48,13 +47,18 @@ class UserAccessMenuTableSeeder extends Seeder
         ]);
 
         DB::table('user_access_menu')->insert([
-            'role_id' => 4,
+            'role_id' => 3,
             'menu_id' => 4
         ]);
 
         DB::table('user_access_menu')->insert([
             'role_id' => 4,
             'menu_id' => 3
+        ]);
+
+        DB::table('user_access_menu')->insert([
+            'role_id' => 4,
+            'menu_id' => 4
         ]);
     }
 }

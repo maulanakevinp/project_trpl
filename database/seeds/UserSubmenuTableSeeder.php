@@ -13,14 +13,6 @@ class UserSubmenuTableSeeder extends Seeder
     {
         DB::table('user_submenu')->insert([
             'menu_id' => 1,
-            'title' => 'Dashboard',
-            'url' => '/',
-            'icon' => 'fas fa-fw fa-tachometer-alt',
-            'is_active' => 0
-        ]);
-
-        DB::table('user_submenu')->insert([
-            'menu_id' => 1,
             'title' => 'Manajemen Pengguna',
             'url' => '/users',
             'icon' => 'fas fa-fw fa-user-edit',
@@ -37,42 +29,34 @@ class UserSubmenuTableSeeder extends Seeder
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Grafik Jenis Kelamin',
-            'url' => '/gender-chart',
-            'icon' => 'fas fa-fw fa-chart-bar',
-            'is_active' => 0
+            'title' => 'Jenis Kelamin',
+            'url' => '/jenis-kelamin',
+            'icon' => 'fas fa-fw fa-venus-mars',
+            'is_active' => 1
         ]);
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Grafik Umur',
-            'url' => '/age-chart',
-            'icon' => 'fas fa-fw fa-chart-bar',
-            'is_active' => 0
+            'title' => 'Usia',
+            'url' => '/usia',
+            'icon' => 'fas fa-fw fa-sort-numeric-up-alt',
+            'is_active' => 1
         ]);
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Grafik agama',
-            'url' => '/religion-chart',
-            'icon' => 'fas fa-fw fa-chart-bar',
-            'is_active' => 0
+            'title' => 'Agama',
+            'url' => '/agama',
+            'icon' => 'fas fa-fw fa-pray',
+            'is_active' => 1
         ]);
 
         DB::table('user_submenu')->insert([
             'menu_id' => 2,
-            'title' => 'Grafik Pekerjaan',
-            'url' => '/job-chart',
-            'icon' => 'fas fa-fw fa-chart-bar',
-            'is_active' => 0
-        ]);
-
-        DB::table('user_submenu')->insert([
-            'menu_id' => 2,
-            'title' => 'Grafik Pernikahan',
-            'url' => '/marital-chart',
-            'icon' => 'fas fa-fw fa-chart-bar',
-            'is_active' => 0
+            'title' => 'Status Pernikahan',
+            'url' => '/status-pernikahan',
+            'icon' => 'fas fa-fw fa-heartbeat',
+            'is_active' => 1
         ]);
 
         DB::table('user_submenu')->insert([

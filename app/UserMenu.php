@@ -34,7 +34,7 @@ class UserMenu extends Model
             ->select('user_menu.id as id', 'user_menu.menu as menu')
             ->join('user_access_menu', 'user_access_menu.menu_id', '=', 'user_menu.id')
             ->where('user_access_menu.role_id', $role_id)
-            ->orderBy('user_access_menu.menu_id', 'asc')->get();
+            ->orderBy('user_access_menu.id', 'asc')->get();
     }
 
     public function submenu()

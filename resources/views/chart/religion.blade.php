@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    {{$title}} - {{config('app.name')}}
+{{$title}} - {{config('app.name')}}
 @endsection
 @section('container')
 <div class="container-fluid">
@@ -15,10 +15,51 @@
         {{ session('failed') }}
     </div>
     @endif
-    
+
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">{{ $title }}</h1>
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div id="grafik"></div>
+        </div>
     </div>
 </div>
+@endsection
+
+@section('chart')
+<script>
+    Highcharts.chart('grafik', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Grafik Agama'
+            },
+            xAxis: {
+                categories: {!! json_encode($categories) !!},
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Jumlah Penduduk'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Jumlah Penduduk',
+                data: {!! json_encode($data) !!}
+            }]
+        });
+</script>
 @endsection
