@@ -20,8 +20,8 @@
                                         <div class="row">
                                             <label class="col-sm-4 col-form-label" for="">@lang('auth.name')</label>
                                             <div class="col-sm-8">
-                                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}">
-                                                @error('name')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                                <input id="nama" type="text" class="form-control @error('nama') is-invalid @enderror" name="nama" value="{{ old('nama') }}">
+                                                @error('nama')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
                                     </div>
@@ -40,50 +40,50 @@
                                             <div class="col-sm-8">
                                                 @foreach ($genders as $gender)
                                                     <div class="custom-control custom-radio custom-control-inline">
-                                                        <input id="gender{{ $loop->iteration }}" type="radio" class="custom-control-input @error('gender') is-invalid @enderror" name="gender" value="{{$gender->id}}" >
-                                                        <label class="custom-control-label" for="gender{{ $loop->iteration }}">
+                                                        <input id="jenis_kelamin{{ $gender->id }}" type="radio" class="custom-control-input @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{$gender->id}}" >
+                                                        <label class="custom-control-label" for="jenis_kelamin{{ $gender->id }}">
                                                             {{$gender->gender}}
                                                         </label>
                                                     </div>
                                                 @endforeach
-                                                @error('gender')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                                @error('jenis_kelamin')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label" for="religion">@lang('auth.religion')</label>
+                                            <label class="col-sm-4 col-form-label" for="agama">@lang('auth.religion')</label>
                                             <div class="col-sm-8">
-                                                <select name="religion" id="religion" class="form-control @error('religion') is-invalid @enderror">
+                                                <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
                                                     <option value="">@lang('auth.choose_religion')</option>
                                                     @foreach ($religions as $religion)
                                                         <option value="{{$religion->id}}">{{$religion->religion}}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('religion')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                                @error('agama')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label" for="marital">@lang('auth.marital')</label>
+                                            <label class="col-sm-4 col-form-label" for="status_pernikahan">@lang('auth.marital')</label>
                                             <div class="col-sm-8">
-                                                <select name="marital" id="marital" class="form-control @error('marital') is-invalid @enderror">
+                                                <select name="status_pernikahan" id="status_pernikahan" class="form-control @error('status_pernikahan') is-invalid @enderror">
                                                     <option value="">@lang('auth.choose_marital')</option>
                                                     @foreach ($maritals as $marital)
                                                         <option value="{{$marital->id}}">{{$marital->marital}}</option>
                                                     @endforeach
                                                 </select>
-                                                @error('marital')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                                @error('status_pernikahan')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label" for="address">@lang('auth.address')</label>
+                                            <label class="col-sm-4 col-form-label" for="alamat">@lang('auth.address')</label>
                                             <div class="col-sm-8">
-                                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address" value="{{ old('address') }}">
-                                                @error('address')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                                <input id="alamat" type="text" class="form-control @error('alamat') is-invalid @enderror" name="alamat" value="{{ old('alamat') }}">
+                                                @error('alamat')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
                                     </div>
@@ -91,30 +91,29 @@
                                 <div class="col-lg-6">
                                     <div class="form-group">
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label" for="birth_place">@lang('auth.birth_place')</label>
+                                            <label class="col-sm-4 col-form-label" for="tempat_lahir">@lang('auth.birth_place')</label>
                                             <div class="col-sm-8">
-                                                <input id="birth_place" type="text" class="form-control @error('birth_place') is-invalid @enderror" name="birth_place" value="{{ old('birth_place') }}">
-                                                @error('birth_place')
+                                                <input id="tempat_lahir" type="text" class="form-control @error('tempat_lahir') is-invalid @enderror" name="tempat_lahir" value="{{ old('tempat_lahir') }}">
+                                                @error('tempat_lahir')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <label class="col-sm-4 col-form-label" for="tanggal_lahir">@lang('auth.birth_date')</label>
+                                            <div class="col-sm-8">
+                                                <input id="tanggal_lahir" type="date" class="form-control @error('tanggal_lahir') is-invalid @enderror" name="tanggal_lahir" value="{{ old('tanggal_lahir') }}" >
+                                                @error('tanggal_lahir')
                                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
-                                            <label class="col-sm-4 col-form-label" for="birth_date">@lang('auth.birth_date')</label>
+                                            <label class="col-sm-4 col-form-label" for="pekerjaan">@lang('auth.job')</label>
                                             <div class="col-sm-8">
-                                                <input id="birth_date" type="date" class="form-control @error('birth_date') is-invalid @enderror" name="birth_date" value="{{ old('birth_date') }}" >
-                                                @error('birth_date')
-                                                <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <label class="col-sm-4 col-form-label" for="job">@lang('auth.job')</label>
-                                            <div class="col-sm-8">
-                                                <input id="job" type="text" class="form-control @error('job') is-invalid @enderror" name="job" value="{{ old('job') }}">
-                                                @error('job')
+                                                <input id="pekerjaan" type="text" class="form-control @error('pekerjaan') is-invalid @enderror" name="pekerjaan" value="{{ old('pekerjaan') }}">
+                                                @error('pekerjaan')
                                                 <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                             </div>
                                         </div>
