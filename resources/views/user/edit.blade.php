@@ -68,18 +68,40 @@
                                         <input id="nik" type="text" class="form-control @error('nik') is-invalid @enderror" name="nik" value="{{ $user->nik }}" >
                                         @error('nik')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                     </div>
+                                </div><div class="form-group row">
+                                    <label for="nik_file" class="col-md-3 col-form-label">{{__('user.nik_file')}}</label>
+                                    <div class="col-md-9">
+                                        <input type="file" id="nik_file" name="nik_file" value="{{ old('nik_file') }}">@if($user->nik_file)<a target="_blank" href="{{ route('detail-nik', $user->nik_file) }}" class="badge badge-info">lihat</a>@endif
+                                        @error('kk')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="nomor_telepon" class="col-md-3 col-form-label">{{__('user.phone_number')}}</label>
+                                    <label for="kk" class="col-md-3 col-form-label">{{__('user.kk')}}</label>
                                     <div class="col-md-9">
-                                        <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ $user->phone_number }}" >
-                                        @error('nomor_telepon')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                        <input id="kk" type="text" class="form-control @error('kk') is-invalid @enderror" name="kk" value="{{ old('kk') ?? $user->kk }}">
+                                        @error('kk')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="kk_file" class="col-md-3 col-form-label">{{__('user.kk_file')}}</label>
+                                    <div class="col-md-9">
+                                        <input type="file" id="kk_file" name="kk_file" value="{{ old('kk_file') }}">@if($user->kk_file)<a target="_blank" href="{{ route('detail-kk', $user->kk_file) }}" class="badge badge-info">lihat</a>@endif
+                                        @error('kk')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group row">
-                                    <label for="peran" class="col-sm-3 col-form-label">{{__('Peran :')}}</label>
+                                    <label for="nomor_telepon" class="col-md-3 col-form-label">{{__('user.phone_number')}}</label>
+                                    <div class="col-md-9">
+                                        <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror"
+                                            name="nomor_telepon" value="{{ $user->phone_number }}">
+                                        @error('nomor_telepon')<span class="invalid-feedback"
+                                            role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="peran" class="col-sm-3 col-form-label">{{__('user.role')}}</label>
                                     <div class="col-sm-9">
                                         <select class="form-control @error('peran') is-invalid @enderror" name="peran" id="peran">
                                             <option value="">{{__('user.choose_role')}}</option>

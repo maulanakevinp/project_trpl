@@ -147,6 +147,16 @@ class UserController extends Controller
         if ($image->image != 'default.jpg') {
             File::delete(public_path('img/profile/' . $image->image));
         }
+        if ($image->nik_file != null) {
+            if (file_exists(public_path('img/nik/' . $image->nik_file))) {
+                File::delete(public_path('img/nik/' . $image->nik_file));
+            }
+        }
+        if ($image->kk_file != null) {
+            if (file_exists(public_path('img/kk/' . $image->kk_file))) {
+                File::delete(public_path('img/kk/' . $image->kk_file));
+            }
+        }
         $user->forceDelete();
         Alert::success('Pengguna berhasil dihapus', 'berhasil');
         return redirect()->back();
@@ -261,7 +271,7 @@ class UserController extends Controller
 
     public function detailKK($kk_file)
     {
-        if (auth()->user()->kk_file == $kk_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3) {
+        if (auth()->user()->kk_file == $kk_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3 || auth()->user()->role_id == 1) {
             $title = 'Detail KK';
             $file = 'img/kk/' . $kk_file;
             $file_name = $kk_file;
@@ -271,7 +281,7 @@ class UserController extends Controller
 
     public function detailNIK($nik_file)
     {
-        if (auth()->user()->nik_file == $nik_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3) {
+        if (auth()->user()->nik_file == $nik_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3 || auth()->user()->role_id == 1) {
             $title = 'Detail NIK';
             $file = 'img/nik/'.$nik_file;
             $file_name = $nik_file;
