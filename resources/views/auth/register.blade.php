@@ -40,10 +40,17 @@
                                             <div class="col-sm-8">
                                                 @foreach ($genders as $gender)
                                                     <div class="custom-control custom-radio custom-control-inline">
-                                                        <input id="jenis_kelamin{{ $gender->id }}" type="radio" class="custom-control-input @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{$gender->id}}" >
+                                                        @if (old('jenis_kelamin') == $gender->id)
+                                                        <input checked="checked" id="jenis_kelamin{{ $gender->id }}" type="radio" class="custom-control-input @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{$gender->id}}" >
                                                         <label class="custom-control-label" for="jenis_kelamin{{ $gender->id }}">
                                                             {{$gender->gender}}
                                                         </label>
+                                                        @else
+                                                        <input id="jenis_kelamin{{ $gender->id }}" type="radio" class="custom-control-input @error('jenis_kelamin') is-invalid @enderror" name="jenis_kelamin" value="{{$gender->id}}" >
+                                                        <label class="custom-control-label" for="jenis_kelamin{{ $gender->id }}">
+                                                            {{$gender->gender}}
+                                                        </label>                                                            
+                                                        @endif
                                                     </div>
                                                 @endforeach
                                                 @error('jenis_kelamin')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
@@ -57,7 +64,11 @@
                                                 <select name="agama" id="agama" class="form-control @error('agama') is-invalid @enderror">
                                                     <option value="">@lang('auth.choose_religion')</option>
                                                     @foreach ($religions as $religion)
-                                                        <option value="{{$religion->id}}">{{$religion->religion}}</option>
+                                                        @if (old('agama') == $religion->id)
+                                                        <option selected="selected" value="{{$religion->id}}">{{$religion->religion}}</option>
+                                                        @else
+                                                        <option value="{{$religion->id}}">{{$religion->religion}}</option>                                                            
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                                 @error('agama')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
@@ -71,7 +82,11 @@
                                                 <select name="status_pernikahan" id="status_pernikahan" class="form-control @error('status_pernikahan') is-invalid @enderror">
                                                     <option value="">@lang('auth.choose_marital')</option>
                                                     @foreach ($maritals as $marital)
+                                                        @if (old('status_pernikahan') == $marital->id)
+                                                        <option selected="selected" value="{{$marital->id}}">{{$marital->marital}}</option>
+                                                        @else
                                                         <option value="{{$marital->id}}">{{$marital->marital}}</option>
+                                                        @endif
                                                     @endforeach
                                                 </select>
                                                 @error('status_pernikahan')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
