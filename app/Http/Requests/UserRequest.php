@@ -37,9 +37,9 @@ class UserRequest extends FormRequest
             'tempat_lahir'          => ['required','string'],
             'tanggal_lahir'         => ['required','date',new BirthDate],
             'pekerjaan'             => ['required','string'],
-            'foto'                  => ['nullable','image','mimes:jpeg,png,gif,webp','max:2048'],
-            'nik_file'              => ['nullable','image','mimes:jpeg,png','max:2048'],
-            'kk_file'               => ['nullable','image','mimes:jpeg,png','max:2048'],
+            'foto'                  => ['nullable','image','mimes:jpeg,png,gif,webp,bmp','max:2048'],
+            'nik_file'              => ['nullable','image','mimes:jpeg,png,bmp','max:2048'],
+            'kk_file'               => ['nullable','image','mimes:jpeg,png,bmp','max:2048'],
         ];
 
         if (request()->isMethod('post')) {

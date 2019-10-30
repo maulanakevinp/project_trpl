@@ -276,6 +276,8 @@ class UserController extends Controller
             $file = 'img/kk/' . $kk_file;
             $file_name = $kk_file;
             return view('user/detail', compact('title', 'file', 'file_name'));
+        } else {
+            return abort(403,'Anda tidak memiliki hak akses');
         }
     }
 
@@ -286,6 +288,8 @@ class UserController extends Controller
             $file = 'img/nik/'.$nik_file;
             $file_name = $nik_file;
             return view('user/detail', compact('title','file','file_name'));
+        } else {
+            return abort(403, 'Anda tidak memiliki hak akses');
         }
     }
 
