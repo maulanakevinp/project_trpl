@@ -125,7 +125,7 @@ class SalaryController extends Controller
             return redirect('/edit-profile');
         }
         $request->validate([
-            'penghasilan'       => 'required|numeric',
+            'penghasilan'       => 'required|numeric|min:0|max:2000000',
             'alasan_pengajuan'  => 'required',
         ]);
         Salary::create([
@@ -147,7 +147,7 @@ class SalaryController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'penghasilan'       => 'required|numeric',
+            'penghasilan'       => 'required|numeric|min:0|max:2000000',
             'alasan_pengajuan'  => 'required',
         ]);
 
