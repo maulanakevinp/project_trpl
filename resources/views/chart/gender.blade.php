@@ -25,7 +25,7 @@
 </div>
 @endsection
 
-@section('chart')
+@section('script')
 <script>
     Highcharts.chart('grafik', {
         chart: {

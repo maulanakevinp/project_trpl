@@ -45,19 +45,15 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $role->role }}</td>
                                 <td>
-                                    <a href="{{ route('role.edit', $role->id)  }}"><span
-                                            class="badge badge-warning">{{ __('role.access') }}</span></a>
-                                    <a class="editRole" href="" data-toggle="modal" data-target="#newRoleModal"
-                                        data-id="{{ $role->id }}"><span
-                                            class="badge badge-success">{{ __('role.edit') }}</span></a>
+                                    <a href="{{ route('role.edit', $role->id)  }}" class="btn btn-success btn-sm"><i class="fas fa-universal-access"></i> Akses</a>
+                                    <button class="editRole btn btn-warning btn-sm btn-circle" data-toggle="modal" data-target="#newRoleModal" data-id="{{ $role->id }}"><i class="fas fa-edit"></i></button>
                                     @if($role->id != 1)
                                     <form class="d-inline-block" action="{{ route('role.destroy',$role->id) }}"
                                         method="POST">
                                         @method('delete')
                                         @csrf
-                                        <button type="submit" class="badge badge-danger "
-                                            onclick="return confirm('{{__('role.delete_confirm')}}');">
-                                            {{ __('role.delete') }}
+                                        <button type="submit" class="btn btn-danger btn-sm btn-circle" onclick="return confirm('{{__('role.delete_confirm')}}');">
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                     @endif
@@ -91,8 +87,7 @@
                 <input id="method-role" type="hidden" name="_method" value="post">
                 <div class="modal-body">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="role" name="peran" placeholder="Role Name"
-                            autocomplete="off">
+                        <input type="text" class="form-control" id="role" name="peran" placeholder="Role Name" autocomplete="off">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -104,4 +99,37 @@
     </div>
 </div>
 
+@endsection
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('.editRole').on('click', function () {
+            const id = $(this).data('id');
+            const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $('#newRoleModalLabel').html("{{__('role.edit_role')}}");
+            $('#submitRole').html("{{__('role.edit')}}");
+            $('#postRole').attr('action', "{{ url('role') }}/" + id);
+            $('#method-role').val('patch');
+            $.ajax({
+                url: "{{ url('getRole') }}/" + id,
+                method: 'post',
+                dataType: 'json',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                success: function (data) {
+                    $('#role').val(data.role);
+                }
+            });
+        });
+        $('.addRole').on('click', function () {
+            $('#newRoleModalLabel').html("{{__('role.add')}}");
+            $('#submitRole').html("{{__('role.add')}}");
+            $('#postRole').attr('action', "{{ route('role.store') }}");
+            $('#method-role').val('post');
+            $('#role').val('');
+        });
+    });
+</script>
 @endsection

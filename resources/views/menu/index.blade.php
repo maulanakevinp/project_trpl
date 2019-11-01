@@ -40,16 +40,13 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $menu->menu }}</td>
                                 <td>
-                                    <a class="editMenu" href="" data-toggle="modal" data-target="#newMenuModal"
-                                        data-id="{{ $menu->id }}"><span
-                                            class="badge badge-success">{{ __('menu.edit') }}</span></a>
+                                    <button class="editMenu btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#newMenuModal" data-id="{{ $menu->id }}"><i class="fas fa-edit"></i></button>
                                     <form class="d-inline-block" action="{{ route('menu.destroy',$menu->id) }}"
                                         method="POST">
                                         @method('delete')
                                         @csrf
-                                        <button type="submit" class="badge badge-danger "
-                                            onclick="return confirm('{{__('menu.delete_confirm')}}');">
-                                            {{ __('menu.delete') }}
+                                        <button type="submit" class="btn btn-danger btn-circle btn-sm " onclick="return confirm('{{__('menu.delete_confirm', ['menu' => $menu->menu])}}');">
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </td>
@@ -94,4 +91,37 @@
     </div>
 </div>
 
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function(){
+            $('.editMenu').on('click', function () {
+                const id = $(this).data('id');
+                const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $('#newMenuModalLabel').html("{{__('menu.edit_menu')}}");
+                $('#submitMenu').html("{{__('menu.edit')}}");
+                $('#postMenu').attr('action', "{{ url('menu') }}/" + id);
+                $('#method-menu').val('patch');
+                $.ajax({
+                    url: "{{ url('/getMenu') }}",
+                    method: 'post',
+                    dataType: 'json',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        id: id
+                    },
+                    success: function (data) {
+                        $('#menu').val(data.menu);
+                    }
+                });
+            });
+            $('.addMenu').on('click', function () {
+                $('#newMenuModalLabel').html("{{__('menu.add')}}");
+                $('#submitMenu').html("{{__('menu.add')}}");
+                $('#postMenu').attr('action', "{{ route('menu.store') }}");
+                $('#method-menu').val('post');
+                $('#menu').val('');
+            });
+        });
+    </script>
 @endsection

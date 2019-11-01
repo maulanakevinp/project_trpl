@@ -44,12 +44,12 @@
                                 <tr>
                                     <td>{{ __('user.nik') }}</td>
                                     <td>:</td>
-                                    <td><a target="_blank" @if($incapable->user->nik_file) data-toggle="tooltip" data-placement="top" title="Lihat detail NIK" href="{{ route('detail-nik', $incapable->user->nik_file) }} @endif">{{ $incapable->user->nik }}</a></td>
+                                    <td><a target="_blank" @if($incapable->user->nik_file) data-toggle="modal" data-target="#detailNIKModal" data-toggle="tooltip" data-placement="top" title="Lihat detail NIK" href="" @endif>{{ $incapable->user->nik }}</a></td>
                                 </tr>
                                 <tr>
                                     <td>{{ __('user.kk') }}</td>
                                     <td>:</td>
-                                    <td><a target="_blank" @if($incapable->user->kk_file) data-toggle="tooltip" data-placement="top" title="Lihat detail KK" href="{{ route('detail-kk', $incapable->user->kk_file) }} @endif">{{ $incapable->user->kk }}</a></td>
+                                    <td><a target="_blank" @if($incapable->user->kk_file)data-toggle="modal" data-target="#detailKKModal" data-toggle="tooltip" data-placement="top" title="Lihat detail KK" href="" @endif>{{ $incapable->user->kk }}</a></td>
                                 </tr>
                                 <tr>
                                     <td>{{ __('user.gender') }}</td>
@@ -133,14 +133,14 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="col-form-label" for="verifikasi">@lang('salary.verify')</label><br>
+                            <label class="col-form-label" for="verifikasi">@lang('incapable.verify')</label><br>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="verifikasi1" name="verifikasi" class="custom-control-input" value="1">
-                                <label class="custom-control-label" for="verifikasi1">{{ __('salary.accept') }}</label>
+                                <label class="custom-control-label" for="verifikasi1">{{ __('incapable.accept') }}</label>
                             </div>
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="verifikasi2" name="verifikasi" class="custom-control-input" value="-1">
-                                <label class="custom-control-label" for="verifikasi2">{{__('salary.decline')}}</label>
+                                <label class="custom-control-label" for="verifikasi2">{{__('incapable.decline')}}</label>
                             </div>
                             @error('verifikasi')
                             <span class="invalid-feedback" role="alert">
@@ -149,7 +149,7 @@
                             @enderror
                         </div>
                         <div id="alasan_penolakan" class="form-group">
-                            <label class="col-form-label" for="">@lang('salary.reason_decline')</label>
+                            <label class="col-form-label" for="">@lang('incapable.reason_decline')</label>
                             <textarea name="alasan_penolakan" class="form-control" cols="30" rows="5">{{ old('alasan_penolakan') }}</textarea>
                         </div>
                         <div class="float-right">
@@ -163,13 +163,81 @@
         </div>
     </div>
 </div>
+<div id="detailNIKModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="detailNIK" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailNIK">Detail NIK</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="text-left">
+                    <select onchange="rotateImage('#nik_image',this.value)">
+                        <option value="">Putar</option>
+                        <option value="90">90</option>
+                        <option value="180">180</option>
+                        <option value="270">270</option>
+                        <option value="360">360</option>
+                    </select>
+                </div>
+                <img id="nik_image" class="mw-100" src="{{url('img/nik/'.$incapable->user->nik_file) }}"
+                    alt="{{ $incapable->user->nik_file }}">
+            </div>
+        </div>
+    </div>
+</div>
+<div id="detailKKModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="detailKK" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailKK">Detail KK</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="text-left">
+                    <select onchange="rotateImage('#kk_image',this.value)">
+                        <option value="">Putar</option>
+                        <option value="90">90</option>
+                        <option value="180">180</option>
+                        <option value="270">270</option>
+                        <option value="360">360</option>
+                    </select>
+                </div>
+                <img id="kk_image" class="mw-100" src="{{url('img/kk/'.$incapable->user->kk_file) }}"
+                    alt="{{ $incapable->user->kk_file }}">
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
-@section('alasan_penolakan')
-$('#alasan_penolakan').hide();
-$('#verifikasi2').on('change', function () {
-    $('#alasan_penolakan').show();
-});
-$('#verifikasi1').on('change', function () {
-    $('#alasan_penolakan').hide();
-});
+@section('script')
+<script>
+    function rotateImage(image,degree) {
+            $(image).animate({
+                transform: degree
+            }, {
+                step: function (now, fx) {
+                    $(this).css({
+                        '-webkit-transform': 'rotate(' + now + 'deg)',
+                        '-moz-transform': 'rotate(' + now + 'deg)',
+                        'transform': 'rotate(' + now + 'deg)',
+                        'margin': '0',
+                    });
+                }
+            });
+        }
+    $(document).ready(function () {
+        $('#alasan_penolakan').hide();
+        $('#verifikasi2').on('change', function () {
+            $('#alasan_penolakan').show();
+        });
+        $('#verifikasi1').on('change', function () {
+            $('#alasan_penolakan').hide();
+        });
+    });
+</script>
 @endsection

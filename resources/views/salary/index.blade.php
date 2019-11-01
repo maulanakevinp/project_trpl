@@ -72,114 +72,96 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                        $i = 1;
-                        @endphp
-                        @foreach($salaries as $salary)
-                        <tr>
-                            <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
-                            <td>{{ $salary->reason }}</td>
-                            <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
-                            @if ($salary->letter_id == null)
-                            <td>{{ __('~') }}</td>
-                            <td>{{ __('salary.status_null') }}</td>
-                            @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == 0)
-                            <td>{{ __('~') }}</td>
-                            <td>{{ __('salary.status_1') }}</td>
-                            @elseif($salary->letter->verify1 == -1 && $salary->letter->verify2 == 0)
-                            <td>{{ __('~') }}</td>
-                            <td><span class="font-weight-bold">{{ __('salary.declined') }}</span> {{$salary->letter->reason1}}</td>
-                            @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == -1)
-                            <td>{{ __('~') }}</td>
-                            <td>{{ __('salary.status_1') }}</td>
-                            @elseif($salary->letter->verify1 == -1 && $salary->letter->verify2 == -1)
-                            <td>{{ __('~') }}</td>
-                            <td><span class="font-weight-bold">{{ __('salary.declined') }}</span> {{$salary->letter->reason1}}</td>
-                            @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1)
-                            <td>{{ $salary->letter->updated_at->format('d M Y - H:i:s') }}</td>
-                            <td>{{ __('salary.approved') }}</td>
-                            @endif
-                            <td>
-                                @if ($salary->letter_id == null)
-                                <a class="editSubmission" href="" data-toggle="modal"
-                                    data-target="{{'#editSubmissionModal'.$i}}" data-id="{{ $salary->id }}"><span
-                                        class="badge badge-warning">{{ __('salary.edit') }}</span></a>
-                                <form class="d-inline-block" action="{{ route('salary.destroy',$salary->id) }}"
-                                    method="POST">
-                                    @method('delete')
-                                    @csrf
-                                    <button type="submit" class="badge badge-danger "
-                                        onclick="return confirm('{{__('salary.delete_confirm')}}');">
-                                        {{ __('salary.delete') }}
-                                    </button>
-                                </form>
-                                @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == 0)
-                                ~
-                                @elseif($salary->letter->verify1 == -1 && $salary->letter->verify2 == 0)
-                                ~
-                                @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == -1)
-                                ~
-                                @elseif($salary->letter->verify1 == -1 && $salary->letter->verify2 == -1)
-                                ~
-                                @elseif($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1)
-                                <a target="_blank" class="d-inline-block" href="{{ route('salary.download',$salary->id) }}">
-                                    <span class="badge badge-success">{{ __('salary.download') }}</span>
-                                </a>
-                                @endif
-                            </td>
-                        </tr>
-                        <!-- Modal -->
-                        <div class="modal fade" id="{{'editSubmissionModal'.$i}}" tabindex="-1" role="dialog"
-                            aria-labelledby="{{'editMenuModalLabel'.$i}}" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="{{'editMenuModalLabel'.$i}}">
-                                            {{ __('salary.edit_salary') }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form action="{{ route('salary.update',$salary->id) }}" method="post">
-                                        @csrf
-                                        @method('patch')
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="">@lang('salary.salary')</label>
-                                                <input id="penghasilan" type="text" class="form-control"
-                                                    name="penghasilan" value="{{ $salary->salary }}">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="">@lang('salary.reason')</label>
-                                                <textarea name="alasan_pengajuan" id="alasan_pengujian"
-                                                    class="form-control" cols="30"
-                                                    rows="5">{{ $salary->reason }}</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">@lang('salary.close')</button>
-                                            <button type="Submit" class="btn btn-primary"
-                                                id="submitMenu">@lang('salary.edit')</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @php
-                        $i++;
-                        @endphp
-                        @endforeach
+                        
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-
 </div>
 <!-- /.container-fluid -->
 
+<!-- Modal -->
+<div class="modal fade" id="editSubmissionModal" tabindex="-1" role="dialog"
+    aria-labelledby="editMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editMenuModalLabel">
+                    {{ __('salary.edit_salary') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="postModal" action="" method="post">
+                @csrf
+                @method('patch')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-form-label" for="">@lang('salary.salary')</label>
+                        <input id="penghasilanEdit" type="text" class="form-control" name="penghasilan" value="{{ old('penghasilan') }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-form-label" for="">@lang('salary.reason')</label>
+                        <textarea name="alasan_pengajuan" id="alasan_pengajuan" class="form-control" cols="30" rows="5">{{ old('alasan_pengajuan') }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('salary.close')</button>
+                    <button type="Submit" class="btn btn-primary" id="submitMenu">@lang('salary.edit')</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
-@section('orderBy')
-    "order": [[ 2, "desc" ]]
+@section('script')
+<script>
+    function editModal(id) {
+        const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: "{{ route('ajax.get.edit.salary') }}",
+            method: 'post',
+            dataType: 'json',
+            data: {
+                _token: CSRF_TOKEN,
+                id: id
+            },
+            success: function (data) {
+                $('#penghasilanEdit').val(data.salary);
+                $('#alasan_pengajuan').html(data.reason);
+                $('#postModal').attr('action',"{{url('/salary')}}"+"/"+data.id);
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            "order": [[ 2, "desc" ]],
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.salary') }}",
+            columns: [
+                {data:'salary', name:'salary'},
+                {data:'reason', name:'reason'},
+                {data:'tanggal_pengajuan', name:'tanggal_pengajuan'},
+                {data:'tanggal_disetujui', name:'tanggal_disetujui'},
+                {data:'status', name:'status'},
+                {data:'action', name:'action'},
+            ],
+        });
+    });
+</script>
 @endsection

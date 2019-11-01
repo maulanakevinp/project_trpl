@@ -7,6 +7,8 @@ use App\Incapable;
 use App\User;
 use PDF;
 use Alert;
+use DataTables;
+use Illuminate\Support\Facades\Lang;
 use App\Http\Requests\IncapableRequest;
 use Illuminate\Http\Request;
 
@@ -21,8 +23,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Form Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::where('user_id', auth()->user()->id)->get();
-        return view('incapable.index', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.index', compact('title', 'subtitle'));
     }
 
     /**
@@ -34,8 +35,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::where('letter_id', null)->get();
-        return view('incapable.unprocessed1', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.unprocessed1', compact('title', 'subtitle'));
     }
 
     /**
@@ -47,10 +47,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::whereHas('letter', function ($letter) {
-            $letter->where('verify1', 1);
-        })->get();
-        return view('incapable.verified1', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.verified1', compact('title', 'subtitle'));
     }
 
     /**
@@ -62,10 +59,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::whereHas('letter', function ($letter) {
-            $letter->where('verify1', -1);
-        })->get();
-        return view('incapable.declined1', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.declined1', compact('title', 'subtitle'));
     }
 
     /**
@@ -77,10 +71,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::whereHas('letter', function ($letter) {
-            $letter->where('verify2', null)->where('verify1', 1);
-        })->get();
-        return view('incapable.unprocessed2', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.unprocessed2', compact('title', 'subtitle'));
     }
 
     /**
@@ -92,10 +83,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::whereHas('letter', function ($letter) {
-            $letter->where('verify2', 1)->where('verify1', 1);
-        })->get();
-        return view('incapable.verified2', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.verified2', compact('title', 'subtitle'));
     }
 
     /**
@@ -107,10 +95,7 @@ class IncapableController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Tidak Mampu';
-        $incapables = Incapable::whereHas('letter', function ($letter) {
-            $letter->where('verify2', -1)->where('verify1', 1);
-        })->get();
-        return view('incapable.declined2', compact('title', 'subtitle', 'incapables'));
+        return view('incapable.declined2', compact('title', 'subtitle'));
     }
 
     /**
@@ -309,5 +294,202 @@ class IncapableController extends Controller
         }
 
         return $data;
+    }
+
+    public function getEditIncapable(Request $request)
+    {
+        $incapable = Incapable::findOrFail($request->id);
+        echo json_encode($incapable);
+    }
+
+    public function getIncapable()
+    {
+        $incapables = Incapable::with('letter', 'user')->whereUserId(auth()->user()->id)->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_disetujui', function ($incapable) {
+                if ($incapable->letter_id != null) {
+                    if ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == 1) {
+                        return $incapable->letter->updated_at->format('d M Y - H:i:s');
+                    } else {
+                        return '-';
+                    }
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status', function ($incapable) {
+                if ($incapable->letter_id != null) {
+                    if ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == 1) {
+                        return Lang::get('incapable.approved');
+                    } elseif ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == null || $incapable->letter->verify2 == -1) {
+                        return 'Sedang diproses';
+                    } elseif ($incapable->letter->verify1 == -1 && $incapable->letter->verify2 == null || $incapable->letter->verify2 == -1) {
+                        return '<span class="font-weight-bold">' . Lang::get('incapable.declined') . '</span> <br>(' . $incapable->letter->reason1 . ')';
+                    }
+                } else {
+                    return 'Belum diproses';
+                }
+            })
+            ->addColumn('action', function ($incapable) {
+                if ($incapable->letter_id != null) {
+                    if ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == 1) {
+                        return '<a target="_blank" class="d-inline-block btn btn-success btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Unduh" href="' . route('incapable.download', $incapable->id) . '">
+                                    <i class="fas fa-download"></i>
+                                </a>';
+                    } elseif ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == null || $incapable->letter->verify2 == -1) {
+                        return '-';
+                    } elseif ($incapable->letter->verify1 == -1 && $incapable->letter->verify2 == null || $incapable->letter->verify2 == -1) {
+                        return '-';
+                    }
+                } else {
+                    return '<button class="editSubmission btn-circle btn-warning btn-sm btn" data-toggle="modal" data-target="#modalEditIncapable" data-toggle="tooltip" data-placement="top" title="Ubah"  onclick="editModal(' . $incapable->id . ')"><i class="fas fa-edit"></i></button>
+                                <form class="d-inline-block" action="' . route('incapable.destroy', $incapable->id) . '" method="POST">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit" class="btn btn-danger btn-circle btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="return confirm(`' . Lang::get('incapable.delete_confirm') . '`);">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>';
+                }
+            })
+            ->rawColumns(['tanggal_pengajuan', 'tanggal_disetujui', 'status', 'action'])
+            ->toJson();
+    }
+
+    public function getUnprocessed1()
+    {
+        $incapables = Incapable::with('user', 'letter')->whereLetterId(null)->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('action', function ($incapable) {
+                return '<a class="d-inline-block btn btn-warning btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Verifikasi" href="' . route('incapable.edit-unprocessed1', $incapable->id) . '">
+                            <i class="fas fa-check"></i>
+                        </a>';
+            })
+            ->rawColumns(['tanggal_pengajuan', 'action'])
+            ->toJson();
+    }
+
+    public function getUnprocessed2()
+    {
+        $incapables = Incapable::with('user', 'letter')->whereHas('letter', function ($s) {
+            $s->whereVerify1(1)->whereVerify2(null);
+        })->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('action', function ($incapable) {
+                return '<a class="d-inline-block btn btn-warning btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Verifikasi" href="' . route('incapable.edit-unprocessed2', $incapable->id) . '">
+                            <i class="fas fa-check"></i>
+                        </a>';
+            })
+            ->rawColumns(['tanggal_pengajuan','action'])
+            ->toJson();
+    }
+
+    public function getVerified1()
+    {
+        $incapables = Incapable::with('user', 'letter')->whereHas('letter', function ($s) { $s->whereVerify1(1); })->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('nik', function ($incapable) {
+                return '<a onclick="viewDetail(' . $incapable->user_id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" >' . $incapable->user->nik . '</a>';
+            })
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_disetujui', function ($incapable) {
+                return $incapable->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('status', function ($incapable) {
+                if ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == 1) {
+                    return Lang::get('incapable.approved');
+                } elseif ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == null) {
+                    return 'Belum di proses';
+                } elseif ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == -1) {
+                    return '<span class="font-weight-bold">' . Lang::get('incapable.declined') . '</span> <br>(' . $incapable->letter->reason2 . ')';
+                }
+            })
+            ->addColumn('action', function ($incapable) {
+                if ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == 1) {
+                    return '<a target="_blank" class="d-inline-block btn btn-success btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Unduh" href="' . route('incapable.download', $incapable->id) . '">
+                                <i class="fas fa-download"></i>
+                            </a>';
+                } elseif ($incapable->letter->verify1 == 1 && $incapable->letter->verify2 == null || $incapable->letter->verify2 == -1) {
+                    return '<a class="editSubmission btn-circle btn-warning btn-sm btn" href="' . route('incapable.edit-verified1', $incapable->id) . '" data-toggle="tooltip" data-placement="top" title="Ubah" ><i class="fas fa-edit"></i></a>';
+                }
+            })
+            ->rawColumns(['nik', 'tanggal_pengajuan', 'tanggal_disetujui', 'status', 'action'])
+            ->toJson();
+    }
+
+    public function getVerified2()
+    {
+        $incapables = Incapable::with('user', 'letter')->whereHas('letter', function ($s) {
+            $s->whereVerify2(1)->whereVerify1(1);
+        })->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('nik', function ($incapable) {
+                return '<a onclick="viewDetail(' . $incapable->user_id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" >' . $incapable->user->nik . '</a>';
+            })
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_disetujui', function ($incapable) {
+                return $incapable->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('status', function ($incapable) {
+                return Lang::get('incapable.approved');
+            })
+            ->addColumn('action', function ($incapable) {
+                return '<a target="_blank" class="d-inline-block btn btn-success btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Unduh" href="' . route('incapable.download', $incapable->id) . '">
+                            <i class="fas fa-download"></i>
+                        </a>';
+            })
+            ->rawColumns(['nik', 'tanggal_pengajuan', 'tanggal_disetujui', 'status', 'action'])
+            ->toJson();
+    }
+
+    public function getDeclined1()
+    {
+        $incapables = Incapable::with('user', 'letter')->whereHas('letter', function ($s) { $s->whereVerify1(-1); })->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('nik', function ($incapable) {
+                return '<a onclick="viewDetail(' . $incapable->user_id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" >' . $incapable->user->nik . '</a>';
+            })
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_ditolak', function ($incapable) {
+                return $incapable->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->rawColumns(['nik', 'tanggal_pengajuan', 'tanggal_ditolak'])
+            ->toJson();
+    }
+
+    public function getDeclined2()
+    {
+        $incapables = Incapable::with('user', 'letter')->whereHas('letter', function ($s) {
+            $s->whereVerify2(-1);
+        })->select('incapables.*');
+        return DataTables::eloquent($incapables)
+            ->addColumn('tanggal_pengajuan', function ($incapable) {
+                return $incapable->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_penolakan', function ($incapable) {
+                return $incapable->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('action', function ($incapable) {
+                return '<a class="d-inline-block btn btn-warning btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Verifikasi" href="' . route('incapable.edit-declined2', $incapable->id) . '">
+                            <i class="fas fa-edit"></i>
+                        </a>';
+            })
+            ->rawColumns(['tanggal_pengajuan', 'tanggal_penolakan', 'action'])
+            ->toJson();
     }
 }

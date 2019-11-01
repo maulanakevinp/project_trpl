@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\BirthDate;
 use Illuminate\Foundation\Http\FormRequest;
 
 class IncapableRequest extends FormRequest
@@ -24,13 +25,13 @@ class IncapableRequest extends FormRequest
     public function rules()
     {
         return [
-            'nama'              => 'required',
-            'tempat_lahir'      => 'required',
-            'tanggal_lahir'     => 'required|date',
-            'pekerjaan'         => 'required',
-            'alamat'            => 'required',
-            'alasan_pengajuan'  => 'required',
-            'merupakan'         => 'required',
+            'nama'              => ['required'],
+            'tempat_lahir'      => ['required'],
+            'tanggal_lahir'     => ['required','date',new BirthDate],
+            'pekerjaan'         => ['required'],
+            'alamat'            => ['required'],
+            'alasan_pengajuan'  => ['required'],
+            'merupakan'         => ['required'],
         ];
     }
 }

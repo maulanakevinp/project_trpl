@@ -6,9 +6,6 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
     @if ($errors->any())<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>@endif
-    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">{{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
-    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">{{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>@endif
-    <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3 ">
             <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $title }}</h5>
@@ -29,25 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($users as $user)
-                        <tr>
-                            <td>{{ $user->nik }}</td>
-                            <td>{{ $user->name }}</td>
-                            <td>{{ $user->role->role }}</td>
-                            <td>
-                                <a href="{{route('users.edit',$user->id)}}" class="badge badge-warning">{{__('user.edit')}}</a>
-                                @if($user->id != Auth::user()->id)
-                                <form class="d-inline-block" action="{{ route('users.delete',$user->id) }}" method="POST">
-                                    @method('delete')
-                                    @csrf
-                                    <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('user.delete_confirm')}}');">
-                                        {{ __('user.delete') }}
-                                    </button>
-                                </form>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
+                        
                     </tbody>
                 </table>
             </div>
@@ -55,4 +34,35 @@
     </div>
 </div>
 <!-- /.container-fluid -->
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.user') }}",
+            columns: [
+                { data: 'nik', name: 'nik' },
+                { data: 'name', name: 'name' },
+                { data: 'role.role', name: 'role.role' },
+                { data: 'action', name: 'action' },
+            ],
+        });
+    });
+</script>
 @endsection

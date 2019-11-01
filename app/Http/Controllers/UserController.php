@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use File;
 use Alert;
 use App\Http\Requests\UserRequest;
+use DataTables;
+use Illuminate\Support\Carbon;
 
 class UserController extends Controller
 {
@@ -277,7 +279,7 @@ class UserController extends Controller
             $file_name = $kk_file;
             return view('user/detail', compact('title', 'file', 'file_name'));
         } else {
-            return abort(403,'Anda tidak memiliki hak akses');
+            return abort(403, 'Anda tidak memiliki hak akses');
         }
     }
 
@@ -285,9 +287,9 @@ class UserController extends Controller
     {
         if (auth()->user()->nik_file == $nik_file || auth()->user()->role_id == 2 || auth()->user()->role_id == 3 || auth()->user()->role_id == 1) {
             $title = 'Detail NIK';
-            $file = 'img/nik/'.$nik_file;
+            $file = 'img/nik/' . $nik_file;
             $file_name = $nik_file;
-            return view('user/detail', compact('title','file','file_name'));
+            return view('user/detail', compact('title', 'file', 'file_name'));
         } else {
             return abort(403, 'Anda tidak memiliki hak akses');
         }
@@ -337,14 +339,84 @@ class UserController extends Controller
             'job'           => $request->pekerjaan,
             'email'         => $request->email,
         ];
-
         if ($method == 'store') {
             $data['role_id'] = $request->peran;
             $data['password'] = Hash::make($request->konfirmasi_kata_sandi);
         } else if ($method == 'update') {
             $data['role_id'] = $request->peran;
         }
-
         return $data;
+    }
+
+    public function getUser()
+    {
+        $user = User::with('role')->select('users.*');
+        return DataTables::eloquent($user)
+        ->addColumn('action', function ($s) {
+        return '
+        <a href="' . route('users.edit', $s->id) . '" data-toggle="tooltip" data-placement="top" title="Ubah" class="editUser btn btn-warning btn-circle btn-sm">
+            <i class="fas fa-edit"></i>
+        </a>
+        <form class="d-inline-block" action="' . route('users.delete', $s->id) . '" method="post">
+            <input type="hidden" name="_token" value="' . csrf_token() . '">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="btn btn-danger btn-circle btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="return confirm(`apakah anda yakin ingin menghapus user ' . $s->name . ' ini?`)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </form>
+        ';
+        })
+        ->rawColumns(['action'])
+        ->toJson();
+    }
+
+    public function getUsers()
+    {
+        $user = User::with('gender')->select('users.*');
+        return DataTables::eloquent($user)
+            ->addColumn('action', function ($s) {
+                return '
+                    <a onclick="viewDetail(' . $s->id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" class="editUser btn btn-info btn-circle btn-sm">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                ';
+            })
+            ->addColumn('usia',function($s){
+                return Carbon::parse($s->birth_date)->diff(\Carbon\Carbon::now())->format('%y tahun');
+            })
+            ->rawColumns(['action','usia'])
+            ->toJson();
+    }
+
+    public function getUserDeleted()
+    {
+        $user = User::with('role')->onlyTrashed();
+        return DataTables::eloquent($user)
+        ->addColumn('action', function ($s) {
+        return '
+        <form class="d-inline-block" action="' . route('users.restore', $s->id) . '" method="post">
+            <input type="hidden" name="_token" value="' . csrf_token() . '">
+            <input type="hidden" name="_method" value="patch">
+            <button type="submit" class="btn btn-warning btn-circle btn-sm" data-toggle="tooltip" data-placement="top" title="kembalikan" onclick="return confirm(`apakah anda yakin ingin mengembalikan pengguna ' . $s->name . ' ini?`)">
+                <i class="fas fa-trash-restore"></i>
+            </button>
+        </form>
+        <form class="d-inline-block" action="' . route('users.destroy', $s->id) . '" method="post">
+            <input type="hidden" name="_token" value="' . csrf_token() . '">
+            <input type="hidden" name="_method" value="delete">
+            <button type="submit" class="btn btn-danger btn-circle btn-sm" data-toggle="tooltip" data-placement="top" title="hapus" onclick="return confirm(`apakah anda yakin ingin menghapus pengguna ' . $s->name . ' ini?`)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </form>
+        ';
+        })
+        ->rawColumns(['action'])
+        ->toJson();
+    }
+
+    public function getDetailUser(Request $request)
+    {
+        $user = User::with('gender','religion','marital')->findOrFail($request->id);
+        echo json_encode($user);
     }
 }

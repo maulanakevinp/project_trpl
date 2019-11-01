@@ -7,7 +7,9 @@ use App\Salary;
 use App\User;
 use PDF;
 use Alert;
+use DataTables;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
 
 class SalaryController extends Controller
 {
@@ -20,8 +22,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Form Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('user_id', auth()->user()->id)->get();
-        return view('salary.index', compact('title', 'subtitle', 'salaries'));
+        return view('salary.index', compact('title', 'subtitle'));
     }
 
     /**
@@ -33,8 +34,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::where('letter_id', null)->get();
-        return view('salary.unprocessed1', compact('title', 'subtitle', 'salaries'));
+        return view('salary.unprocessed1', compact('title', 'subtitle'));
     }
 
     /**
@@ -46,10 +46,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::whereHas('letter', function ($letter) {
-            $letter->where('verify1', 1);
-        })->get();
-        return view('salary.verified1', compact('title', 'subtitle', 'salaries'));
+        return view('salary.verified1', compact('title', 'subtitle'));
     }
 
     /**
@@ -61,10 +58,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::whereHas('letter', function ($letter) {
-            $letter->where('verify1', -1);
-        })->get();
-        return view('salary.declined1', compact('title', 'subtitle', 'salaries'));
+        return view('salary.declined1', compact('title', 'subtitle'));
     }
 
     /**
@@ -76,10 +70,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::whereHas('letter', function ($letter) {
-            $letter->where('verify2', null)->where('verify1', 1);
-        })->get();
-        return view('salary.unprocessed2', compact('title', 'subtitle', 'salaries'));
+        return view('salary.unprocessed2', compact('title', 'subtitle'));
     }
 
     /**
@@ -91,10 +82,7 @@ class SalaryController extends Controller
     {
         $title = 'Pengajuan Surat';
         $subtitle = 'Data Pengajuan Surat Keterangan Penghasilan';
-        $salaries = Salary::whereHas('letter', function ($letter) {
-            $letter->where('verify2', 1)->where('verify1', 1);
-        })->get();
-        return view('salary.verified2', compact('title', 'subtitle', 'salaries'));
+        return view('salary.verified2', compact('title', 'subtitle'));
     }
 
     /**
@@ -250,7 +238,6 @@ class SalaryController extends Controller
             $number = 1;
         } else {
             $number = $letter->number + 1;
-
         }
 
         if ($request->verifikasi == -1) {
@@ -300,5 +287,220 @@ class SalaryController extends Controller
         } else {
             return abort(404);
         }
+    }
+
+    public function getEditSalary(Request $request)
+    {
+        $salary = Salary::findOrFail($request->id);
+        echo json_encode($salary);
+    }
+
+    public function getSalary()
+    {
+        $salaries = Salary::with('letter', 'user')->whereUserId(auth()->user()->id)->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_disetujui', function ($salary) {
+                if ($salary->letter_id != null) {
+                    if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
+                        return $salary->letter->updated_at->format('d M Y - H:i:s');
+                    } else {
+                        return '-';
+                    }
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status', function ($salary) {
+                if ($salary->letter_id != null) {
+                    if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
+                        return Lang::get('salary.approved');
+                    } elseif ($salary->letter->verify1 == 1 && $salary->letter->verify2 == null || $salary->letter->verify2 == -1) {
+                        return 'Sedang diproses';
+                    } elseif ($salary->letter->verify1 == -1 && $salary->letter->verify2 == null || $salary->letter->verify2 == -1) {
+                        return '<span class="font-weight-bold">' . Lang::get('salary.declined') . '</span> <br>(' . $salary->letter->reason1 . ')';
+                    }
+                } else {
+                    return 'Belum diproses';
+                }
+            })
+            ->addColumn('action', function ($salary) {
+                if ($salary->letter_id != null) {
+                    if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
+                        return '<a target="_blank" class="d-inline-block btn btn-success btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Unduh" href="' . route('salary.download', $salary->id) . '">
+                                    <i class="fas fa-download"></i>
+                                </a>';
+                    } elseif ($salary->letter->verify1 == 1 && $salary->letter->verify2 == null || $salary->letter->verify2 == -1) {
+                        return '-';
+                    } elseif ($salary->letter->verify1 == -1 && $salary->letter->verify2 == null || $salary->letter->verify2 == -1) {
+                        return '-';
+                    }
+                } else {
+                    return '<button class="editSubmission btn-circle btn-warning btn-sm btn" data-toggle="modal" data-target="#editSubmissionModal" onclick="editModal(' . $salary->id . ')" data-toggle="tooltip" data-placement="top" title="Ubah" ><i class="fas fa-edit"></i></button>
+                                <form class="d-inline-block" action="' . route('salary.destroy', $salary->id) . '" method="POST">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="submit" class="btn btn-danger btn-circle btn-sm" data-toggle="tooltip" data-placement="top" title="Hapus" onclick="return confirm(`' . Lang::get('salary.delete_confirm') . '`);">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>';
+                }
+            })
+            ->rawColumns(['tanggal_pengajuan', 'tanggal_disetujui', 'status', 'action'])
+            ->toJson();
+    }
+
+    public function getUnprocessed1()
+    {
+        $salaries = Salary::with('user', 'letter')->whereLetterId(null)->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('action', function ($salary) {
+                return '<a class="d-inline-block btn btn-warning btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Verifikasi" href="' . route('salary.edit-unprocessed1', $salary->id) . '">
+                            <i class="fas fa-check"></i>
+                        </a>';
+            })
+            ->addColumn('penghasilan', function ($salary) {
+                return 'Rp.' . number_format($salary->salary, 2, ',', '.');
+            })
+            ->rawColumns(['tanggal_pengajuan','penghasilan', 'action'])
+            ->toJson();
+    }
+
+    public function getUnprocessed2()
+    {
+        $salaries = Salary::with('user', 'letter')->whereHas('letter',function($s){$s->whereVerify1(1)->whereVerify2(null);})->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('penghasilan', function ($salary) {
+                return 'Rp.' . number_format($salary->salary, 2, ',', '.');
+            })
+            ->addColumn('action', function ($salary) {
+                return '<a class="d-inline-block btn btn-warning btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Verifikasi" href="' . route('salary.edit-unprocessed2', $salary->id) . '">
+                            <i class="fas fa-check"></i>
+                        </a>';
+            })
+            ->rawColumns(['tanggal_pengajuan','penghasilan', 'action'])
+            ->toJson();
+    }
+
+    public function getVerified1()
+    {
+        $salaries = Salary::with('user', 'letter')->whereHas('letter', function ($s) {
+            $s->whereVerify1(1);
+        })->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('nik', function ($salary) {
+                return '<a onclick="viewDetail(' . $salary->user_id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" >'.$salary->user->nik.'</a>';
+            })
+            ->addColumn('penghasilan', function ($salary) {
+                return 'Rp.'.number_format($salary->salary, 2, ',', '.');
+            })
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_disetujui', function ($salary) {
+                return $salary->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('status', function ($salary) {
+                if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
+                    return Lang::get('salary.approved');
+                } elseif ($salary->letter->verify1 == 1 && $salary->letter->verify2 == null) {
+                    return 'Belum di proses';
+                } elseif ($salary->letter->verify1 == 1 && $salary->letter->verify2 == -1) {
+                    return '<span class="font-weight-bold">' . Lang::get('salary.declined') . '</span> <br>(' . $salary->letter->reason2 . ')';
+                }
+            })
+            ->addColumn('action', function ($salary) {
+                if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
+                    return '<a target="_blank" class="d-inline-block btn btn-success btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Unduh" href="' . route('salary.download', $salary->id) . '">
+                                <i class="fas fa-download"></i>
+                            </a>';
+                } elseif ($salary->letter->verify1 == 1 && $salary->letter->verify2 == null || $salary->letter->verify2 == -1) {
+                    return '<a class="editSubmission btn-circle btn-warning btn-sm btn" href="'.route('salary.edit-verified1',$salary->id).'" data-toggle="tooltip" data-placement="top" title="Ubah" ><i class="fas fa-edit"></i></a>';
+                }
+            })
+            ->rawColumns(['nik','penghasilan','tanggal_pengajuan', 'tanggal_disetujui', 'status', 'action'])
+            ->toJson();
+    }
+
+    public function getVerified2()
+    {
+        $salaries = Salary::with('user', 'letter')->whereHas('letter', function ($s) {
+            $s->whereVerify2(1)->whereVerify1(1);
+        })->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('nik', function ($salary) {
+                return '<a onclick="viewDetail(' . $salary->user_id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" >'.$salary->user->nik.'</a>';
+            })
+            ->addColumn('penghasilan', function ($salary) {
+                return 'Rp.'.number_format($salary->salary, 2, ',', '.');
+            })
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_disetujui', function ($salary) {
+                return $salary->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('status', function ($salary) {
+                return Lang::get('salary.approved');
+            })
+            ->addColumn('action', function ($salary) {
+                return '<a target="_blank" class="d-inline-block btn btn-success btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Unduh" href="' . route('salary.download', $salary->id) . '">
+                            <i class="fas fa-download"></i>
+                        </a>';
+            })
+            ->rawColumns(['nik','penghasilan','tanggal_pengajuan', 'tanggal_disetujui', 'status', 'action'])
+            ->toJson();
+    }
+
+    public function getDeclined1()
+    {
+        $salaries = Salary::with('user', 'letter')->whereHas('letter', function ($s) {
+            $s->whereVerify1(-1);
+        })->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('nik', function ($salary) {
+                return '<a onclick="viewDetail(' . $salary->user_id . ')" href="" data-toggle="modal" data-target="#userDetailModal" data-toggle="tooltip" data-placement="top" title="Lihat detail pengguna" >'.$salary->user->nik.'</a>';
+            })
+            ->addColumn('penghasilan', function ($salary) {
+                return 'Rp.'.number_format($salary->salary, 2, ',', '.');
+            })
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('tanggal_ditolak', function ($salary) {
+                return $salary->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->rawColumns(['nik','penghasilan','tanggal_pengajuan', 'tanggal_ditolak'])
+            ->toJson();
+    }
+
+    public function getDeclined2()
+    {
+        $salaries = Salary::with('user', 'letter')->whereHas('letter',function($s){$s->whereVerify2(-1);})->select('salaries.*');
+        return DataTables::eloquent($salaries)
+            ->addColumn('tanggal_pengajuan', function ($salary) {
+                return $salary->created_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('penghasilan', function ($salary) {
+                return 'Rp.' . number_format($salary->salary, 2, ',', '.');
+            })
+            ->addColumn('tanggal_penolakan', function ($salary) {
+                return $salary->letter->updated_at->format('d M Y - H:i:s');
+            })
+            ->addColumn('action', function ($salary) {
+                return '<a class="d-inline-block btn btn-warning btn-sm btn-circle" data-toggle="tooltip" data-placement="top" title="Verifikasi" href="' . route('salary.edit-declined2', $salary->id) . '">
+                            <i class="fas fa-edit"></i>
+                        </a>';
+            })
+            ->rawColumns(['tanggal_pengajuan','tanggal_penolakan','penghasilan', 'action'])
+            ->toJson();
     }
 }

@@ -16,7 +16,7 @@ return [
     // Labels
     'add'               =>  'Tambah menu baru',
     'edit_menu'         =>  'Ubah menu',
-    'delete_confirm'    =>  'Apakah anda yakin ingin menghapus menu ini???',
+    'delete_confirm'    =>  'Apakah anda yakin ingin menghapus menu :menu ini???',
 
     // Actions
     'action'    => 'Aksi',

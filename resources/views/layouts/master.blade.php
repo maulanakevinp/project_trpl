@@ -112,113 +112,12 @@
     <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     @include('sweet::alert')
-    @yield('chart')
+    @yield('script')
     <script>
-        $(document).ready(function(){
-            $('#dataTable').DataTable({
-                "language": {
-                    "lengthMenu": "Tampilkan _MENU_ data per halaman",
-                    "zeroRecords": "Maaf - Tidak ada yang ditemukan",
-                    "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
-                    "infoEmpty": "Tidak ada data yang tersedia",
-                    "infoFiltered": "(difilter dari _MAX_ total kolom)",
-                    "emptyTable": "Tidak ada data di dalam tabel",
-                    "search": "Cari",
-                    "paginate": {
-                        "previous": "Sebelumnya",
-                        "next": "Selanjutnya"
-                    }
-                },
-                @yield('orderBy')
-            });
-            @yield('alasan_penolakan')
-            $(".custom-file-input").on("change", function() {
-                var fileName = $(this).val().split("\\").pop();
-                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                readURL(this);
-            });
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $('#image').attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-            $('.accessMenu').on('click', function() {
-                const menuId = $(this).data('menu');
-                const roleId = $(this).data('role');
-                const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: "{{ url('/change-access') }}",
-                    type: 'post',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        menuId: menuId,
-                        roleId: roleId
-                    },
-                    success: function() {
-                        document.location.href = "{{ url('role') }}/" + roleId +"/edit";
-                    }
-                });
-            });
-            $('.editRole').on('click', function() {
-                const id = $(this).data('id');
-                const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $('#newRoleModalLabel').html("{{__('role.edit_role')}}");
-                $('#submitRole').html("{{__('role.edit')}}");
-                $('#postRole').attr('action', "{{ url('role') }}/" + id);
-                $('#method-role').val('patch');
-                $.ajax({
-                    url: "{{ url('getRole') }}/" + id,
-                    method: 'post',
-                    dataType: 'json',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        id: id
-                    },
-                    success: function(data) {
-                        $('#role').val(data.role);
-                    }
-                });
-            });
-            $('.addRole').on('click', function() {
-                $('#newRoleModalLabel').html("{{__('role.add')}}");
-                $('#submitRole').html("{{__('role.add')}}");
-                $('#postRole').attr('action', "{{ route('role.store') }}");
-                $('#method-role').val('post');
-                $('#role').val('');
-            });
-            $('.editMenu').on('click', function() {
-                const id = $(this).data('id');
-                const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $('#newMenuModalLabel').html("{{__('menu.edit_menu')}}");
-                $('#submitMenu').html("{{__('menu.edit')}}");
-                $('#postMenu').attr('action', "{{ url('menu') }}/" + id);
-                $('#method-menu').val('patch');
-                $.ajax({
-                    url: "{{ url('/getMenu') }}",
-                    method: 'post',
-                    dataType: 'json',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        id: id
-                    },
-                    success: function(data) {
-                        $('#menu').val(data.menu);
-                    }
-                });
-            });
-            $('.addMenu').on('click', function() {
-                $('#newMenuModalLabel').html("{{__('menu.add')}}");
-                $('#submitMenu').html("{{__('menu.add')}}");
-                $('#postMenu').attr('action', "{{ route('menu.store') }}");
-                $('#method-menu').val('post');
-                $('#menu').val('');
-            });
-                
-        });
+        if(window.innerWidth <= 500){
+            $('#page-top').attr('class','sidebar-toggled');
+            $('#accordionSidebar').attr('class','navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled')
+        }
     </script>
 </body>
 

@@ -28,12 +28,6 @@
         </ul>
     </div>
     @endif
-    @if (session('success'))<div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button></div>@endif
-    @if (session('failed'))<div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('failed') }}<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button></div>@endif
     <div class="card shadow h-100">
         <div class="card-header">
             <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ __('salary.data') }}</h5>
@@ -51,23 +45,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                        $i = 1;
-                        @endphp
-                        @foreach($salaries as $salary)
-                        <tr>
-                            <td>{{ $salary->user->nik }}</td>
-                            <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
-                            <td>{{ $salary->reason }}</td>
-                            <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
-                            <td>
-                                <a href="{{ route('salary.edit-unprocessed2',$salary->id) }}" class="badge badge-warning">{{ __('salary.verify') }}</a>
-                            </td>
-                        </tr>
-                        @php
-                        $i++;
-                        @endphp
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -78,6 +55,35 @@
 <!-- /.container-fluid -->
 
 @endsection
-@section('orderBy')
-"order": [[ 3, "desc" ]]
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            "order": [[ 3, "desc" ]],
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.unprocessed2.salary') }}",
+            columns: [
+                {data:'user.nik', name:'user.nik'},
+                {data:'penghasilan', name:'penghasilan'},
+                {data:'reason', name:'reason'},
+                {data:'tanggal_pengajuan', name:'tanggal_pengajuan'},
+                {data:'action', name:'action'},
+            ],
+        });
+    });
+</script>
 @endsection

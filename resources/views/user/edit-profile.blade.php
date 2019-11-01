@@ -63,9 +63,8 @@
                                 <div class="form-group row">
                                     <label for="nik_file" class="col-md-3 col-form-label">{{__('user.nik_file')}}</label>
                                     <div class="col-md-9">
-                                        <input type="file" id="nik_file" name="nik_file" 
-                                            value="{{ old('nik_file') }}">@if(Auth::user()->nik_file)<a target="_blank" href="{{ route('detail-nik', Auth::user()->nik_file) }}" class="badge badge-info">lihat</a>@endif
-                                        @error('kk')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                        <input type="file" id="nik_file" name="nik_file"  value="{{ old('nik_file') }}">@if(Auth::user()->nik_file)<a data-toggle="modal" data-target="#detailNIKModal" data-toggle="tooltip" data-placement="top" title="Lihat detail NIK" href="" class="btn btn-info btn-sm btn-circle"><i class="fas fa-eye"></i></a>@endif
+                                        @error('nik_file')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -78,9 +77,8 @@
                                 <div class="form-group row">
                                     <label for="kk_file" class="col-md-3 col-form-label">{{__('user.kk_file')}}</label>
                                     <div class="col-md-9">
-                                        <input type="file" id="kk_file" name="kk_file"
-                                            value="{{ old('kk_file') }}">@if(Auth::user()->kk_file)<a target="_blank" href="{{ route('detail-kk', Auth::user()->kk_file) }}" class="badge badge-info">lihat</a>@endif
-                                        @error('kk')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                        <input type="file" id="kk_file" name="kk_file" value="{{ old('kk_file') }}">@if(Auth::user()->kk_file)<a data-toggle="modal" data-target="#detailKKModal" data-toggle="tooltip" data-placement="top" title="Lihat detail KK" href="" class="btn btn-info btn-sm btn-circle"><i class="fas fa-eye"></i></a>@endif
+                                        @error('kk_file')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                     </div>
                                 </div>
                             </div>
@@ -88,10 +86,8 @@
                                 <div class="form-group row">
                                     <label for="nomor_telepon" class="col-md-3 col-form-label">{{__('user.phone_number')}}</label>
                                     <div class="col-md-9">
-                                        <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror"
-                                            name="nomor_telepon" value="{{ old('nomor_telepon') ?? Auth::user()->phone_number }}">
-                                        @error('nomor_telepon')<span class="invalid-feedback"
-                                            role="alert"><strong>{{ $message }}</strong></span>@enderror
+                                        <input id="nomor_telepon" type="text" class="form-control @error('nomor_telepon') is-invalid @enderror" name="nomor_telepon" value="{{ old('nomor_telepon') ?? Auth::user()->phone_number }}">
+                                        @error('nomor_telepon')<span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>@enderror
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -186,5 +182,89 @@
             </div>
         </div>
     </div>
+    <div id="detailNIKModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="detailNIK" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailNIK">Detail NIK</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div>
+                        <select onchange="rotateImage('#nik_image',this.value)">
+                            <option value="">Putar</option>
+                            <option value="90">90</option>
+                            <option value="180">180</option>
+                            <option value="270">270</option>
+                            <option value="360">360</option>
+                        </select>
+                    </div>
+                    <img id="nik_image" class="mw-100" src="{{url('img/nik/'.Auth::user()->nik_file) }}"
+                        alt="{{ Auth::user()->nik_file }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="detailKKModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="detailKK" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailKK">Detail KK</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-center">
+                    <div>
+                        <select onchange="rotateImage('#kk_image',this.value)">
+                            <option value="">Putar</option>
+                            <option value="90">90</option>
+                            <option value="180">180</option>
+                            <option value="270">270</option>
+                            <option value="360">360</option>
+                        </select>
+                    </div>
+                    <img id="kk_image" class="mw-100" src="{{url('img/kk/'.Auth::user()->kk_file) }}"
+                        alt="{{ Auth::user()->kk_file }}">
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('script')
+<script>
+    function rotateImage(image, degree) {
+        $(image).animate({
+            transform: degree
+        }, {
+            step: function (now, fx) {
+                $(this).css({
+                    '-webkit-transform': 'rotate(' + now + 'deg)',
+                    '-moz-transform': 'rotate(' + now + 'deg)',
+                    'transform': 'rotate(' + now + 'deg)',
+                    'margin': '0',
+                });
+            }
+        });
+    }
+    $(document).ready(function () {
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+            readURL(this);
+        });
 
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+</script>
 @endsection

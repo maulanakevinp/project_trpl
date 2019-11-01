@@ -44,18 +44,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($incapables as $incapable)
-                        <tr>
-                            <td>{{ $incapable->user->nik }}</td>
-                            <td>{{ $incapable->reason }}</td>
-                            <td>{{ $incapable->letter->reason2 }}</td>
-                            <td>{{ $incapable->created_at->format('d M Y - H:i:s') }}</td>
-                            <td>{{ $incapable->letter->updated_at->format('d M Y - H:i:s') }}</td>
-                            <td>
-                                <a href="{{ route('incapable.edit-declined2',$incapable->id) }}" class="badge badge-warning">{{ __('incapable.edit') }}</a>
-                            </td>
-                        </tr>
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -66,6 +54,36 @@
 <!-- /.container-fluid -->
 
 @endsection
-@section('orderBy')
-"order": [[ 3, "desc" ]]
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            "order": [[ 3, "desc" ]],
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.declined2.incapable') }}",
+            columns: [
+                {data:'user.nik', name:'user.nik'},
+                {data:'reason', name:'reason'},
+                {data:'letter.reason2', name:'letter.reason2'},
+                {data:'tanggal_pengajuan', name:'tanggal_pengajuan'},
+                {data:'tanggal_penolakan', name:'tanggal_penolakan'},
+                {data:'action', name:'action'},
+            ],
+        });
+    });
+</script>
 @endsection

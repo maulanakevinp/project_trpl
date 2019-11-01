@@ -110,7 +110,7 @@
             <p style="" class="bold underline">
                 {{ $kepala->name }}
             </p>
-            <img style="position: absolute; top: 795px; right:150px;height: 120px; width:120px" src="{{ asset('img/logo/tanda-tangan.png') }}" alt="">
+            <img style="position: absolute; top: 765px; right:150px;height: 120px; width:120px" src="{{ asset('img/logo/tanda-tangan.png') }}" alt="">
             <img style="position: absolute; top: 760px; right:220px;height: 120px; width:120px;-ms-transform: rotate(20deg);-webkit-transform: rotate(20deg);transform: rotate(20deg);" src="{{ asset('img/logo/stempel.png') }}" alt="">
         </div>
     </div>

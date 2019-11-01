@@ -45,98 +45,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                        $i = 1;
-                        @endphp
-                        @foreach($salaries as $salary)
-                        <tr>
-                            <td>{{ $salary->user->nik }}</a></td>
-                            <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
-                            <td>{{ $salary->reason }}</td>
-                            <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
-                            <td>
-                                <a href="{{ route('salary.edit-unprocessed1',$salary->id) }}" class="badge badge-warning">
-                                    {{ __('salary.verify') }}
-                                </a>
-                            </td>
-                        </tr>
-
-                        <!-- Modal -->
-                        <div class="modal fade" id="{{'editSubmissionModal'.$i}}" tabindex="-1" role="dialog"
-                            aria-labelledby="{{'editMenuModalLabel'.$i}}" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="{{'editMenuModalLabel'.$i}}">
-                                            {{ __('salary.edit_salary') }}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <form action="{{ route('salary.verify1',$salary->id) }}" method="post">
-                                        @csrf
-                                        @method('put')
-                                        <input type="hidden" name="update" value="0">
-                                        <div class="modal-body">
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="">@lang('salary.salary')</label>
-                                                <input id="penghasilan" type="text" class="form-control"
-                                                    name="penghasilan" value="{{ $salary->salary }}" disabled>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label" for="">@lang('salary.reason')</label>
-                                                <textarea name="alasan_pengajuan" id="alasan_pengujian"
-                                                    class="form-control" cols="30" rows="5"
-                                                    disabled>{{ $salary->reason }}</textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-form-label"
-                                                    for="verifikasi">@lang('salary.verify')</label><br>
-                                                <div class="custom-control custom-radio">
-                                                    @if (old('verifikasi') == 1)
-                                                    <input checked="checked" type="radio" id="verifikas1"
-                                                        name="verifikasi" class="custom-control-input" value="1">
-                                                    @else
-                                                    <input type="radio" id="verifikas1" name="verifikasi"
-                                                        class="custom-control-input" value="1">
-                                                    @endif
-                                                    <label class="custom-control-label"
-                                                        for="verifikas1">{{ __('salary.accept') }}</label>
-                                                </div>
-                                                <div class="custom-control custom-radio">
-                                                    @if (old('verifikasi') == -1)
-                                                    <input checked="checked" type="radio" id="verifikasi2"
-                                                        name="verifikasi" class="custom-control-input" value="-1">
-                                                    @else
-                                                    <input type="radio" id="verifikasi2" name="verifikasi"
-                                                        class="custom-control-input" value="-1">
-                                                    @endif
-                                                    <label class="custom-control-label"
-                                                        for="verifikasi2">{{__('salary.decline')}}</label>
-                                                </div>
-                                                @error('verifikasi')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                                @enderror
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                @lang('salary.close')
-                                            </button>
-                                            <button type="Submit" class="btn btn-primary" id="submitMenu">
-                                                @lang('salary.verify')
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @php
-                        $i++;
-                        @endphp
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -147,6 +55,35 @@
 <!-- /.container-fluid -->
 
 @endsection
-@section('orderBy')
-"order": [[ 3, "desc" ]]
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            "order": [[ 3, "desc" ]],
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.unprocessed1.salary') }}",
+            columns: [
+                {data:'user.nik', name:'user.nik'},
+                {data:'penghasilan', name:'penghasilan'},
+                {data:'reason', name:'reason'},
+                {data:'tanggal_pengajuan', name:'tanggal_pengajuan'},
+                {data:'action', name:'action'},
+            ],
+        });
+    });
+</script>
 @endsection

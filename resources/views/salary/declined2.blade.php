@@ -45,19 +45,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($salaries as $salary)
-                        <tr>
-                            <td>{{ $salary->user->nik }}</td>
-                            <td>{{ 'Rp.'.number_format($salary->salary, 2, ',', '.') }}</td>
-                            <td>{{ $salary->reason }}</td>
-                            <td>{{ $salary->letter->reason2 }}</td>
-                            <td>{{ $salary->created_at->format('d M Y - H:i:s') }}</td>
-                            <td>{{ $salary->letter->updated_at->format('d M Y - H:i:s') }}</td>
-                            <td>
-                                <a href="{{ route('salary.edit-declined2',$salary->id) }}" class="badge badge-warning">{{ __('salary.edit') }}</a>
-                            </td>
-                        </tr>
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -68,6 +55,37 @@
 <!-- /.container-fluid -->
 
 @endsection
-@section('orderBy')
-"order": [[ 3, "desc" ]]
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            "order": [[ 3, "desc" ]],
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.declined2.salary') }}",
+            columns: [
+                {data:'user.nik', name:'user.nik'},
+                {data:'penghasilan', name:'penghasilan'},
+                {data:'reason', name:'reason'},
+                {data:'letter.reason2', name:'letter.reason2'},
+                {data:'tanggal_pengajuan', name:'tanggal_pengajuan'},
+                {data:'tanggal_penolakan', name:'tanggal_penolakan'},
+                {data:'action', name:'action'},
+            ],
+        });
+    });
+</script>
 @endsection

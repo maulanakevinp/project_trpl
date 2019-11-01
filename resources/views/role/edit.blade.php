@@ -53,3 +53,26 @@
 <!-- /.container-fluid -->
 
 @endsection
+@section('script')
+    <script>
+        $(document).ready(function () {
+            $('.accessMenu').on('click', function () {
+                const menuId = $(this).data('menu');
+                const roleId = $(this).data('role');
+                const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "{{ url('/change-access') }}",
+                    type: 'post',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        menuId: menuId,
+                        roleId: roleId
+                    },
+                    success: function () {
+                        document.location.href = "{{ url('role') }}/" + roleId + "/edit";
+                    }
+                });
+            });
+        });
+    </script>
+@endsection

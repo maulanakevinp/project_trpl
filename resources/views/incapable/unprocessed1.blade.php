@@ -44,18 +44,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($incapables as $incapable)
-                        <tr>
-                            <td>{{ $incapable->user->nik }}</a></td>
-                            <td>{{ $incapable->reason }}</td>
-                            <td>{{ $incapable->created_at->format('d M Y - H:i:s') }}</td>
-                            <td>
-                                <a href="{{ route('incapable.edit-unprocessed1',$incapable->id) }}" class="badge badge-warning">
-                                    {{ __('incapable.verify') }}
-                                </a>
-                            </td>
-                        </tr>
-                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -66,6 +54,34 @@
 <!-- /.container-fluid -->
 
 @endsection
-@section('orderBy')
-"order": [[ 2, "desc" ]]
+@section('script')
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            "order": [[ 2, "desc" ]],
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.unprocessed1.incapable') }}",
+            columns: [
+                {data:'user.nik', name:'user.nik'},
+                {data:'reason', name:'reason'},
+                {data:'tanggal_pengajuan', name:'tanggal_pengajuan'},
+                {data:'action', name:'action'},
+            ],
+        });
+    });
+</script>
 @endsection

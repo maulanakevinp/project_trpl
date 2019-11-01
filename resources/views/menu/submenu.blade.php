@@ -22,54 +22,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
                     <h5 class="m-0 pt-1 font-weight-bold text-primary float-left">{{ $title }}</h5>
-                    <a href="" class="btn btn-sm btn-primary float-right addSubMenu" data-toggle="modal" data-target="#newSubMenuModal">{{ __('submenu.add') }}</a>
-                    <!-- Modal -->
-                    <div class="modal fade" id="newSubMenuModal" tabindex="-1" role="dialog" aria-labelledby="newSubMenuModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="newSubMenuModalLabel">{{ __('submenu.add') }}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <form id="postSubMenu" action="{{ route('submenu.store') }}" method="post">
-                                    @csrf
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" id="title" name="title" placeholder="@lang('submenu.title')" autocomplete="off">
-                                        </div>
-                                        <div class="form-group">
-                                            <select name="menu" id="menu" class="form-control">
-                                                <option value="">{{ __('submenu.choose_menu') }}</option>
-                                                @foreach ($user_menu as $menu)
-                                                <option value="{{ $menu->id }}">{{ $menu->menu }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" id="url" name="url" placeholder="@lang('submenu.url')">
-                                        </div>
-                                        <div class="form-group">
-                                            <input type="text" class="form-control" id="icon" name="icon" placeholder="@lang('submenu.icon')">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="1" id="is_active" name="is_active">
-                                                <label class="form-check-label" for="is_active">
-                                                    {{ __('submenu.active') }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('submenu.close')</button>
-                                            <button type="Submit" class="btn btn-primary" id="submitSubMenu">@lang('submenu.add') </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <a href="" class="btn btn-sm btn-primary float-right addSubmenu" data-toggle="modal" data-target="#newSubmenuModal">{{ __('submenu.add') }}</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -85,94 +38,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $i = 1;
-                                @endphp
-                                @foreach($user_submenu as $submenu)
-                                <tr>
-                                    <td>{{ $submenu->title }}</td>
-                                    <td>{{ $submenu->menu->menu }}</td>
-                                    <td>{{ $submenu->url }}</td>
-                                    <td>{{ $submenu->icon }}</td>
-                                    <td>{{ $submenu->is_active }}</td>
-                                    <td>
-                                        <a href="" data-toggle="modal" data-target="{{'#editSubMenuModal'.$i}}" ><span class="badge badge-warning">{{ __('submenu.edit') }}</span></a>
-                                        <form class="d-inline-block" action="{{ route('submenu.destroy',$submenu->id) }}" method="POST">
-                                            @method('delete')
-                                            @csrf
-                                            @if ($submenu->menu->menu != 'Menu')
-                                                <button type="submit" class="badge badge-danger " onclick="return confirm('{{__('submenu.delete_confirm',['submenu' => $submenu->title])}}');">
-                                                    {{ __('submenu.delete') }}
-                                                </button>
-                                            @endif
-                                        </form>
-                                    </td>
-
-                                    <!-- Modal -->
-                                    <div class="modal fade" id="{{'editSubMenuModal'.$i}}" tabindex="-1" role="dialog" aria-labelledby="{{'editSubMenuModalLabel'.$i}}" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="{{'editSubMenuModalLabel'.$i}}">{{ __('submenu.edit') }}</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <form id="postSubMenu" action="{{ route('submenu.update',$submenu->id) }}" method="post">
-                                                    @csrf
-                                                    @method('patch')
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="title">{{ __('submenu.title') }}</label>
-                                                            <input type="text" class="form-control" id="title" name="title" value="{{ $submenu->title }}" autocomplete="off">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="menu">{{ __('submenu.menu') }}</label>
-                                                            <select name="menu" id="menu" class="form-control">
-                                                                <option value="">{{ __('submenu.choose_menu') }}</option>
-                                                                @foreach ($user_menu as $menu)
-                                                                @if ($submenu->menu_id == $menu->id)
-                                                                    <option selected="selected" value="{{ $menu->id }}">{{ $menu->menu }}</option>
-                                                                @else
-                                                                    <option value="{{ $menu->id }}">{{ $menu->menu }}</option>
-                                                                @endif
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="url">{{ __('submenu.url') }}</label>
-                                                            <input type="text" class="form-control" id="url" name="url" value="{{ $submenu->url }}">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="icon">{{ __('submenu.icon') }}</label>
-                                                            <input type="text" class="form-control" id="icon" name="icon" value="{{ $submenu->icon }}">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                @if ($submenu->is_active == 1)
-                                                                    <input checked="checked" class="form-check-input" type="checkbox" value="1" id="is_active" name="is_active">
-                                                                @else
-                                                                    <input class="form-check-input" type="checkbox" value="1" id="is_active" name="is_active">
-                                                                @endif
-                                                                <label class="form-check-label" for="is_active">
-                                                                    {{ __('submenu.active') }}
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('submenu.close')</button>
-                                                            <button type="Submit" class="btn btn-primary" id="submitSubMenu">@lang('submenu.edit') </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </tr>
-                                @php
-                                    $i++;
-                                @endphp
-                                @endforeach
+                                
                             </tbody>
                         </table>
                     </div>
@@ -183,6 +49,135 @@
 
 </div>
 <!-- /.container-fluid -->
-
-
+<!-- Modal -->
+<div class="modal fade" id="newSubmenuModal" tabindex="-1" role="dialog" aria-labelledby="newSubmenuModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newSubmenuModalLabel">{{ __('submenu.add') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="postSubmenu" action="{{ route('submenu.store') }}" method="post">
+                @csrf
+                <input id="method-submenu" type="hidden" name="_method" value="post">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="title" name="submenu"
+                            placeholder="@lang('submenu.title')" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <select name="menu" id="menu" class="form-control">
+                            <option value="">{{ __('submenu.choose_menu') }}</option>
+                            @foreach ($user_menu as $menu)
+                            <option value="{{ $menu->id }}">{{ $menu->menu }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="url" name="url" placeholder="@lang('submenu.url')">
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-11">
+                            <input onkeyup="iconChange()" type="text" class="form-control" id="icon" name="icon" placeholder="@lang('submenu.icon')">
+                        </div>
+                        <div class="col-1 p-2">
+                            <i id="icon-change"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="1" id="is_active" name="is_active">
+                            <label class="form-check-label" for="is_active">
+                                {{ __('submenu.active') }}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@lang('submenu.close')</button>
+                        <button type="Submit" class="btn btn-primary" id="submitSubmenu">@lang('submenu.add') </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
+@section('script')
+<script>
+    function iconChange() {
+        $('#icon-change').attr('class',$('#icon').val());
+    }
+    function editSubmenu(id) {
+        const CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $('#newSubmenuModalLabel').html("{{__('submenu.edit_menu')}}");
+        $('#submitSubmenu').html("{{__('submenu.edit')}}");
+        $('#postSubmenu').attr('action', "{{ url('submenu') }}/" + id);
+        $('#method-submenu').val('patch');
+        $.ajax({
+            url: "{{ route('ajax.get.edit.submenu') }}",
+            method: 'post',
+            dataType: 'json',
+            data: {
+                _token: CSRF_TOKEN,
+                id: id
+            },
+            success: function (data) {
+                $('#title').val(data.title);
+                $('#menu').val(data.menu_id);
+                $('#url').val(data.url);
+                $('#icon').val(data.icon);
+                if (data.is_active == 1) {
+                    $('#is_active').attr('checked',true);
+                } else {
+                    $('#is_active').attr('checked',false);
+                }
+                $('#delete-submenu').show().attr('action',"{{ url('/submenu') }}" + "/" + data.id);
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "zeroRecords": "Maaf - Tidak ada yang ditemukan",
+                "info": "Tampilkan halaman _PAGE_ dari _PAGES_",
+                "infoEmpty": "Tidak ada data yang tersedia",
+                "infoFiltered": "(difilter dari _MAX_ total kolom)",
+                "emptyTable": "Tidak ada data di dalam tabel",
+                "search": "Cari",
+                "paginate": {
+                    "previous": "Sebelumnya",
+                    "next": "Selanjutnya"
+                }
+            },
+            processing: true,
+            serverside: true,
+            ajax: "{{ route('ajax.get.submenu') }}",
+            columns: [
+                {data: 'title',name: 'title' },
+                {data: 'menu.menu', name: 'menu.menu'},
+                {data: 'url',name: 'url'},
+                {data: 'icon', name: 'icon'},
+                {data: 'is_active', name: 'is_active'},
+                {data: 'action', name: 'action'},
+            ],
+        });
+        $('.addSubmenu').on('click', function () {
+            console.log('tes');
+            $('#newSubmenuModalLabel').html("{{__('submenu.add')}}");
+            $('#submitSubmenu').html("{{__('submenu.add')}}");
+            $('#postSubmenu').attr('action', "{{ route('submenu.store') }}");
+            $('#method-submenu').val('post');
+            $('#title').val('');
+            $('#menu').val('');
+            $('#url').val('');
+            $('#icon').val('');
+            $('#is_active').attr('checked', false);
+            $('#delete-submenu').hide();
+        });
+    });
+</script>
 @endsection
