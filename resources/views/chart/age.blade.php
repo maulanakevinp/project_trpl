@@ -28,38 +28,38 @@
 @section('script')
 <script>
     Highcharts.chart('grafik', {
-            chart: {
-                type: 'column'
-            },
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Grafik Usia'
+        },
+        xAxis: {
+            categories: {!! json_encode($categories) !!},
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
             title: {
-                text: 'Grafik Usia'
-            },
-            xAxis: {
-                categories: {!! json_encode($categories) !!},
-                crosshair: true
-            },
-            yAxis: {
-                min: 0,
-                title: {
-                    text: 'Jumlah Penduduk'
-                }
-            },
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
-            },
-            series: [{
-                name: 'Jumlah Penduduk',
-                data: {!! json_encode($data) !!}
-            }]
-        });
+                text: 'Jumlah Penduduk'
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        series: [{
+            name: 'Jumlah Penduduk',
+            data: {!! json_encode($data) !!}
+        }]
+    });
 </script>
 @endsection

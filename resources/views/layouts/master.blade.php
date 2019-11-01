@@ -33,7 +33,7 @@
     <script src="https://code.highcharts.com/highcharts.js"></script>
 </head>
 
-<body id="page-top">
+<body id="page-top" class="sidebar-toggled">
 
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -113,12 +113,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     @include('sweet::alert')
     @yield('script')
-    <script>
-        if(window.innerWidth <= 500){
-            $('#page-top').attr('class','sidebar-toggled');
-            $('#accordionSidebar').attr('class','navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled')
-        }
-    </script>
 </body>
 
 </html>
