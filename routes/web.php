@@ -48,7 +48,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::resource('/menu', 'MenuController')->except(['create', 'show', 'edit']);
         Route::post('/getMenu', 'MenuController@getMenu');
 
-        Route::resource('/submenu', 'SubmenuController')->except(['create', 'show', 'edit']);;
+        Route::resource('/submenu', 'SubmenuController')->except(['create', 'show', 'edit']);
         Route::get('/getSubmenu', 'SubmenuController@getSubmenu')->name('ajax.get.submenu');
         Route::post('/getSubmenu/edit', 'SubmenuController@getEditSubmenu')->name('ajax.get.edit.submenu');
 

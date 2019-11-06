@@ -49,6 +49,7 @@
 
 </div>
 <!-- /.container-fluid -->
+
 <!-- Modal -->
 <div class="modal fade" id="newSubmenuModal" tabindex="-1" role="dialog" aria-labelledby="newSubmenuModalLabel"
     aria-hidden="true">
