@@ -13,7 +13,7 @@
     <section id="features" class="features p-0">
         <div class="container p-0">
                 <h3>{{ $title }}</h3>
-            <div class="row">
+            <div class="row justify-content-center">
                 @if (Auth::user()->role->role == 'Penduduk')
                     <div class="col-lg-4">
                         <div class="feature-item">
