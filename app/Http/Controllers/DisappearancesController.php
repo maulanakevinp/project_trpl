@@ -131,7 +131,6 @@ class DisappearancesController extends Controller
             $letter = new Letter;
         }
         $request->validate([
-            'tujuan'        => ['required'],
             'verifikasi'    => ['required']
         ]);
         if($request->verifikasi == -1){
@@ -150,7 +149,6 @@ class DisappearancesController extends Controller
         $letter->save();
 
         $disappearance->letter_id = $letter->id;
-        $disappearance->purpose = $request->tujuan;
         $disappearance->save();
         Alert::success('Pengajuan surat keterangan kehilangan berhasil diverifikasi', 'berhasil');
         return redirect()->back();

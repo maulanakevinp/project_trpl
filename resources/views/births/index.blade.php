@@ -240,18 +240,11 @@
                     <input id="update" type="hidden" name="update" value="">
                     <div class="row">
                         <div class="col-lg-6 mb-3">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">{{ __('letter.file') }}</label> 
-                                <div class="col-sm-8">
-                                    <input type="file" class="form-control" name="surat_pengantar">
-                                </div>
-                                <a href="#" class="btn btn-primary btn-sm btn-circle mt-1" data-toggle="modal" data-target="#DetailSuratPengantar" data-toggle="tooltip" title="Lihat surat"><i class="fas fa-eye"></i></a>
-                            </div>
                             <h3>Data Anak</h3>
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="">@lang('birth.name')</label>
                                 <div class="col-sm-9">
-                                    <input id="name" type="text" class="form-control " name="nama" value="{{ old('nama') }}">
+                                    <input id="nama" type="text" class="form-control " name="nama" value="{{ old('nama') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -282,7 +275,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="">@lang('birth.religion')</label>
                                 <div class="col-sm-9">
-                                    <select id="religion" class="form-control" name="agama">
+                                    <select id="agama" class="form-control" name="agama">
                                         <option value="">Pilih</option>
                                         <option value="Islam" {{ old('agama') == 'Islam' ? 'selected="selected"' : '' }}>Islam</option>
                                         <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected="selected"' : '' }}>Kristen</option>
@@ -296,7 +289,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="">@lang('birth.address')</label>
                                 <div class="col-sm-9">
-                                    <textarea id="address" name="alamat" class="form-control " cols="30" rows="2">{{ old('alamat') }}</textarea>
+                                    <textarea id="alamat" name="alamat" class="form-control " cols="30" rows="2">{{ old('alamat') }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -307,11 +300,7 @@
                             </div>
                         </div>
                         <div class="col-lg-6 mb-3">
-                            @if (auth()->user()->gender->gender == "Laki-laki")
-                            <h3>Data Orangtua (Istri)</h3>
-                            @elseif(auth()->user()->gender->gender == "Perempuan")
-                            <h3>Data Orangtua (Suami)</h3>
-                            @endif
+                            <h3 id="dataOrtu">Data Orangtua</h3>
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label" for="">@lang('birth.name')</label>
                                 <div class="col-sm-9">
@@ -397,19 +386,23 @@
                 id: id
             },
             success: function (data) {
-                console.log(data.name);
-                $('#name').val(data.name);
-                $('#name').attr('disabled','disabled');
+                if (data.gender_parent == 'Perempuan') {
+                    $('#dataOrtu').html('Data Orangtua (Istri)');
+                } else if (data.gender == 'Laki-laki') {
+                    $('#dataOrtu').html('Data Orangtua (Suami)');
+                }
+                $('#nama').val(data.name);
+                $('#nama').attr('disabled','disabled');
                 $("input[name=jenis_kelamin][value="+ data.gender +"]").attr('checked','checked');
                 $("input[name=jenis_kelamin]").attr('disabled','disabled');
                 $('#birth_place').val(data.birth_place);
                 $('#birth_place').attr('disabled','disabled');
                 $('#birth_date').val(data.birth_date);
                 $('#birth_date').attr('disabled','disabled');
-                $('#religion').val(data.religion);
-                $('#religion').attr('disabled','disabled');
-                $('#address').val(data.address);
-                $('#address').attr('disabled','disabled');
+                $('#agama').val(data.religion);
+                $('#agama').attr('disabled','disabled');
+                $('#alamat').val(data.address);
+                $('#alamat').attr('disabled','disabled');
                 $('#order').val(data.order);
                 $('#order').attr('disabled','disabled');
                 $('#name_parent').val(data.name_parent);

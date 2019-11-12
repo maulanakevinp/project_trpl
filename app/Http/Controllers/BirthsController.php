@@ -152,7 +152,6 @@ class BirthsController extends Controller
             $letter = new Letter;
         }
         $request->validate([
-            'tujuan'        => ['required'],
             'verifikasi'    => ['required']
         ]);
         if($request->verifikasi == -1){
@@ -169,9 +168,8 @@ class BirthsController extends Controller
         }
         
         $letter->save();
-
+        
         $birth->letter_id = $letter->id;
-        $birth->purpose = $request->tujuan;
         $birth->save();
         Alert::success('Pengajuan surat keterangan kelahiran berhasil diverifikasi', 'berhasil');
         return redirect()->back();
