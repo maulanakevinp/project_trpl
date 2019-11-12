@@ -314,7 +314,6 @@
                 $('#addressEdit').val(data.address);
                 $('#addressEdit').attr('disabled','disabled');
                 $('#purposeEdit').val(data.purpose);
-                $('#purposeEdit').attr('disabled','disabled');
                 @if (auth()->user()->role_id == 3)
                     if (update) {
                         $('#update').val('1');
