@@ -18,7 +18,8 @@ class CreateSalariesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('letter_id')->nullable();
             $table->string('salary');
-            $table->text('reason');
+            $table->text('purpose');
+            $table->string('file')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIncapablesTable extends Migration
+class CreateEnterprisesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,16 @@ class CreateIncapablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('incapables', function (Blueprint $table) {
+        Schema::create('enterprises', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('letter_id')->nullable();
             $table->string('name');
-            $table->string('birth_place');
-            $table->date('birth_date');
-            $table->string('job');
             $table->text('address');
             $table->text('purpose');
-            $table->tinyInteger('as');
             $table->string('file')->nullable();
             $table->timestamps();
-
+            
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('letter_id')->references('id')->on('letters')
@@ -41,6 +37,6 @@ class CreateIncapablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('incapables');
+        Schema::dropIfExists('enterprises');
     }
 }

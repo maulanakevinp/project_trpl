@@ -12,7 +12,7 @@ class Incapable extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'letter_id', 'name', 'birth_place', 'birth_date', 'job', 'address', 'reason', 'as'
+        'user_id', 'letter_id', 'name', 'birth_place', 'birth_date', 'job', 'address', 'purpose', 'as','file'
     ];
 
     public function user()

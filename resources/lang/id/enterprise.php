@@ -4,15 +4,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Salary Language Lines
+    | Enterprise Language Lines
     |--------------------------------------------------------------------------
     |
-    | The following language lines are used during Salary for various
-    | messages that we need to display to the Salary. You are free to modify
+    | The following language lines are used during Enterprise for various
+    | messages that we need to display to the Enterprise. You are free to modify
     | these language lines according to your application's requirements.
     |
     */
 
     // Atributtes
-    'salary'            => 'Penghasilan Perbulan',
+    'name'      =>  'Nama Usaha',
+    'address'   =>  'Alamat',
 ];

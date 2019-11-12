@@ -4,15 +4,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Salary Language Lines
+    | Domicile Language Lines
     |--------------------------------------------------------------------------
     |
-    | The following language lines are used during Salary for various
-    | messages that we need to display to the Salary. You are free to modify
+    | The following language lines are used during Domicile for various
+    | messages that we need to display to the Domicile. You are free to modify
     | these language lines according to your application's requirements.
     |
     */
 
     // Atributtes
-    'salary'            => 'Penghasilan Perbulan',
+    'purpose'            => 'Tujuan',
 ];

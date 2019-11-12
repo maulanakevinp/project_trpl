@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIncapablesTable extends Migration
+class CreateBirthsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,25 @@ class CreateIncapablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('incapables', function (Blueprint $table) {
+        Schema::create('births', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('letter_id')->nullable();
             $table->string('name');
+            $table->enum('gender',['Laki-laki','Perempuan']);
             $table->string('birth_place');
             $table->date('birth_date');
-            $table->string('job');
+            $table->enum('religion',['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Kong Hu Cu']);
             $table->text('address');
-            $table->text('purpose');
-            $table->tinyInteger('as');
+            $table->tinyInteger('order');
+            $table->string('name_parent');
+            $table->tinyInteger('age');
+            $table->enum('gender_parent',['Laki-laki','Perempuan']);
+            $table->string('job');
+            $table->text('address_parent');
             $table->string('file')->nullable();
             $table->timestamps();
-
+            
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('letter_id')->references('id')->on('letters')
@@ -41,6 +46,6 @@ class CreateIncapablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('incapables');
+        Schema::dropIfExists('births');
     }
 }

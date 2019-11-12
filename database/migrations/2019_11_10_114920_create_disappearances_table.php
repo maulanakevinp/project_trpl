@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateIncapablesTable extends Migration
+class CreateDisappearancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateIncapablesTable extends Migration
      */
     public function up()
     {
-        Schema::create('incapables', function (Blueprint $table) {
+        Schema::create('disappearances', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('letter_id')->nullable();
             $table->string('name');
-            $table->string('birth_place');
-            $table->date('birth_date');
-            $table->string('job');
-            $table->text('address');
-            $table->text('purpose');
-            $table->tinyInteger('as');
+            $table->date('date');
+            $table->string('place');
             $table->string('file')->nullable();
             $table->timestamps();
 
@@ -41,6 +37,6 @@ class CreateIncapablesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('incapables');
+        Schema::dropIfExists('disappearances');
     }
 }
