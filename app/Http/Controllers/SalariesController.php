@@ -76,7 +76,7 @@ class SalariesController extends Controller
         $kepala = User::find(1);
         if ($salary->letter->verify1 == 1 && $salary->letter->verify2 == 1) {
             if ($salary->user_id == auth()->user()->id || auth()->user()->role_id == 2 || auth()->user()->role_id == 3) {
-                $pdf = PDF::loadview('salaries.show', compact('domicile', 'kepala'));
+                $pdf = PDF::loadview('salaries.show', compact('salary', 'kepala'));
                 return $pdf->stream();
             } else {
                 return abort(403, 'Anda tidak memiliki hak akses');
