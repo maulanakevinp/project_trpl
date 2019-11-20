@@ -52,7 +52,7 @@ class SalariesController extends Controller
         }
         $request->validate([
             'penghasilan'       => ['required','numeric','min:0','max:2000000'],
-            'tujuan'            => ['required'],
+            'tujuan'            => ['required','max:60'],
             'surat_pengantar'   => ['required','image','mimes:jpeg,png','max:2048']
         ]);
         Salary::create([
@@ -97,7 +97,7 @@ class SalariesController extends Controller
     {
         $request->validate([
             'penghasilan'       => ['required','numeric','min:0','max:2000000'],
-            'tujuan'            => ['required'],
+            'tujuan'            => ['required','max:60'],
             'surat_pengantar'   => ['image','mimes:jpeg,png','max:2048']
         ]);
 

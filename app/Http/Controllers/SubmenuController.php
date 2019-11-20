@@ -33,10 +33,10 @@ class SubmenuController extends Controller
     {
 
         $request->validate([
-            'menu' => 'required|numeric',
-            'submenu' => 'required',
-            'url' => 'required',
-            'icon' => 'required',
+            'menu'      => 'required|numeric|max:60',
+            'submenu'   => 'required|max:60',
+            'url'       => 'required|max:60',
+            'icon'      => 'required|max:60',
         ]);
         $is_active = $request->is_active;
         if ($is_active == null) {
@@ -64,10 +64,10 @@ class SubmenuController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'menu' => 'required|numeric',
-            'submenu' => 'required',
-            'url' => 'required',
-            'icon' => 'required',
+            'menu'      => 'required|numeric|max:60',
+            'submenu'   => 'required|max:60',
+            'url'       => 'required|max:60',
+            'icon'      => 'required|max:60',
         ]);
 
         $is_active = $request->is_active;

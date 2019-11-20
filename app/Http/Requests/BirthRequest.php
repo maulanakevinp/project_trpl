@@ -25,16 +25,16 @@ class BirthRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'nama'                  => ['required'],
+            'nama'                  => ['required','max:60'],
             'jenis_kelamin'         => ['required'],
-            'tempat_lahir'          => ['required'],
+            'tempat_lahir'          => ['required','max:60'],
             'tanggal_lahir'         => ['required','date',new BirthDate],
             'agama'                 => ['required'],
             'alamat'                => ['required'],
             'anak_ke'               => ['required','numeric','min:1'],
-            'nama_orangtua'         => ['required'],
+            'nama_orangtua'         => ['required','max:60'],
             'usia_orangtua'         => ['required','numeric','min:1'],
-            'pekerjaan_orangtua'    => ['required'],
+            'pekerjaan_orangtua'    => ['required','max:60'],
             'alamat_orangtua'       => ['required'],
         ];
         if (request()->isMethod('post')) {

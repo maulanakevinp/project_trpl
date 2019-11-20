@@ -51,7 +51,7 @@ class DomicilesController extends Controller
             return redirect('/edit-profile');
         }
         $request->validate([
-            'tujuan' => ['required'],
+            'tujuan' => ['required','max:60'],
             'surat_pengantar' => ['required','image','mimes:jpeg,png','max:2048']
         ]);
         Domicile::create([
@@ -94,7 +94,7 @@ class DomicilesController extends Controller
     public function update(Request $request, Domicile $domicile)
     {
         $request->validate([
-            'tujuan' => ['required'],
+            'tujuan' => ['required','max:60'],
             'surat_pengantar' => ['image','mimes:jpeg,png','max:2048']
         ]);
 

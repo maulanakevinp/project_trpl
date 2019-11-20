@@ -193,8 +193,8 @@
                                 Adalah benar-benar merupakan
                                 <select id="asEdit" class="form-control-sm" name="merupakan" >
                                     <option value="">Pilih</option>
-                                    <option value="1">Orangtua/Wali saya</option>
-                                    <option value="2">Anak saya</option>
+                                    <option value="1" {{ old('merupakan') == 1 ? 'selected="selected"' : '' }}>Orangtua/Wali saya</option>
+                                    <option value="2" {{ old('merupakan') == 2 ? 'selected="selected"' : '' }}>Anak saya</option>
                                 </select>
                             </div>
                         </div>

@@ -52,9 +52,9 @@ class DisappearancesController extends Controller
             return redirect('/edit-profile');
         }
         $request->validate([
-            'kehilangan'            => ['required'],
+            'kehilangan'            => ['required','max:60'],
             'tanggal_kehilangan'    => ['required','date', new BirthDate],
-            'tempat_kehilangan'     => ['required'],
+            'tempat_kehilangan'     => ['required','max:60'],
             'surat_pengantar'       => ['required','image','mimes:jpeg,png','max:2048']
         ]);
         Disappearance::create([
@@ -99,9 +99,9 @@ class DisappearancesController extends Controller
     public function update(Request $request, Disappearance $disappearance)
     {
         $request->validate([
-            'kehilangan'            => ['required'],
+            'kehilangan'            => ['required','max:60'],
             'tanggal_kehilangan'    => ['required', new BirthDate],
-            'tempat_kehilangan'     => ['required'],
+            'tempat_kehilangan'     => ['required','max:60'],
             'surat_pengantar'       => ['image','mimes:jpeg,png','max:2048']
         ]);
 

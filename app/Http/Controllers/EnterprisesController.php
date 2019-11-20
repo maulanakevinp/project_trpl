@@ -51,9 +51,9 @@ class EnterprisesController extends Controller
             return redirect('/edit-profile');
         }
         $request->validate([
-            'nama_usaha'        => ['required'],
+            'nama_usaha'        => ['required','max:60'],
             'alamat'            => ['required'],
-            'tujuan'            => ['required'],
+            'tujuan'            => ['required','max:60'],
             'surat_pengantar'   => ['required','image','mimes:jpeg,png','max:2048']
         ]);
         Enterprise::create([
@@ -98,9 +98,9 @@ class EnterprisesController extends Controller
     public function update(Request $request, Enterprise $enterprise)
     {
         $request->validate([
-            'nama_usaha'        => ['required'],
+            'nama_usaha'        => ['required','max:60'],
             'alamat'            => ['required'],
-            'tujuan'            => ['required'],
+            'tujuan'            => ['required','max:60'],
             'surat_pengantar'   => ['image','mimes:jpeg,png','max:2048']
         ]);
 

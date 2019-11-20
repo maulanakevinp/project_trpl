@@ -31,7 +31,7 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'peran' => 'required'
+            'peran' => 'required|max:60'
         ]);
 
         UserRole::create([
@@ -74,7 +74,7 @@ class RoleController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'peran' => 'required'
+            'peran' => 'required|max:60'
         ]);
 
         UserRole::where('id', $id)->update([

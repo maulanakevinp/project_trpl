@@ -25,12 +25,12 @@ class IncapableRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'nama'            => ['required'],
-            'tempat_lahir'    => ['required'],
+            'nama'            => ['required','max:60'],
+            'tempat_lahir'    => ['required','max:60'],
             'tanggal_lahir'   => ['required','date',new BirthDate],
-            'pekerjaan'       => ['required'],
+            'pekerjaan'       => ['required','max:60'],
             'alamat'          => ['required'],
-            'tujuan'          => ['required'],
+            'tujuan'          => ['required','max:60'],
             'merupakan'       => ['required'],
         ];
         if (request()->isMethod('post')) {

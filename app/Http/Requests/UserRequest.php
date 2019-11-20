@@ -25,18 +25,18 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'nama_lengkap'          => ['required','string','max:255'],
+            'nama_lengkap'          => ['required','string','max:60'],
             'nik'                   => ['required','digits:16'],
             'kk'                    => ['nullable','digits:16','required_with:kk_file'],
-            'email'                 => ['required','string','email','max:255'],
+            'email'                 => ['required','string','email','max:60'],
             'jenis_kelamin'         => ['required'],
             'agama'                 => ['required'],
             'status_pernikahan'     => ['required'],
             'nomor_telepon'         => ['nullable','digits_between:7,13'],
             'alamat'                => ['required','string'],
-            'tempat_lahir'          => ['required','string'],
+            'tempat_lahir'          => ['required','string','max:60'],
             'tanggal_lahir'         => ['required','date',new BirthDate],
-            'pekerjaan'             => ['required','string'],
+            'pekerjaan'             => ['required','string','max:60'],
             'foto'                  => ['nullable','image','mimes:jpeg,png,gif,webp,bmp','max:2048'],
             'nik_file'              => ['nullable','image','mimes:jpeg,png,bmp','max:2048'],
             'kk_file'               => ['nullable','image','mimes:jpeg,png,bmp','max:2048'],
@@ -44,7 +44,7 @@ class UserRequest extends FormRequest
 
         if (request()->isMethod('post')) {
             $rules['peran']                 = ['required','numeric'];
-            $rules['email']                 = ['required','string','email','unique:users','max:255'];
+            $rules['email']                 = ['required','string','email','unique:users','max:60'];
             $rules['kata_sandi']            = ['required','min:6','required_with:konfirmasi_kata_sandi','same:konfirmasi_kata_sandi'];
             $rules['konfirmasi_kata_sandi'] = ['required','min:6'];
         } else if(request()->isMethod('patch')){
