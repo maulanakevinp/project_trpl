@@ -149,9 +149,9 @@ Route::group(['middleware' => ['web', 'auth', 'roles', 'verified']], function ()
         Route::put('/salaries/{salary}/verify1', 'SalariesController@verify1')->name('salaries.verify1');
         Route::get('/salaries/{salary}/unprocessed1', 'SalariesController@editUnprocessed1')->name('salaries.edit-unprocessed1');
         Route::get('/salaries/{salary}/verified1', 'SalariesController@editVerified1')->name('salaries.edit-verified1');        
-        Route::get('/getUnprocessed1Domiciles', 'SalariesController@getUnprocessed1')->name('ajax.get.unprocessed1.salaries');
-        Route::get('/getVerified1Domiciles', 'SalariesController@getVerified1')->name('ajax.get.verified1.salaries');
-        Route::get('/getDeclined1Domiciles', 'SalariesController@getDeclined1')->name('ajax.get.declined1.salaries');
+        Route::get('/getUnprocessed1Salaries', 'SalariesController@getUnprocessed1')->name('ajax.get.unprocessed1.salaries');
+        Route::get('/getVerified1Salaries', 'SalariesController@getVerified1')->name('ajax.get.verified1.salaries');
+        Route::get('/getDeclined1Salaries', 'SalariesController@getDeclined1')->name('ajax.get.declined1.salaries');
         
         // Incapables
         Route::get('/incapables/admin', 'IncapablesController@index')->name('incapables.index1');
