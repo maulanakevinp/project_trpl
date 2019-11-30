@@ -20,8 +20,28 @@ class Letter extends Model
         return $this->hasMany('App\Salary');
     }
 
+    public function domiciles()
+    {
+        return $this->hasMany('App\Domicile');
+    }
+
+    public function enterprises()
+    {
+        return $this->hasMany('App\Enterprise');
+    }
+
     public function incapables()
     {
         return $this->hasMany('App\Incapable');
+    }
+
+    public function disappearances()
+    {
+        return $this->hasMany('App\Disappearance');
+    }
+
+    public function births()
+    {
+        return $this->hasMany('App\Birth');
     }
 }
