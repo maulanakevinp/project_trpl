@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\BirthDate;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
@@ -14,7 +15,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return \Auth::check();
+        return auth()->check();
     }
 
     /**
@@ -26,9 +27,6 @@ class UserRequest extends FormRequest
     {
         $rules = [
             'nama_lengkap'          => ['required','string','max:60'],
-            'nik'                   => ['required','digits:16'],
-            'kk'                    => ['nullable','digits:16','required_with:kk_file'],
-            'email'                 => ['required','string','email','max:60'],
             'jenis_kelamin'         => ['required'],
             'agama'                 => ['required'],
             'status_pernikahan'     => ['required'],
@@ -45,10 +43,15 @@ class UserRequest extends FormRequest
         if (request()->isMethod('post')) {
             $rules['peran']                 = ['required','numeric'];
             $rules['email']                 = ['required','string','email','unique:users','max:60'];
+            $rules['nik']                   = ['required','digits:16','unique:users'];
+            $rules['kk']                    = ['nullable','digits:16','required_with:kk_file','unique:users'];
             $rules['kata_sandi']            = ['required','min:6','required_with:konfirmasi_kata_sandi','same:konfirmasi_kata_sandi'];
             $rules['konfirmasi_kata_sandi'] = ['required','min:6'];
         } else if(request()->isMethod('patch')){
             $rules['peran']                 = ['required','numeric'];
+            $rules['email']                 = ['required','string','email','max:60', Rule::unique('users','email')->ignore($this->user)];
+            $rules['nik']                   = ['required','digits:16',Rule::unique('users','nik')->ignore($this->user)];
+            $rules['kk']                    = ['nullable','digits:16','required_with:kk_file',Rule::unique('users','kk')->ignore($this->user)];
         }
         return $rules;
     }
