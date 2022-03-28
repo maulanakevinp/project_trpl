@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## Cara Install Clone
+## Cara Install
 - Clone repository ini
 - Tunggu sampai proses clone selesai
 - Buka folder porject yang sudah di clone melalui terminal
